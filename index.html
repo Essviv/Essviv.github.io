@@ -1508,7 +1508,7 @@ SOA：分布式程序实践
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/JVM/JVM的方法调用/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/备忘/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1530,8 +1530,8 @@ SOA：分布式程序实践
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/JVM/JVM的方法调用/" itemprop="url">
-                  JVM的方法调用
+                <a class="post-title-link" href="/2017/01/25/IO/netty/备忘/" itemprop="url">
+                  备忘
                 </a>
               
             
@@ -1566,8 +1566,8 @@ SOA：分布式程序实践
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/JVM/JVM的方法调用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/JVM/JVM的方法调用/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/IO/netty/备忘/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/备忘/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1595,14 +1595,12 @@ SOA：分布式程序实践
       
         
           
-          JVM的方法调用关键字： 编译时静态多分派，运行时动态单分派
-”静态多分派“是指在编译阶段，编译器根据方法接收者以及参数的静态类型来决定选用的方法版本
-”动态单分派“是指在运行阶段，只根据方法接收者的实际类型来决定调用的实际方法
-方法调用并不等于于方法执行，方法调用阶段唯一的任务就是确定被调用方法的
+          备忘
+netty是如何实现对于某个channel的IO事件，交由同一个线程去处理?channel持有一个eventloop，后续所有的操作都会交由这个eventllop操作，具体是在每个操作前，判断一下当前的执行线程是不是eventloop，如果是，直接执行，如果不是，则将要执行的事情放到event
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/JVM/JVM的方法调用/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/IO/netty/备忘/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
