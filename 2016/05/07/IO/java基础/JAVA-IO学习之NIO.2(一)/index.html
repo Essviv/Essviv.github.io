@@ -1,0 +1,817 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="JAVA-IO学习之NIO.2(一）buffer属性
+capacity: 缓冲区的容量大小
+
+position: 当前缓冲区的游标位置，也就是下一个读或写的位置
+
+limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，在写模式，这个值一般和capacity一样
+
+mark: 缓冲区的标记位置，mark()方法将缓冲区当前的游标位置记录下来，后续可以通过reset()方法将游标重置到这个位置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA-IO学习之NIO.2(一)">
+<meta property="og:url" content="http://yoursite.com/2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="JAVA-IO学习之NIO.2(一）buffer属性
+capacity: 缓冲区的容量大小
+
+position: 当前缓冲区的游标位置，也就是下一个读或写的位置
+
+limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，在写模式，这个值一般和capacity一样
+
+mark: 缓冲区的标记位置，mark()方法将缓冲区当前的游标位置记录下来，后续可以通过reset()方法将游标重置到这个位置">
+<meta property="og:image" content="https://raw.githubusercontent.com/Essviv/images/master/buffer-props.png">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JAVA-IO学习之NIO.2(一)">
+<meta name="twitter:description" content="JAVA-IO学习之NIO.2(一）buffer属性
+capacity: 缓冲区的容量大小
+
+position: 当前缓冲区的游标位置，也就是下一个读或写的位置
+
+limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，在写模式，这个值一般和capacity一样
+
+mark: 缓冲区的标记位置，mark()方法将缓冲区当前的游标位置记录下来，后续可以通过reset()方法将游标重置到这个位置">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Essviv/images/master/buffer-props.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/"/>
+
+
+
+
+
+  <title> JAVA-IO学习之NIO.2(一) | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JAVA-IO学习之NIO.2(一)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-07T10:20:54+08:00">
+                2016-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="JAVA-IO学习之NIO-2-一）"><a href="#JAVA-IO学习之NIO-2-一）" class="headerlink" title="JAVA-IO学习之NIO.2(一）"></a>JAVA-IO学习之NIO.2(一）</h1><h2 id="buffer"><a href="#buffer" class="headerlink" title="buffer"></a>buffer</h2><h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><ul>
+<li><p>capacity: 缓冲区的容量大小</p>
+</li>
+<li><p>position: 当前缓冲区的游标位置，也就是下一个读或写的位置</p>
+</li>
+<li><p>limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，在写模式，这个值一般和capacity一样</p>
+</li>
+<li><p>mark: 缓冲区的标记位置，mark()方法将缓冲区当前的游标位置记录下来，后续可以通过reset()方法将游标重置到这个位置上</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Essviv/images/master/buffer-props.png" alt="Buffer属性"></p>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>缓冲区的分类比较简洁，基本上可以按数据类型进行划分，比如ByteBuffer, CharBuffer, DoubleBuffer, IntBuffer等等，但是有一个是特别值得注意的， <strong>MappedByteBuffer</strong>. 具体的使用场景和方法可以参见<strong>TODO</strong>.</p>
+<h3 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h3><ul>
+<li><p>put/get: 两个方法都有两种变体. 一种是基于相对位置的（即不带参数的）,这种方式会改变buffer当前的游标位置，另一种是基于绝对位置的，这种方式不会改变游标的当前位置.</p>
+</li>
+<li><p>allocate, wrap： 获取buffer的两种方式，一种是直接分配相应大小的缓冲区，另一种是将现有的数组进行包装，注意，这种情况下，wrap得到的缓冲区当中的数组即为传给wrap函数的数组，意思就是如果修改了这个数组的值，那么buffer的值也就被修改了. 反之亦然. </p>
+</li>
+<li><p>flip, rewind, clear: 这些操作都将position的值置为0， flip将limit设置成当前position的值，所以它一般用来从写模式切换成读模式; rewind将position的值置为0，但它不会改变limit； clear将position置为0，并且将limit置为capacity，因此它经常用来从读模式切换回写模式. </p>
+</li>
+<li><p>remaining, hasRemaining: 获取和判断从当前位置到缓冲区上界的元素数量. </p>
+</li>
+<li><p>compact: 回收已经读取过的缓冲区数据，保留未被读取的缓冲区数据，也就是保留position~limit之间的数据，将它们复制到数组开始部分，并将position置于下一个能够读写的位置上，将limit置于capacity的位置. </p>
+</li>
+<li><p>mark/reset: 标记和恢复当前游标的位置</p>
+</li>
+</ul>
+<h3 id="视图缓冲区"><a href="#视图缓冲区" class="headerlink" title="视图缓冲区"></a>视图缓冲区</h3><p>视图缓冲区和原来的缓冲区共享数据元素. </p>
+<ul>
+<li><p>duplicate: 复制一份缓冲区，两者拥有独立的position, limit, capacity属性，但共享同一个数组，也就是说，对其中一个缓冲区的修改会反映到另一个缓冲区中</p>
+</li>
+<li><p>asReadOnlyBuffer: 创建缓冲区的只读视图，除了不能执行写操作，以及readOnly返回true之外，其它的都和原来的缓冲区保持一致.</p>
+</li>
+</ul>
+<h3 id="字节顺序"><a href="#字节顺序" class="headerlink" title="字节顺序"></a>字节顺序</h3><ul>
+<li><p>big-endian: 大端字节序，最高字节（most significant byte)存储于低位地址，最低字节（least significant byte)存储于高位地址</p>
+</li>
+<li><p>little-endian: 小端字节序，最高字节存储于高位地址，最低字节存储于低位地址</p>
+</li>
+</ul>
+<h2 id="channel"><a href="#channel" class="headerlink" title="channel"></a>channel</h2><ol>
+<li><p>channel–&gt;buffer, buffer–&gt;channel</p>
+</li>
+<li><p>多路复用的概念</p>
+</li>
+<li><p>channel与stream的不同： </p>
+<ul>
+<li><p>channel是双向的，而stream是单向的</p>
+</li>
+<li><p>channel可以是异步的</p>
+</li>
+<li><p>channel读写的目标都是buffer</p>
+</li>
+</ul>
+</li>
+<li><p>channel可以通过Files等对象获取得到</p>
+</li>
+<li><p>channel的类型可以分为两大类： 一类为FileChannel， 一类为SocketChannel, SocketChannel又进一步细分为SocketChannel, ServerSocketChannel, DatagramChannel</p>
+</li>
+</ol>
+<h2 id="selector"><a href="#selector" class="headerlink" title="selector"></a>selector</h2><ol>
+<li><p>NIO: channel &amp; buffer</p>
+</li>
+<li><p>NIO: non-blocking read &amp; write</p>
+</li>
+<li><p>selector: monitor multiple channels </p>
+</li>
+<li><p>selectionKey: SelectableChannel注册到selector时，将返回相应的selectionKey，它是两者间关系的管理工具</p>
+</li>
+<li><p>SelectableChannel: 可以被注册到selector中的一种通道，所有的socket通道都属于这种类型， 相反，fileChannel不属于这种类型. </p>
+</li>
+</ol>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ul>
+<li><p>JAVA NIO： <a href="ftp://ftp.bupt.edu.cn/pub/Documents/Programming/Java-Related/(ebook-pdf" target="_blank" rel="external">JAVA NIO O’Reilly</a>%20-%20O’Reilly%20-%20Java%20NIO.pdf)</p>
+</li>
+<li><p>JAVA NIO Turtorial: <a href="http://tutorials.jenkov.com/java-nio/index.html" target="_blank" rel="external">Jenkov NIO Turtorial</a></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/04/quota/" rel="next" title="自勉">
+                <i class="fa fa-chevron-left"></i> 自勉
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/07/java-nio-2/" rel="prev" title="JAVA-IO学习">
+                JAVA-IO学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/"
+           data-title="JAVA-IO学习之NIO.2(一)" data-url="http://yoursite.com/2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JAVA-IO学习之NIO-2-一）"><span class="nav-text">JAVA-IO学习之NIO.2(一）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#buffer"><span class="nav-text">buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性"><span class="nav-text">属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分类"><span class="nav-text">分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#操作"><span class="nav-text">操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#视图缓冲区"><span class="nav-text">视图缓冲区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字节顺序"><span class="nav-text">字节顺序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#channel"><span class="nav-text">channel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#selector"><span class="nav-text">selector</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

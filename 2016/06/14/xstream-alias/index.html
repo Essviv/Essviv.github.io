@@ -1,0 +1,789 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="XStream 别名," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="XStream概览XStream是用来将对象与XML进行互相转换的第三方库. 它的主要特点包括：
+
+简单易用. 
+无需映射. 
+性能. 
+简洁的XML. 
+…
+错误信息的输出.
+支持与JSON格式的转换.
+
+别名假设我们定义了以下的XML格式, 需要通过XStream进行读写：
+123456789101112&amp;lt;blog author=&amp;quot;Guilherme Silveira&amp;quot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XStream学习(1)">
+<meta property="og:url" content="http://yoursite.com/2016/06/14/xstream-alias/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="XStream概览XStream是用来将对象与XML进行互相转换的第三方库. 它的主要特点包括：
+
+简单易用. 
+无需映射. 
+性能. 
+简洁的XML. 
+…
+错误信息的输出.
+支持与JSON格式的转换.
+
+别名假设我们定义了以下的XML格式, 需要通过XStream进行读写：
+123456789101112&amp;lt;blog author=&amp;quot;Guilherme Silveira&amp;quot">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="XStream学习(1)">
+<meta name="twitter:description" content="XStream概览XStream是用来将对象与XML进行互相转换的第三方库. 它的主要特点包括：
+
+简单易用. 
+无需映射. 
+性能. 
+简洁的XML. 
+…
+错误信息的输出.
+支持与JSON格式的转换.
+
+别名假设我们定义了以下的XML格式, 需要通过XStream进行读写：
+123456789101112&amp;lt;blog author=&amp;quot;Guilherme Silveira&amp;quot">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/14/xstream-alias/"/>
+
+
+
+
+
+  <title> XStream学习(1) | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/14/xstream-alias/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                XStream学习(1)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-14T21:15:00+08:00">
+                2016-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/06/14/xstream-alias/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/14/xstream-alias/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="XStream"><a href="#XStream" class="headerlink" title="XStream"></a>XStream</h1><h2 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h2><p>XStream是用来将对象与XML进行互相转换的第三方库. 它的主要特点包括：</p>
+<ul>
+<li>简单易用. </li>
+<li>无需映射. </li>
+<li>性能. </li>
+<li>简洁的XML. </li>
+<li>…</li>
+<li>错误信息的输出.</li>
+<li>支持与JSON格式的转换.</li>
+</ul>
+<h2 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h2><p>假设我们定义了以下的XML格式, 需要通过XStream进行读写：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;blog author=&quot;Guilherme Silveira&quot;&gt;</div><div class="line">  &lt;entry&gt;</div><div class="line">    &lt;title&gt;first&lt;/title&gt;</div><div class="line">    &lt;description&gt;My first blog entry.&lt;/description&gt;</div><div class="line">  &lt;/entry&gt;</div><div class="line">  &lt;entry&gt;</div><div class="line">    &lt;title&gt;tutorial&lt;/title&gt;</div><div class="line">    &lt;description&gt;</div><div class="line">        Today we have developed a nice alias tutorial. Tell your friends! NOW!</div><div class="line">    &lt;/description&gt;</div><div class="line">  &lt;/entry&gt;</div><div class="line">&lt;/blog&gt;</div></pre></td></tr></table></figure>
+<p>首先，我们需要根据XML格式定义以下两个对象模型:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">package com.thoughtworks.xstream;</div><div class="line"></div><div class="line">public class Blog &#123;</div><div class="line">        private Author writer;</div><div class="line">        private List entries = new ArrayList();</div><div class="line"></div><div class="line">        public Blog(Author writer) &#123;</div><div class="line">                this.writer = writer;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public void add(Entry entry) &#123;</div><div class="line">                entries.add(entry);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public List getContent() &#123;</div><div class="line">                return entries;</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">package com.thoughtworks.xstream;</div><div class="line"></div><div class="line">public class Author &#123;</div><div class="line">        private String name;</div><div class="line">        public Author(String name) &#123;</div><div class="line">                this.name = name;</div><div class="line">        &#125;</div><div class="line">        public String getName() &#123;</div><div class="line">                return name;</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">package com.thoughtworks.xstream;</div><div class="line"></div><div class="line">public class Entry &#123;</div><div class="line">        private String title, description;</div><div class="line">        public Entry(String title, String description) &#123;</div><div class="line">                this.title = title;</div><div class="line">                this.description = description;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着就可以通过XStream来进行XML格式的输出：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">        Blog teamBlog = new Blog(new Author(&quot;Guilherme Silveira&quot;));</div><div class="line">        teamBlog.add(new Entry(&quot;first&quot;,&quot;My first blog entry.&quot;));</div><div class="line">        teamBlog.add(new Entry(&quot;tutorial&quot;,</div><div class="line">                &quot;Today we have developed a nice alias tutorial. Tell your friends! NOW!&quot;));</div><div class="line"></div><div class="line">        XStream xstream = new XStream();</div><div class="line">        System.out.println(xstream.toXML(teamBlog));</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最终我们得到的输出是这样的, 似乎看上去和我们想要的结果有点不一样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;com.thoughtworks.xstream.Blog&gt;</div><div class="line">  &lt;writer&gt;</div><div class="line">    &lt;name&gt;Guilherme Silveira&lt;/name&gt;</div><div class="line">  &lt;/writer&gt;</div><div class="line">  &lt;entries&gt;</div><div class="line">    &lt;com.thoughtworks.xstream.Entry&gt;</div><div class="line">      &lt;title&gt;first&lt;/title&gt;</div><div class="line">      &lt;description&gt;My first blog entry.&lt;/description&gt;</div><div class="line">    &lt;/com.thoughtworks.xstream.Entry&gt;</div><div class="line">    &lt;com.thoughtworks.xstream.Entry&gt;</div><div class="line">      &lt;title&gt;tutorial&lt;/title&gt;</div><div class="line">      &lt;description&gt;</div><div class="line">        Today we have developed a nice alias tutorial. Tell your friends! NOW!</div><div class="line">      &lt;/description&gt;</div><div class="line">    &lt;/com.thoughtworks.xstream.Entry&gt;</div><div class="line">  &lt;/entries&gt;</div><div class="line">&lt;/com.thoughtworks.xstream.Blog&gt;</div></pre></td></tr></table></figure>
+<h2 id="类别名"><a href="#类别名" class="headerlink" title="类别名"></a>类别名</h2><p>首先我们需要把类似于’com.thoughtworks.xstream.Blog’这样的包名给去掉，<strong>XStream给我们提供了alias方法来实现类的别名功能</strong>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">xstream.alias(&quot;blog&quot;, Blog.class);</div><div class="line">xstream.alias(&quot;entry&quot;, Entry.class);</div></pre></td></tr></table></figure>
+<p>现在再看来看看我们的输出, 现在它变成了以下这样，离我们期望的结果似乎近了一点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;blog&gt;</div><div class="line">  &lt;writer&gt;</div><div class="line">    &lt;name&gt;Guilherme Silveira&lt;/name&gt;</div><div class="line">  &lt;/writer&gt;</div><div class="line">  &lt;entries&gt;</div><div class="line">    &lt;entry&gt;</div><div class="line">      &lt;title&gt;first&lt;/title&gt;</div><div class="line">      &lt;description&gt;My first blog entry.&lt;/description&gt;</div><div class="line">    &lt;/entry&gt;</div><div class="line">    &lt;entry&gt;</div><div class="line">      &lt;title&gt;tutorial&lt;/title&gt;</div><div class="line">      &lt;description&gt;</div><div class="line">        Today we have developed a nice alias tutorial. Tell your friends! NOW!</div><div class="line">      &lt;/description&gt;</div><div class="line">    &lt;/entry&gt;</div><div class="line">  &lt;/entries&gt;</div><div class="line">&lt;/blog&gt;</div></pre></td></tr></table></figure>
+<h2 id="属性别名"><a href="#属性别名" class="headerlink" title="属性别名"></a>属性别名</h2><p>现在我们希望把writer属性改成author，同样地，<strong>XStream提供了aliasField来实现类属性的别名设置</strong>, 现在的输出变成了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">xstream.aliasField(&quot;author&quot;, Blog.class, &quot;writer&quot;);</div><div class="line"></div><div class="line">&lt;blog&gt;</div><div class="line">  &lt;author&gt;</div><div class="line">    &lt;name&gt;Guilherme Silveira&lt;/name&gt;</div><div class="line">  &lt;/author&gt;</div><div class="line">  &lt;entries&gt;</div><div class="line">    &lt;entry&gt;</div><div class="line">      &lt;title&gt;first&lt;/title&gt;</div><div class="line">      &lt;description&gt;My first blog entry.&lt;/description&gt;</div><div class="line">    &lt;/entry&gt;</div><div class="line">    &lt;entry&gt;</div><div class="line">      &lt;title&gt;tutorial&lt;/title&gt;</div><div class="line">      &lt;description&gt;</div><div class="line">        Today we have developed a nice alias tutorial. Tell your friends! NOW!</div><div class="line">      &lt;/description&gt;</div><div class="line">    &lt;/entry&gt;</div><div class="line">  &lt;/entries&gt;</div><div class="line">&lt;/blog&gt;</div></pre></td></tr></table></figure>
+<h2 id="隐式集合"><a href="#隐式集合" class="headerlink" title="隐式集合"></a>隐式集合</h2><p>再来看看entries的输出，XStream引入了“隐式集合”的概念，当遇到不需要显示集合根结点的情况时，可以将它映射成隐式集合.<br>在上述的例子中，entries是个列表，默认输出时，会将entries作为集合的根结点，有时候这种输出并不是我们期望的，那么如何将它去掉呢？<br><strong>XStream中提供了addImplicitCollection方法来解决这个问题</strong>， 再次输出的结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">xstream.addImplicitCollection(Blog.class, &quot;entries&quot;);</div><div class="line"></div><div class="line">&lt;blog&gt;</div><div class="line">  &lt;author&gt;</div><div class="line">    &lt;name&gt;Guilherme Silveira&lt;/name&gt;</div><div class="line">  &lt;/author&gt;</div><div class="line">  &lt;entry&gt;</div><div class="line">    &lt;title&gt;first&lt;/title&gt;</div><div class="line">    &lt;description&gt;My first blog entry.&lt;/description&gt;</div><div class="line">  &lt;/entry&gt;</div><div class="line">  &lt;entry&gt;</div><div class="line">    &lt;title&gt;tutorial&lt;/title&gt;</div><div class="line">    &lt;description&gt;</div><div class="line">        Today we have developed a nice alias tutorial. Tell your friends! NOW!</div><div class="line">    &lt;/description&gt;</div><div class="line">  &lt;/entry&gt;</div><div class="line">&lt;/blog&gt;</div></pre></td></tr></table></figure>
+<h2 id="属性别名-1"><a href="#属性别名-1" class="headerlink" title="属性别名"></a>属性别名</h2><p>有时候我们可能会希望将类的某个字段输出成结点的属性，而不是它的子结点，比如在上述的例子中，可以将writer字段输出成属性. <strong>XStream提供了useAttributeFor方法将类的字段作为结点属性输出</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">stream.useAttributeFor(Blog.class, &quot;writer&quot;);</div><div class="line">xstream.aliasField(&quot;author&quot;, Blog.class, &quot;writer&quot;);</div></pre></td></tr></table></figure>
+<p>但是，如果要将writer输出成结点的属性，还需要完成一个转换. 那就是Author类如何转换成String值，因为结点的属性值只能是字符类型. <strong>XStream提供了SingleValueConverter接口来实现类与字符类型之间的转换功能</strong>. 因此只要能提供一个converter能将author转化成字符类型，就可以顺利将writer字段作为结点的属性输出. 定义完转化器之后，将它注册到XStream中，就可以得到相应的输出: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">class AuthorConverter implements SingleValueConverter &#123;</div><div class="line"></div><div class="line">        public String toString(Object obj) &#123;</div><div class="line">                return ((Author) obj).getName();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public Object fromString(String name) &#123;</div><div class="line">                return new Author(name);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        public boolean canConvert(Class type) &#123;</div><div class="line">                return type.equals(Author.class);</div><div class="line">        &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//将新定义的转化器注册到XStream中</div><div class="line">xstream.registerConverter(new AuthorConverter());</div><div class="line"></div><div class="line">//输出</div><div class="line">&lt;blog author=&quot;Guilherme Silveira&quot;&gt;</div><div class="line">  &lt;entry&gt;</div><div class="line">    &lt;title&gt;first&lt;/title&gt;</div><div class="line">    &lt;description&gt;My first blog entry.&lt;/description&gt;</div><div class="line">  &lt;/entry&gt;</div><div class="line">  &lt;entry&gt;</div><div class="line">    &lt;title&gt;tutorial&lt;/title&gt;</div><div class="line">    &lt;description&gt;</div><div class="line">        Today we have developed a nice alias tutorial. Tell your friends! NOW!</div><div class="line">    &lt;/description&gt;</div><div class="line">  &lt;/entry&gt;</div><div class="line">&lt;/blog&gt;</div></pre></td></tr></table></figure>
+<h2 id="包名别名"><a href="#包名别名" class="headerlink" title="包名别名"></a>包名别名</h2><p>有的时候我们可以希望为包名设置别名，<strong>XStream提供了aliasPackage来设置包名的别名</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">xstream.aliasPackage(&quot;my.company&quot;, &quot;org.thoughtworks&quot;);</div><div class="line"></div><div class="line">//输出</div><div class="line">&lt;my.company.xstream.Blog&gt;</div><div class="line">  &lt;author&gt;</div><div class="line">    &lt;name&gt;Guilherme Silveira&lt;/name&gt;</div><div class="line">  &lt;/author&gt;</div><div class="line">  &lt;entries&gt;</div><div class="line">    &lt;my.company.xstream.Entry&gt;</div><div class="line">      &lt;title&gt;first&lt;/title&gt;</div><div class="line">      &lt;description&gt;My first blog entry.&lt;/description&gt;</div><div class="line">    &lt;/my.company.xstream.Entry&gt;</div><div class="line">    &lt;my.company.xstream.Entry&gt;</div><div class="line">      &lt;title&gt;tutorial&lt;/title&gt;</div><div class="line">      &lt;description&gt;</div><div class="line">        Today we have developed a nice alias tutorial. Tell your friends! NOW!</div><div class="line">      &lt;/description&gt;</div><div class="line">    &lt;/my.company.xstream.Entry&gt;</div><div class="line">  &lt;/entries&gt;</div><div class="line">&lt;/my.company.xstream.Blog&gt;</div></pre></td></tr></table></figure>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>XStream别名官方文档: <a href="http://x-stream.github.io/alias-tutorial.html" target="_blank" rel="external">别名</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/XStream-别名/" rel="tag"># XStream 别名</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/14/xstream-annotation/" rel="next" title="XStream学习(2)">
+                <i class="fa fa-chevron-left"></i> XStream学习(2)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/15/xstream-converter/" rel="prev" title="XStream学习(3)">
+                XStream学习(3) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/14/xstream-alias/"
+           data-title="XStream学习(1)" data-url="http://yoursite.com/2016/06/14/xstream-alias/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#XStream"><span class="nav-text">XStream</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概览"><span class="nav-text">概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#别名"><span class="nav-text">别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类别名"><span class="nav-text">类别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性别名"><span class="nav-text">属性别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隐式集合"><span class="nav-text">隐式集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性别名-1"><span class="nav-text">属性别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包名别名"><span class="nav-text">包名别名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

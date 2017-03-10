@@ -1,0 +1,899 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="培训数据库开发单一的数据源或集群的代理异构数据源： hibernate, spring-data(for redis, hbase)
+提供统一的API
+动态生成操作
+优化性能
+异步并行加载框架
+热点缓存
+恶意访问的拦截、值班表扫描的拦截
+按需加载
+
+
+
+淘宝技术魔方技术架构
+数据源层（DB， 日志） —&amp;gt;   计算层（hadoop集群+hdfs，云梯； nosql集群，银河）—-&amp;gt; 存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="培训">
+<meta property="og:url" content="http://yoursite.com/2016/05/25/培训/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="培训数据库开发单一的数据源或集群的代理异构数据源： hibernate, spring-data(for redis, hbase)
+提供统一的API
+动态生成操作
+优化性能
+异步并行加载框架
+热点缓存
+恶意访问的拦截、值班表扫描的拦截
+按需加载
+
+
+
+淘宝技术魔方技术架构
+数据源层（DB， 日志） —&amp;gt;   计算层（hadoop集群+hdfs，云梯； nosql集群，银河）—-&amp;gt; 存">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="培训">
+<meta name="twitter:description" content="培训数据库开发单一的数据源或集群的代理异构数据源： hibernate, spring-data(for redis, hbase)
+提供统一的API
+动态生成操作
+优化性能
+异步并行加载框架
+热点缓存
+恶意访问的拦截、值班表扫描的拦截
+按需加载
+
+
+
+淘宝技术魔方技术架构
+数据源层（DB， 日志） —&amp;gt;   计算层（hadoop集群+hdfs，云梯； nosql集群，银河）—-&amp;gt; 存">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/05/25/培训/"/>
+
+
+
+
+
+  <title> 培训 | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/25/培训/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                培训
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-25T10:20:54+08:00">
+                2016-05-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/05/25/培训/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/25/培训/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="培训"><a href="#培训" class="headerlink" title="培训"></a>培训</h1><h2 id="数据库开发"><a href="#数据库开发" class="headerlink" title="数据库开发"></a>数据库开发</h2><h3 id="单一的数据源或集群的代理"><a href="#单一的数据源或集群的代理" class="headerlink" title="单一的数据源或集群的代理"></a>单一的数据源或集群的代理</h3><h3 id="异构数据源：-hibernate-spring-data-for-redis-hbase"><a href="#异构数据源：-hibernate-spring-data-for-redis-hbase" class="headerlink" title="异构数据源： hibernate, spring-data(for redis, hbase)"></a>异构数据源： hibernate, spring-data(for redis, hbase)</h3><ul>
+<li>提供统一的API</li>
+<li>动态生成操作</li>
+<li>优化性能<ul>
+<li>异步并行加载框架</li>
+<li>热点缓存</li>
+<li>恶意访问的拦截、值班表扫描的拦截</li>
+<li>按需加载</li>
+</ul>
+</li>
+</ul>
+<h3 id="淘宝技术魔方技术架构"><a href="#淘宝技术魔方技术架构" class="headerlink" title="淘宝技术魔方技术架构"></a>淘宝技术魔方技术架构</h3><ul>
+<li>数据源层（DB， 日志） —&gt;   计算层（hadoop集群+hdfs，云梯； nosql集群，银河）—-&gt; 存储层 —-&gt; 查询层  —-&gt; 服务层</li>
+<li>TimeTunnel: 读日志增量的工具</li>
+<li>DataX: 异构数据源之间导入导出数据的工具（构架+插件）</li>
+</ul>
+<h3 id="数据库的优化（开发人员）"><a href="#数据库的优化（开发人员）" class="headerlink" title="数据库的优化（开发人员）"></a>数据库的优化（开发人员）</h3><ul>
+<li><p>DB的优化原理</p>
+<ul>
+<li>优化器模块</li>
+<li>执行计划（oracle会对这部分进行缓存，mysql不会对这部分缓存)</li>
+<li>学会查看执行计划和性能损耗</li>
+<li>innodb_buffer_pool_size对性能有决定性的影响</li>
+</ul>
+</li>
+<li><p>查询优化</p>
+<ul>
+<li>索引的利弊</li>
+<li>索引的限制： 索引的计算、函数、数据类型转换均会导致索引失效.</li>
+<li>重量级的关键字的执行原理<ul>
+<li>join</li>
+<li>order by</li>
+<li>group by:先排序再分组</li>
+<li>distinct: 先分组再从每组中取一条记录</li>
+</ul>
+</li>
+<li>表机制<ul>
+<li>innodb行锁是通过事务来实现的</li>
+<li>行锁升级为表锁的情况: 索引失效、间隙锁、死锁</li>
+</ul>
+</li>
+<li>mysql的新技术<ul>
+<li>源码安装使用ICC编译器</li>
+<li>HandlerSocket（绕过mysql的优化器模块)</li>
+<li>percona: percona数据库， xtrdb存储引擎（可完全替代innodb）， xtrbackup（可完全替代hotbackup）</li>
+</ul>
+</li>
+<li>数据库的表设计<ul>
+<li>范式与非范式结合使用: 适当冗余数据避免join, 常用字段与不常用字段垂直拆分(大字段)<h2 id="缓存架构-b-s结构的项目中有哪些缓存可以做"><a href="#缓存架构-b-s结构的项目中有哪些缓存可以做" class="headerlink" title="缓存架构(b/s结构的项目中有哪些缓存可以做)"></a>缓存架构(b/s结构的项目中有哪些缓存可以做)</h2></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>页面缓存： OSCache, EHCache, 页面静态化(IO, xml+xslt)</li>
+<li>页面局部缓存: 标签类的技术， OSCache, EHCache, ESI(标准, JAVA的实现称为JESI）</li>
+<li>浏览器的缓存<ul>
+<li>优缺点(慎用)</li>
+<li>html5(最被看好)<ul>
+<li>更丰富的标签、表单</li>
+<li>canvas</li>
+<li>webStorage</li>
+<li>webSocket</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>反射代理服务器的缓存<ul>
+<li>七层的软件负载均衡器: nginx（通过配置可直接缓存）</li>
+<li>nginx(专做负载均衡) + squid(专做缓存)</li>
+</ul>
+</li>
+<li>数据库的前端缓存<ul>
+<li>热点数据的缓存<ul>
+<li>热点规则: 支持可配置</li>
+<li>key规则： 一级缓存、二级缓存</li>
+<li>数据失效： 绝对失效、相对失效、事件失效（消息中间件, JMS）</li>
+</ul>
+</li>
+<li>经常反复创建并销毁的对象<ul>
+<li>享元模式: 建议使用软引用.</li>
+<li>前端的一些缓存: jquery中的data方法</li>
+</ul>
+</li>
+<li>分布式的缓存服务器<ul>
+<li>Redis<ul>
+<li>提供了更丰富的数据类型: list, set, hashes, string, hset(不仅仅是cache， 更多的是服务端的计算) </li>
+<li>支持持久化: rdb持久化、aof持久化、无持久化（吞吐量最高）<ul>
+<li>rdb持久化: 快照文件<ul>
+<li>持久化所需要的空间</li>
+<li>恢复需要多长时间</li>
+<li>对QPS的影响</li>
+</ul>
+</li>
+<li>aof持久化: 日志文件</li>
+</ul>
+</li>
+<li>支持主备机制: master-slaver<ul>
+<li>master做读写，slave做持久化</li>
+<li>master做写，slave做读</li>
+<li>master宕机，slave接管（keepalived）</li>
+</ul>
+</li>
+<li>消息中间件(非企业级): pubsub</li>
+<li>在线扩容、容量规划等内容</li>
+</ul>
+</li>
+<li>memcached<ul>
+<li>内存存储：内存要求高，CPU要求低</li>
+<li>集中式缓存：多个实例之间不通讯，存在单点问题</li>
+<li>SOCKET通讯，NIO编程： 网络带宽、Socket的连接数都是制约性能的因素</li>
+<li>内存分配: 全部预先分配，不存在内存碎片，不需要回收； slab, chunk, page(每次分配的内存大小，分配完内存后会按一定的大小划分成slab）<ul>
+<li>MemcachedClient官方</li>
+<li>淘宝memcached: xplatform asf</li>
+<li>google的MSM(memcached session manager)</li>
+<li>新浪memcachedb(memcached的持久化)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>GemFile</li>
+<li>BKD<h2 id="服务层"><a href="#服务层" class="headerlink" title="服务层"></a>服务层</h2></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>webService(http+xml)</li>
+<li>RPC(tcp/ip)<ul>
+<li>基础的RPC操作</li>
+<li>性能优化<ul>
+<li>io模型( 同步阻塞IO， 同步非阻塞IO， 多路复用IO(nio, 事件机制)， 异步IO)</li>
+<li>线程模型</li>
+</ul>
+</li>
+<li>netty, mina</li>
+<li>服务的透明化：服务框架中间件(dubbo)</li>
+<li>服务的治理： 自动注册与治理、配置、升降级 —-&gt; 微服务</li>
+<li>dubbo(dubboX) + 其它第三方开源项目, spring-cloud(更完整), spring-boot<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2></li>
+</ul>
+</li>
+<li>B/S架构的目标</li>
+<li>架构师的理论体系</li>
+<li>非功能性需求（从需求到架构）</li>
+<li>构架的的总体分层（前端、后台）</li>
+<li>数据的优化( java, jvm, tomcat…)</li>
+<li>合理的缓存架构</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/23/SOA/JAXB/" rel="next" title="JAXB">
+                <i class="fa fa-chevron-left"></i> JAXB
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/25/doc/markdown/" rel="prev" title="markdown">
+                markdown <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/25/培训/"
+           data-title="培训" data-url="http://yoursite.com/2016/05/25/培训/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#培训"><span class="nav-text">培训</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库开发"><span class="nav-text">数据库开发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#单一的数据源或集群的代理"><span class="nav-text">单一的数据源或集群的代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异构数据源：-hibernate-spring-data-for-redis-hbase"><span class="nav-text">异构数据源： hibernate, spring-data(for redis, hbase)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#淘宝技术魔方技术架构"><span class="nav-text">淘宝技术魔方技术架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库的优化（开发人员）"><span class="nav-text">数据库的优化（开发人员）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存架构-b-s结构的项目中有哪些缓存可以做"><span class="nav-text">缓存架构(b/s结构的项目中有哪些缓存可以做)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务层"><span class="nav-text">服务层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

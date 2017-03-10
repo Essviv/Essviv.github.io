@@ -1,0 +1,837 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SpringMVC handlerMapping," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="处理器映射在前面关于SpringMVC处理流程的描述中提到，当用户向服务器发起请求时，spring将请求通过handlerMapping映射成具体的handler，并带上一系列的拦截器，后续的处理由该处理器和拦截器来完成. 在使用注解@RequestMapping的时候，spring会自动使用RequestMappingHandlerMapping这个类来进行处理，它会自动找出所有controll">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC学习(3)">
+<meta property="og:url" content="http://yoursite.com/2016/06/28/spring-mvc-handler-mapping/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="处理器映射在前面关于SpringMVC处理流程的描述中提到，当用户向服务器发起请求时，spring将请求通过handlerMapping映射成具体的handler，并带上一系列的拦截器，后续的处理由该处理器和拦截器来完成. 在使用注解@RequestMapping的时候，spring会自动使用RequestMappingHandlerMapping这个类来进行处理，它会自动找出所有controll">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC学习(3)">
+<meta name="twitter:description" content="处理器映射在前面关于SpringMVC处理流程的描述中提到，当用户向服务器发起请求时，spring将请求通过handlerMapping映射成具体的handler，并带上一系列的拦截器，后续的处理由该处理器和拦截器来完成. 在使用注解@RequestMapping的时候，spring会自动使用RequestMappingHandlerMapping这个类来进行处理，它会自动找出所有controll">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/28/spring-mvc-handler-mapping/"/>
+
+
+
+
+
+  <title> SpringMVC学习(3) | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/28/spring-mvc-handler-mapping/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC学习(3)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-28T20:43:00+08:00">
+                2016-06-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/06/28/spring-mvc-handler-mapping/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/28/spring-mvc-handler-mapping/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="处理器映射"><a href="#处理器映射" class="headerlink" title="处理器映射"></a>处理器映射</h1><p>在前面关于SpringMVC处理流程的描述中提到，当用户向服务器发起请求时，spring将请求通过handlerMapping映射成具体的handler，并带上一系列的拦截器，后续的处理由该处理器和拦截器来完成. 在使用注解@RequestMapping的时候，spring会自动使用RequestMappingHandlerMapping这个类来进行处理，它会自动找出所有controller类中使用@RequestMapping注解的地方. </p>
+<p>在springMVC中，所有继承自AbstractHandlerMapping的实现都有以下这些属性:</p>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>interceptors</td>
+<td>和当前handler关联的所有拦截器列表，请求会先由interceptor进行拦截处理，最后到达handler</td>
+</tr>
+<tr>
+<td>defaultHandler</td>
+<td>默认的处理器，当没有匹配到合适的拦截器时使用</td>
+</tr>
+<tr>
+<td>order</td>
+<td>用于多个handlerMapping之间的排序时使用</td>
+</tr>
+<tr>
+<td>alwaysUseFullPath</td>
+<td>如果设置为true,那么在查找的时候会使用完整的路径进行匹配；否则只使用相对路径进行匹配. e.g. 如果某个servlet使用/testing/*， 这个值设置为true， 那么匹配的将是/testing/viewPage.html, 否则就是/viewPage.html</td>
+</tr>
+</tbody>
+</table>
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>spring中使用拦截器机制在对请求进行处理之前执行一些特定的操作， 这些拦截器由HandlerInterceptor来定义， 这个接口定义了三个方法，如果想自定义拦截器，可以通过继承HandlerInterceptorAdapter类来实现：</p>
+<ol>
+<li><p>preHandler: 在请求到达处理器之前被调用，返回boolean类型的值，如果为true，意味着请求通过，交由后续的拦截器或处理器进行一步处理；如果为false，说明请求不通过，或响应已由本拦截器输出</p>
+</li>
+<li><p>postHandler: 在处理器返回相应的响应结果之后被调用 , 用于做一些后续的处理操作</p>
+</li>
+<li><p>afterCompletion: 在整个请求结束之后被调用 </p>
+</li>
+</ol>
+<p>以下这段代码展示了如何配置interceptor信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;beans&gt;</div><div class="line">    &lt;bean class=&quot;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping&quot;&gt;</div><div class="line">        &lt;property name=&quot;interceptors&quot;&gt;</div><div class="line">            &lt;bean class=&quot;example.MyInterceptor&quot;/&gt;</div><div class="line">        &lt;/property&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line">&lt;beans&gt;</div></pre></td></tr></table></figure>
+<h1 id="视图解析"><a href="#视图解析" class="headerlink" title="视图解析"></a>视图解析</h1><p>几乎所有的MVC框架都会提供相应的视图解析机制，而SpringMVC中使用ViewResolver和View类来完成相应的功能， 其中ViewResolver是用于将控制器返回的逻辑视图解析成相应的视图, 而View类则完成数据的准备和实际的渲染工作. SpringMVC中自带了一些视图解析器的实现, 以下是相应的说明，后续还给出了视图解析器的配置样例: </p>
+<table>
+<thead>
+<tr>
+<th>视图解析器名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AbstractCachingViewResolver</td>
+<td>视图解析器的抽象实现，完成视图缓存的功能，所有需要缓存视图的视图解析器都可以从这个类派生</td>
+</tr>
+<tr>
+<td>XmlViewResolver</td>
+<td>由XML文件中的配置来定义逻辑视图到实际视图的对应关系，默认的xml文件位于/WEB-INF/views.xml中</td>
+</tr>
+<tr>
+<td>UrlBasedViewResolver</td>
+<td>基于URL路径的视图解析机制，如果实际的视图资源与逻辑视图之间有严格的对应关系，或者逻辑视图是实际视图的某个特定部分时，就可以使用这个解析器. 这个解析器还可以定义路径的前后缀信息</td>
+</tr>
+<tr>
+<td>InternalResourceViewResolver</td>
+<td>工具类，它是UrlBasedViewResolver和InternalResourceView的组合</td>
+</tr>
+<tr>
+<td>VelocityViewResolver、FreeMarkerViewResolver</td>
+<td>两者都是基于模板语言的视图解析器，都继承自UrlBasedViewResolver，对应的视图类分别是VelocityView和FreeMarkerView</td>
+</tr>
+<tr>
+<td>ContentNegotiatingViewResolver</td>
+<td>这个解析器自己并不解析视图，而是将解析工作委托给配置好的视图解析器列表来进行解析，可以根据请求地址的后缀或者Accept头信息返回相应的视图内容</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;viewResolver&quot;</div><div class="line">        class=&quot;org.springframework.web.servlet.view.UrlBasedViewResolver&quot;&gt;</div><div class="line">    &lt;property name=&quot;viewClass&quot; value=&quot;org.springframework.web.servlet.view.JstlView&quot;/&gt;</div><div class="line">    &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/jsp/&quot;/&gt;</div><div class="line">    &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<h2 id="解析器级联"><a href="#解析器级联" class="headerlink" title="解析器级联"></a>解析器级联</h2><p>SpringMVC中支持将解析器级联，通过Order接口对各个解析器进行排序，当有请求进来时则对它一一进行解析. 以下的样例代码展示了同时配置多个视图解析器: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;jspViewResolver&quot; class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;</div><div class="line">    &lt;property name=&quot;viewClass&quot; value=&quot;org.springframework.web.servlet.view.JstlView&quot;/&gt;</div><div class="line">    &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/jsp/&quot;/&gt;</div><div class="line">    &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line"></div><div class="line">&lt;bean id=&quot;excelViewResolver&quot; class=&quot;org.springframework.web.servlet.view.XmlViewResolver&quot;&gt;</div><div class="line">    &lt;property name=&quot;order&quot; value=&quot;1&quot;/&gt;</div><div class="line">    &lt;property name=&quot;location&quot; value=&quot;/WEB-INF/views.xml&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line"></div><div class="line">&lt;!-- in views.xml --&gt;</div><div class="line">&lt;beans&gt;</div><div class="line">    &lt;bean name=&quot;report&quot; class=&quot;org.springframework.example.ReportExcelView&quot;/&gt;</div><div class="line">&lt;/beans&gt;</div></pre></td></tr></table></figure>
+<h2 id="重定向视图"><a href="#重定向视图" class="headerlink" title="重定向视图"></a>重定向视图</h2><p>在视图解析器解析得到相应的视图类之后，由视图类进行后续的处理. 对于InternalResourceView来讲，内部使用RequestDispatcher进行相应的forward操作; 对于FreeMarkerView及VelocityView来讲，由它们直接输入相应的视图内容. 但是有时候可能会需要将视图重定向，比如经典的“Post-Redirect-Get”场景. 在Spring中提供了两种方式来进行重定向操作：</p>
+<ul>
+<li><p>使用RedirectView: 这种方式直接由处理器返回RedirectView的实例，因此重定向的操作直接由这个类完成，但这种做法将重定向操作与控制器紧密耦合，即控制器感知到业务在进行重定向操作，不推荐</p>
+</li>
+<li><p>使用redirect:前缀: 这种做法在返回的逻辑视图前加上相应的前缀，对于控制器层而言，它和其它的逻辑视图一样；但对于UrlBasedViewResolver来讲，带有这个前缀的逻辑视图意味着要进行重定向操作. 在重定向过程中，可以RedirectAttribute将当前请求的一些属性传递给目标URL.</p>
+</li>
+<li><p>使用forward：前缀: 使用这个前缀时，UrlBasedViewResolver会在内部生成InternalResourceView，并把逻辑视图中除了该前缀外的其它部分包装到view中，然后调用RequestDispatcher.forward方法进行处理.</p>
+</li>
+</ul>
+<h2 id="ContentNegotiatingViewResolver（CNVR"><a href="#ContentNegotiatingViewResolver（CNVR" class="headerlink" title="ContentNegotiatingViewResolver（CNVR)"></a>ContentNegotiatingViewResolver（CNVR)</h2><p>正如前面所说的那样，CNVR自己并不进行视图解析工作，它把这部分工作委托给相应的ViewResolver进行. CNVR支持以下两种策略进行解析：</p>
+<ul>
+<li><p>根据请求的后缀进行解析，比如fred.xml返回xml视图，而fred.pdf返回pdf视图</p>
+</li>
+<li><p>根据请求的Accept头信息, 但是这种方式在使用浏览器时比较局限，比如在使用FireFox浏览器时，它的Accept头总是被设置为Accept: text/html,application/xhtml+xml,application/xml;q=0.9,<em>/</em>;q=0.8</p>
+</li>
+</ul>
+<p>CNVR获取视图的整个过程如下：</p>
+<ol>
+<li><p>CNVR中的每个视图解析器都提供了一些View对象，这些View对象都提供了相应的ContentType属性，这个属性表示该View类能提供的内容类型。在视图解析的第一个步骤，就是将请求的内容类型（Content-Type)，与这些view的ContentType进行匹配，由第一个满足条件的View来进行处理</p>
+</li>
+<li><p>如果没有视图解析器（关联的View类）能够提供与请求类型相兼容的类型，那么交由CNVR的defaultViews中提供的view进行匹配，由第一个满足匹配条件的view进行处理</p>
+</li>
+</ol>
+<p>以下给出了CNVR的配置样例，</p>
+<ul>
+<li><p>当请求.html时，视图解析器就会根据text/html进行查找，InternalResourceViewResolver提供的View满足这个要求，因此就由这个解析器进行后续的处理; </p>
+</li>
+<li><p>当请求.atom类型时，视图解析器根据application/atom+xml类型进行查找，匹配到BeanNameViewResolver; </p>
+</li>
+<li><p>当请求的是.json类型时，视图解析器无法提供相应类型的内容，于是CNVR开始匹配defaultViews属性中匹配的view类，匹配到MappingJackson2JsonView.</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;bean class=&quot;org.springframework.web.servlet.view.ContentNegotiatingViewResolver&quot;&gt;</div><div class="line">    &lt;property name=&quot;viewResolvers&quot;&gt;</div><div class="line">        &lt;list&gt;</div><div class="line">            &lt;bean class=&quot;org.springframework.web.servlet.view.BeanNameViewResolver&quot;/&gt;</div><div class="line">            &lt;bean class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;</div><div class="line">                &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/jsp/&quot;/&gt;</div><div class="line">                &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;/&gt;</div><div class="line">            &lt;/bean&gt;</div><div class="line">        &lt;/list&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property name=&quot;defaultViews&quot;&gt;</div><div class="line">        &lt;list&gt;</div><div class="line">            &lt;bean class=&quot;org.springframework.web.servlet.view.json.MappingJackson2JsonView&quot;/&gt;</div><div class="line">        &lt;/list&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line"></div><div class="line">&lt;bean id=&quot;content&quot; class=&quot;com.foo.samples.rest.SampleContentAtomView&quot;/&gt;</div></pre></td></tr></table></figure>
+<p>如果CNVR中没有配置相应的viewResolvers属性，那么它将使用上下文中配置的所有viewResolver.</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><ul>
+<li>官方参考文档: <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#mvc-viewresolver-resolver" target="_blank" rel="external">官方文档</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringMVC-handlerMapping/" rel="tag"># SpringMVC handlerMapping</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/21/spring-mvc-controller/" rel="next" title="SpringMVC学习(2)">
+                <i class="fa fa-chevron-left"></i> SpringMVC学习(2)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/29/spring-mvc-fileUpload-exceptionHandle/" rel="prev" title="SpringMVC学习(4)">
+                SpringMVC学习(4) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/28/spring-mvc-handler-mapping/"
+           data-title="SpringMVC学习(3)" data-url="http://yoursite.com/2016/06/28/spring-mvc-handler-mapping/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#处理器映射"><span class="nav-text">处理器映射</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#拦截器"><span class="nav-text">拦截器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#视图解析"><span class="nav-text">视图解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#解析器级联"><span class="nav-text">解析器级联</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重定向视图"><span class="nav-text">重定向视图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContentNegotiatingViewResolver（CNVR"><span class="nav-text">ContentNegotiatingViewResolver（CNVR)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文档"><span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

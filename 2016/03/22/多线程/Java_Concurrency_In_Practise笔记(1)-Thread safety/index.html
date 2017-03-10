@@ -1,0 +1,754 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Java_Concurrency_In_Practise笔记(1)-Thread safety使用多线程编程时会遇到的问题
+数据一致性问题: nothing bad ever happen
+Liveness Failure: something good eventually happens, deadlock, starvation, livelock
+性能问题：多线程时，CPU需要在不同的上下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java_Concurrency_In_Practise笔记(1)-Thread safety">
+<meta property="og:url" content="http://yoursite.com/2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="Java_Concurrency_In_Practise笔记(1)-Thread safety使用多线程编程时会遇到的问题
+数据一致性问题: nothing bad ever happen
+Liveness Failure: something good eventually happens, deadlock, starvation, livelock
+性能问题：多线程时，CPU需要在不同的上下">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java_Concurrency_In_Practise笔记(1)-Thread safety">
+<meta name="twitter:description" content="Java_Concurrency_In_Practise笔记(1)-Thread safety使用多线程编程时会遇到的问题
+数据一致性问题: nothing bad ever happen
+Liveness Failure: something good eventually happens, deadlock, starvation, livelock
+性能问题：多线程时，CPU需要在不同的上下">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/"/>
+
+
+
+
+
+  <title> Java_Concurrency_In_Practise笔记(1)-Thread safety | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Java_Concurrency_In_Practise笔记(1)-Thread safety
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-22T10:20:54+08:00">
+                2016-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Java-Concurrency-In-Practise笔记-1-Thread-safety"><a href="#Java-Concurrency-In-Practise笔记-1-Thread-safety" class="headerlink" title="Java_Concurrency_In_Practise笔记(1)-Thread safety"></a>Java_Concurrency_In_Practise笔记(1)-Thread safety</h1><h2 id="使用多线程编程时会遇到的问题"><a href="#使用多线程编程时会遇到的问题" class="headerlink" title="使用多线程编程时会遇到的问题"></a>使用多线程编程时会遇到的问题</h2><ul>
+<li>数据一致性问题: nothing bad ever happen</li>
+<li>Liveness Failure: something good eventually happens, deadlock, starvation, livelock</li>
+<li>性能问题：多线程时，CPU需要在不同的上下文之间进行切换，线程间的同步操作等也会耗费一些CPU时间</li>
+</ul>
+<h2 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h2><p>编写线程安全的代码的本质是：<strong>管理好对那些可共享，可变状态的读写操作</strong></p>
+<p>任何情况下，如果多个线程会同时对某个状态访问，并且其中至少一个线程会对状态进行修改，那么它们就必须通过某些机制来保证数据的一致性，这也是判断某个对象是否是线程安全的依据</p>
+<h3 id="1-Race-condition"><a href="#1-Race-condition" class="headerlink" title="1. Race condition"></a>1. Race condition</h3><p>出现数据一致性的情况基本上都具备了上述的两个条件：<strong>同时有多个线程对对象的状态进行访问，并且其中至少一个线程会对状态进行修改</strong></p>
+<p>竞争条件指的是两个或多个线程读写某些共享数据，而最后的结果取决于线程的精确执行时序，这种情况在多线程中非常常见。</p>
+<ul>
+<li><p>check-and-act：执行的操作取决于某个观察到的先决条件，但当开始act(act并不一定是写操作，也可以是读操作）的时候，之前观察到的先决条件已经失效</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">e.g. 检查到文件系统中没有文件X，于是开始创建X，但是当开始创建X时，另一个线程已经在文件系统中创建了X</div><div class="line"></div><div class="line">e.g. lazy initialization: 单例模式</div></pre></td></tr></table></figure>
+</li>
+<li><p>read-modify-write: 由于这种操作的结果依赖于之前的操作，当写操作开始的时候，可能之前读取到的状态值已经发生变化</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">e.g. i++</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-解决办法"><a href="#2-解决办法" class="headerlink" title="2. 解决办法"></a>2. 解决办法</h3><p>解决数据的一致性问题也可以通过两个方面来进行：控制同一时间访问状态的线程数量，或者让状态变为只读变量，甚至可以将类实现为无状态类，无状态类天生就是线程安全的</p>
+<p>在JAVA中，同步的机制包括：<strong>synchronized， volatile，原子化变量，显式锁（这些方法本质上都是限制了同一时间只能有一个线程能操作对象的状态）</strong></p>
+<h4 id="2-1-原子化变量"><a href="#2-1-原子化变量" class="headerlink" title="2.1 原子化变量"></a>2.1 原子化变量</h4><p>对原子化变量的所有操作都是原子化的，从内存的角度来看，基本上同操作volatile变量是一样的（对volatile变量的写操作与随后对该变量的读操作之间有happen-before关系），因此这些操作都是线程安全的</p>
+<h4 id="2-2-synchronized"><a href="#2-2-synchronized" class="headerlink" title="2.2 synchronized"></a>2.2 synchronized</h4><p>synchronized由两个部分组成，<strong>一个是获取到的锁对象，另一个是锁的代码块</strong></p>
+<p>synchronized方法是synchronized代码块的一种简略表达，它包含方法中所有的代码块，锁的对象是调用该方法的那个对象；如果是对static方法加synchronized关键字，那么锁的对象的是该方法所在的类</p>
+<p>JAVA中的每个对象都有内置锁，当线程进入synchronized区域时，自动得到某个对象（synchronized后的对象）的内置锁，并在退出synchronized代码块时自动释放该对象锁，不管这种退出是正常的执行结束还是由于代码出现异常</p>
+<h4 id="2-3-重入锁"><a href="#2-3-重入锁" class="headerlink" title="2.3 重入锁"></a>2.3 重入锁</h4><p>当一个线程试图获取某个锁时，如果这个锁已经被其它的线程所占有，那么该线程会阻塞，但如果拥有这个锁的线程就是它本身，那么它可以重复地获取锁，这种机制被称为是重入锁，这种重入锁是通过记录拥有锁的线程对象以及获取锁的次数来实现的。</p>
+<h4 id="2-4-利用锁实现状态的统一"><a href="#2-4-利用锁实现状态的统一" class="headerlink" title="2.4 利用锁实现状态的统一"></a>2.4 利用锁实现状态的统一</h4><p>这里的状态并不一定是指某个变量，也可能是几个变量组合成的状态，在读写这些状态的时候，需要通过锁机制（不管是synchronized关键字还是Lock机制）保证同一时间只有一个线程在对它们进行操作</p>
+<p>另外，对某个类中所有的方法加上synchronized关键字并不能保证这个类的使用中就是线程安全的，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if(!a.containsElement(b))&#123;</div><div class="line">    a.addElement(b);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是个典型的check-and-act代码；在这段代码中，即使这两个方法都是原子操作，也不能保证这两个操作是原子的。</p>
+<h2 id="Liveness"><a href="#Liveness" class="headerlink" title="Liveness"></a>Liveness</h2>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/02/05/前端/eloquent_js/JS基础---高阶函数/" rel="next" title="JS基础 - 高阶函数">
+                <i class="fa fa-chevron-left"></i> JS基础 - 高阶函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/03/22/安全/Spring security的原理/" rel="prev" title="Spring security的原理">
+                Spring security的原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/"
+           data-title="Java_Concurrency_In_Practise笔记(1)-Thread safety" data-url="http://yoursite.com/2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-Concurrency-In-Practise笔记-1-Thread-safety"><span class="nav-text">Java_Concurrency_In_Practise笔记(1)-Thread safety</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用多线程编程时会遇到的问题"><span class="nav-text">使用多线程编程时会遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据一致性"><span class="nav-text">数据一致性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Race-condition"><span class="nav-text">1. Race condition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-解决办法"><span class="nav-text">2. 解决办法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-原子化变量"><span class="nav-text">2.1 原子化变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-synchronized"><span class="nav-text">2.2 synchronized</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-重入锁"><span class="nav-text">2.3 重入锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-利用锁实现状态的统一"><span class="nav-text">2.4 利用锁实现状态的统一</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Liveness"><span class="nav-text">Liveness</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

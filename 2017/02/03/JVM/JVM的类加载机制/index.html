@@ -1,0 +1,814 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JVM,类加载," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="JVM的类从被加载到虚拟机，到从内存中卸载，可以分为七个步骤，分别是加载， 验证， 准备， 解析， 初始化， 使用以及卸载. 如下图所示， 其中验证、准备和解析又被称统称为是“连接”阶段. 
+
+加载虚拟机在加载阶段将类定义加载到内存中，并在方法区中建立相应的运行时数据结构，同时在堆上建立相应的Class对象实例，作为访问方法区运行时数据的入口. 
+
+通过类的全限定名获取类定义的二进制字节流
+
+根据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM的类加载机制">
+<meta property="og:url" content="http://yoursite.com/2017/02/03/JVM/JVM的类加载机制/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="JVM的类从被加载到虚拟机，到从内存中卸载，可以分为七个步骤，分别是加载， 验证， 准备， 解析， 初始化， 使用以及卸载. 如下图所示， 其中验证、准备和解析又被称统称为是“连接”阶段. 
+
+加载虚拟机在加载阶段将类定义加载到内存中，并在方法区中建立相应的运行时数据结构，同时在堆上建立相应的Class对象实例，作为访问方法区运行时数据的入口. 
+
+通过类的全限定名获取类定义的二进制字节流
+
+根据">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/jvm-class-load.jpg?raw=true">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM的类加载机制">
+<meta name="twitter:description" content="JVM的类从被加载到虚拟机，到从内存中卸载，可以分为七个步骤，分别是加载， 验证， 准备， 解析， 初始化， 使用以及卸载. 如下图所示， 其中验证、准备和解析又被称统称为是“连接”阶段. 
+
+加载虚拟机在加载阶段将类定义加载到内存中，并在方法区中建立相应的运行时数据结构，同时在堆上建立相应的Class对象实例，作为访问方法区运行时数据的入口. 
+
+通过类的全限定名获取类定义的二进制字节流
+
+根据">
+<meta name="twitter:image" content="https://github.com/Essviv/images/blob/master/jvm-class-load.jpg?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/02/03/JVM/JVM的类加载机制/"/>
+
+
+
+
+
+  <title> JVM的类加载机制 | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/03/JVM/JVM的类加载机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JVM的类加载机制
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-03T15:18:00+08:00">
+                2017-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/03/JVM/JVM的类加载机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/03/JVM/JVM的类加载机制/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JVM的类从被加载到虚拟机，到从内存中卸载，可以分为七个步骤，分别是<strong>加载， 验证， 准备， 解析， 初始化， 使用以及卸载.</strong> 如下图所示， 其中验证、准备和解析又被称统称为是“连接”阶段. </p>
+<p><img src="https://github.com/Essviv/images/blob/master/jvm-class-load.jpg?raw=true" alt="jvm-class-load"></p>
+<h2 id="加载"><a href="#加载" class="headerlink" title="加载"></a>加载</h2><p>虚拟机在加载阶段将类定义加载到内存中，并在方法区中建立相应的运行时数据结构，同时在堆上建立相应的Class对象实例，作为访问方法区运行时数据的入口. </p>
+<ol>
+<li><p>通过类的全限定名获取类定义的二进制字节流</p>
+</li>
+<li><p>根据获取到的二进制字节流在方法区中建立运行时的数据结构</p>
+</li>
+<li><p>在堆中建立相应的Class对象实例，作为访问方法区运行时数据结构的入口</p>
+</li>
+</ol>
+<p>这里值得一提的是， 在第1步中”根据类的全限定名获取类定义的二进制字节流”， 并不要求一定要从Class文件中加载，任何可以获取到合法的类定义字节流的途径都可以. 相对于类加载的其它阶段， 类加载的过程（准确地说，是类加载阶段的第1步）是开发者可控性最强的阶段， 开发人员可以根据需要选择从任何需要的地方获取相应的类定义数据. </p>
+<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><p>在虚拟中， 类加载的第1步是通过“<strong>类加载器</strong>”来完成的，类加载器又可以分为不同的层次, 每个类加载器均有父加载器（启动加载器除外）， 在加载类对象的时候 ，类加载器采用了的是“双亲委派模型”. (<a href="http://essviv.github.io/2017/01/25/JVM/ClassLoader%E7%9A%84%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B/" target="_blank" rel="external">这里</a>). 具体来讲，当类加载器尝试加载某个类之前，它总是先将加载操作“委托”给父加载器执行，只有当父加载器无法加载该类对象时，它才自己尝试加载. </p>
+<ul>
+<li><p>启动加载器(Bootstrap ClassLoader)</p>
+</li>
+<li><p>扩展加载器(Extend ClassLoader)</p>
+</li>
+<li><p>应用加载器(Application ClassLoader)</p>
+</li>
+<li><p>自定义加载器(Custom ClassLoader)</p>
+</li>
+</ul>
+<p>另外，在虚拟机中，<strong>任意类的唯一性由类加载器以及这个类本身共同决定.</strong> 换句话说，即使是完全相同的一个类，如果加载的时候使用不同的类加载器，那么对于虚拟机而言就是两个不同的类. 在JAVA虚拟机中，类加载器可以细分为四类:</p>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><p>在完成类加载后，紧接着虚拟机要完成的操作就是“验证”, 在这步中虚拟机要完成的对类定义对象的验证，以保证加载的类对象是符合格式规范，且不会做破坏虚拟机的事情. 在验证阶段，虚拟机要完成的动作又可进一步细分为：</p>
+<ol>
+<li><p><strong>文件格式的验证</strong>: 这步验证的主要目的是保证字节流能够在方法区中正确无误地建立运行时数据结构，主要验证的内容包括确认字节流是否符合文件规范的要求，以及文件版本号能否被当前的虚拟机所处理. 在完成这步验证后，类定义的字节流就会在方法区中建立相应的运行时数据结构，后续的验证都会基于方法区中的数据结构来进行. </p>
+</li>
+<li><p><strong>元数据的验证</strong>： 这步验证主要是对类定义的各种元数据进行确认，保证不会出现不符合JAVA规范的元数据信息</p>
+</li>
+<li><p><strong>字节码的验证</strong>： 这步验证主要是确保类定义的数据流和控制流没有问题，以确保在类的执行过程中，不会有危及虚拟机安全的动作</p>
+</li>
+<li><p><strong>符号引用的验证</strong>： 这步验证主要是确保类定义的符号引用都能被正确地解析成直接引用</p>
+</li>
+</ol>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p><strong>准备阶段是正式为类变量分配内存并设置初始值的阶段， 这些内存都将在方法区中分配.</strong>这句话中，有三个地方值得引起我们的注意：</p>
+<ol>
+<li>为类变量分配内存： 在准备阶段，只会为<strong>类变量</strong>分配内存，不包括实例变量</li>
+<li>为类变量设置初始值： 这里的“初始值”通常情况下是指数据类型的初始值，而不是开发人员设置的值. </li>
+<li>内存将在方法区中分配： 类变量的内存都在被分配在方法区中，而不是堆上</li>
+</ol>
+<p>这里有个<strong>例外</strong>，就是当类变量被final修饰时，在准备阶段会完成类变量的赋值操作.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">例<span class="number">1</span>：</div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> value = <span class="number">3</span>;</div><div class="line"></div><div class="line">在完成准备阶段后，value的值会被初始化成<span class="number">0</span>，而不是<span class="number">3</span>（这步是在初始化阶段完成的）</div><div class="line"></div><div class="line">例<span class="number">2</span>： </div><div class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> value = <span class="number">3</span>;</div><div class="line"></div><div class="line">则完成“准备”阶段后，value的值会被初始化成<span class="number">3</span></div></pre></td></tr></table></figure>
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p>类文件的解析过程是将符号引用转化成直接引用的过程.</p>
+<p><strong>TODO</strong> </p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>在进入初始化阶段后，虚拟机才真正开始执行程序中定义的代码. 在“准备”阶段，类变量完成了内存分配及初始值的设置，而在这里，类变量将进一步按照程序的设置，完成赋值操作. 或者可以这么说，在初始化阶段，虚拟机调用了类构造器()方法.</p>
+<p>这里简单介绍下类构造器()方法的执行规则：</p>
+<ul>
+<li><p>()方法是由编译器收集类中定义的所有<strong>类变量的赋值操作和静态语句块</strong>合并产生的，收集的顺序由语句在源文件中出现的顺序决定. 其中， 静态语句块中只能访问到定义在静态语句块之前的变量，对于定义在静态语句块之后的变量，在语句块中可以赋值，但不能访问</p>
+</li>
+<li><p>()方法与实例构造器不同，它不需要显式地调用父类构造器，虚拟机会保证在调用子类()方法之前，已经完成父类()方法的调用.</p>
+</li>
+<li><p>()方法对于类或接口来讲不是必需的，如果类中没有静态语句块，也没有对类变量进行赋值操作，则可以不用生成()方法</p>
+</li>
+<li><p>虚拟机会保证类的()方法在多线程环境中被正确地加锁和同步.</p>
+</li>
+</ul>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><p><a href="http://wiki.jikexueyuan.com/project/java-vm/class-loading-mechanism.html" target="_blank" rel="external">类加载机制</a></p>
+</li>
+<li><p><a href="http://blog.csdn.net/u013256816/article/details/50829596" target="_blank" rel="external">JVM类加载机制</a></p>
+</li>
+</ol>
+<h2 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h2><ol>
+<li><p><a href="https://github.com/Essviv/spring/blob/master/src/main/java/com/cmcc/syw/jvm/statics/Child.java" target="_blank" rel="external">类加载的“初始化”1</a></p>
+</li>
+<li><p><a href="https://github.com/Essviv/spring/blob/master/src/main/java/com/cmcc/syw/jvm/statics/StaticTest.java" target="_blank" rel="external">类加载的“初始化”2</a></p>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JVM/" rel="tag"># JVM</a>
+          
+            <a href="/tags/类加载/" rel="tag"># 类加载</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/03/2017年学习计划/" rel="next" title="2017学习计划">
+                <i class="fa fa-chevron-left"></i> 2017学习计划
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/03/前端/eloquent_js/JS基础-数据类型/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/03/JVM/JVM的类加载机制/"
+           data-title="JVM的类加载机制" data-url="http://yoursite.com/2017/02/03/JVM/JVM的类加载机制/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#加载"><span class="nav-text">加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类加载器"><span class="nav-text">类加载器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#验证"><span class="nav-text">验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备"><span class="nav-text">准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解析"><span class="nav-text">解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例代码"><span class="nav-text">示例代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

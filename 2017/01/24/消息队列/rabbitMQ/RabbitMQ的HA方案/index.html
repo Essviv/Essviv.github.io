@@ -1,0 +1,802 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="RabbitMQ的HA方案默认情况下，queue可以认为是只存在于它被声明的那个节点中，但是broker和binding可以认为存在于集群中的所有节点中. 可以通过镜像的方式，将queue复制到其它的节点中，以此来提高可用性
+
+镜像队列之间彼此形成了一主多从的关系，当主镜像队列因为某些原因消失时，一个从镜像自动被推选为主镜像
+
+不论客户端连接到哪个结点，它都将连接到主镜像队列中，所有队列的操作也都">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RabbitMQ的HA方案">
+<meta property="og:url" content="http://yoursite.com/2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="RabbitMQ的HA方案默认情况下，queue可以认为是只存在于它被声明的那个节点中，但是broker和binding可以认为存在于集群中的所有节点中. 可以通过镜像的方式，将queue复制到其它的节点中，以此来提高可用性
+
+镜像队列之间彼此形成了一主多从的关系，当主镜像队列因为某些原因消失时，一个从镜像自动被推选为主镜像
+
+不论客户端连接到哪个结点，它都将连接到主镜像队列中，所有队列的操作也都">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RabbitMQ的HA方案">
+<meta name="twitter:description" content="RabbitMQ的HA方案默认情况下，queue可以认为是只存在于它被声明的那个节点中，但是broker和binding可以认为存在于集群中的所有节点中. 可以通过镜像的方式，将queue复制到其它的节点中，以此来提高可用性
+
+镜像队列之间彼此形成了一主多从的关系，当主镜像队列因为某些原因消失时，一个从镜像自动被推选为主镜像
+
+不论客户端连接到哪个结点，它都将连接到主镜像队列中，所有队列的操作也都">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/"/>
+
+
+
+
+
+  <title> RabbitMQ的HA方案 | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RabbitMQ的HA方案
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
+                2017-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="RabbitMQ的HA方案"><a href="#RabbitMQ的HA方案" class="headerlink" title="RabbitMQ的HA方案"></a>RabbitMQ的HA方案</h1><p>默认情况下，queue可以认为是只存在于它被声明的那个节点中，但是broker和binding可以认为存在于集群中的所有节点中. 可以通过镜像的方式，将queue复制到其它的节点中，以此来提高可用性</p>
+<ul>
+<li><p>镜像队列之间彼此形成了一主多从的关系，当主镜像队列因为某些原因消失时，一个从镜像自动被推选为主镜像</p>
+</li>
+<li><p>不论客户端连接到哪个结点，它都将连接到主镜像队列中，所有队列的操作也都是通过主镜像队列来完成，这样就保证了队列的FIFO特性</p>
+</li>
+<li><p>发布到主镜像队列中的消息将会被自动镜像到所有的从镜像中</p>
+</li>
+<li><p>如果主镜像中的消息确认已经被消费了，那么从镜像会自动将该消息删除</p>
+</li>
+<li><p>这种镜像的方式并不能将流量分散到各个节点，因为每个节点做的事情是一样的，但是它提高了可用性，如果主镜像队列因为某些原因消失了，那么从镜像可以自动升级为主镜像，保证了队列的可用性</p>
+</li>
+</ul>
+<h2 id="配置镜像"><a href="#配置镜像" class="headerlink" title="配置镜像"></a>配置镜像</h2><ul>
+<li><p>队列镜像的配置是通过policy来完成的，通过ha-mode和ha-params参数来配置</p>
+<ul>
+<li>ha-mode = all, ha-params = null: 所有的队列将被镜像到集群中的所有节点中</li>
+<li>ha-mode = exactly, ha-params = count: 所有的队列将被准确地镜像count份，如果集群中的节点少于count个，那么将会被镜像到所有的节点中</li>
+<li>ha-mode = nodes, ha-params = [node_names]: 所有的队列将被镜像到列表中提供的节点中，节点的名称为rabbitmctl cluster_status中列出的节点名</li>
+</ul>
+</li>
+<li><p>主队列镜像的位置也是可以配置的，可以在声明队列时设置，也可以在配置文件中设置，也可以通过配置policy中的queue-master-locator参数来完成，可选的参数有：</p>
+<ul>
+<li>min-masters: 将集群中拥有最少主队列镜像的那个节点作为主镜像所在的节点</li>
+<li>client-local: 将声明这个队列的节点作为主镜像所在的节点</li>
+<li>random: 随机挑选集群中的节点</li>
+</ul>
+</li>
+<li><p>如果新配置的policy导致原先的主镜像所在的节点不在队列的镜像集群中，那么RMQ会保持原来的主镜像所在的节点，直到新的主镜像完成同步后，才会将原来的主镜像队列删除。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">如果原来的队列Q被镜像到了[A, B]节点中，其中A节点为主镜像所在的节点，现在配置了新的policy，将队列中镜像到了[C, D]中，那么RMQ的操作将会是，保留[A, C, D], 直到C或者D完成了队列的同步后，再把A从镜像队列中删除，最后变成[C, D]</div></pre></td></tr></table></figure>
+</li>
+<li><p>排它队列: 由于具有排它性的队列当声明它的连接(connection)关闭时，会被自动删除，因此这种类型的队列永远也不会被镜像，而且它也不会被持久化，一旦连接关闭，它就会被自动删除，因此镜像和持久化都是没有意义的。</p>
+</li>
+<li><p>具体的配置可以通过rabbitmctl的set_policy来完成 ，也可以通过RMQ的管理界面来完成</p>
+</li>
+</ul>
+<h2 id="节点间的同步机制和故障转移"><a href="#节点间的同步机制和故障转移" class="headerlink" title="节点间的同步机制和故障转移"></a>节点间的同步机制和故障转移</h2><h3 id="1-同步机制"><a href="#1-同步机制" class="headerlink" title="1. 同步机制"></a>1. 同步机制</h3><p>节点可以选择在任意时刻加入到集群中，当一个节点新增到集群中时，它的镜像队列是空的，随后所有新增的消息都会自动发布到这个新的节点中，但之前队列中已经有的消息并不会自动出现在这个新的队列镜像中，但是随着时间的推移，这部分队列头部的消息被逐步消费掉，等到它们被全部消费掉的时候，新增节点中的消息将和其它节点的消息完全一致， 这种同步的机制被称为“自然同步”(natural synchronization)</p>
+<p>当然也可以选择显式地同步消息队列，但是由于同步会导致队列暂停响应，因此，建议只针对那些不活跃的队列进行显式同步，而对于那些活跃的队列只需要使用上述的方式进行同步即可</p>
+<p>显式的同步有两种方式，一种是手动同步，一种是自动同步，可以通过设置ha-sync-mode参数来完成，分别为manual和automatic. 在RMQ3.6.0之后，可以通过设置ha-sync-batch-size参数来批量同步，默认每次只同步一条消息. </p>
+<h3 id="2-故障转移"><a href="#2-故障转移" class="headerlink" title="2. 故障转移"></a>2. 故障转移</h3><p>当集群中的主镜像掉线时，集群中的某个从节点将会被推选为主镜像，如果此时集群中没有其它节点，那么该节点中那些被设置为持久化的消息将被持久化到硬盘，如果重启了该节点，这些消息将会被恢复； 如果某个从镜像原先属于某个集群中，那么当这个从镜像重启时，它将会重新加入到集群中，但是由于此时这个从镜像并不知道自己队列中的内容和主镜像中的内容是否一致，因此重新加入集群中意味着它将抛弃之前持久化的所有消息，以保持与主镜像内容的一致性</p>
+<p>当关闭主镜像时，如果此时集群中所有的从节点都处于未同步的状态，那么要分两种情况：</p>
+<ul>
+<li><p>如果关闭请求是来自可控制的事件(如RMQ服务器关闭或者系统关闭）那么RMQ会拒绝进行故障转移，此时它会直接将整个队列关闭，从而避免数据的丢失，但是这时候会造成队列的不可用</p>
+</li>
+<li><p>如果关闭请求是来自不可控制的事件(如服务器崩溃或节点掉线) 那么即使所有的从节点都处于未同步的状态，那么集群还是会自动进行故障转移，此时保障了集群的可用性，但是有可能会千万数据的丢失</p>
+</li>
+</ul>
+<p>如果想保证集群的可用性，在任何情况下都进行故障转移，那么可以设置ha-promote-on-shutdown参数为always, 这时在任何情况下，只要主镜像关闭了，即使集群中所有的从节点都处于未同步的状态，集群也将进行故障转移操作.</p>
+<p>当整个集群全部下线时，最后一个下线的节点必须是最先重新启动的节点，因为它是整个集群最后的主镜像，如果它没有被最先启动，那么所有启动的从镜像将会等待30秒，然后失败； 如果需要将这个主镜像从集群中移除，那么可以通过rabbitmqctl设置forget_cluster_node参数, 关于这个参数含义的解释可以参阅参考文档中的“Loss a master while all slaves are stopped.”一节。</p>
+<h3 id="HA方案下消息发送确认及事务的语义"><a href="#HA方案下消息发送确认及事务的语义" class="headerlink" title="HA方案下消息发送确认及事务的语义"></a>HA方案下消息发送确认及事务的语义</h3><p>HA方案下，消息发送确认及事务的语义是指所有的镜像队列都确认消息发送或者事务提交完成，也就是说，只要集群中的某个镜像没有对发送的消息进行确认，那么发布者将会被暂停，直到这个镜像发送了确认，或者集群中的其他镜像节点认为这个镜像已经掉线（掉线的检测是RMQ通过间隔一定时间的心跳检测来完成的)</p>
+<p>HA方案下，发布者的流量控制是也是通过这种方式来实现的，只有当集群中所有的镜像都允许发布者发布消息的时候，发布者才可以继续发布消息，否则它只能继续等待或者直到集群中的其它节点认为该节点已经掉线</p>
+<p>有些时间，消费者可能会需要知道集群中的某个节点掉线的通知，这可以通过设置x-cancel-on-ha-failover参数来实现，具体可以参见文档 </p>
+<h3 id="HA方案下节点掉线的处理和语义"><a href="#HA方案下节点掉线的处理和语义" class="headerlink" title="HA方案下节点掉线的处理和语义"></a>HA方案下节点掉线的处理和语义</h3><ul>
+<li><p>如果是从镜像掉线，那么主镜像依然是主镜像，其它的从镜像也不会得到任何通知或者采取任何操作</p>
+</li>
+<li><p>如果是主镜像掉线，那么以下的操作将会被执行：</p>
+<ul>
+<li><p>最老的那个从镜像将会被推选为新的主镜像，因为这样才能使丢消息的概率降到最低</p>
+</li>
+<li><p>如果所有的从镜像都没有处于“已同步”的状态，那么那些只存在于主镜像中的消息将会丢失</p>
+</li>
+<li><p>新的主镜像会认为之前所有到主镜像的连接都已经被突然中断，因此它会把所有没有收到消费确认的消息重新推到队列中，不管这种没有确认是由于网络中断造成的，还是由于原来的主镜像没有把相应的确认消息同步给它们造成的，这种做法可能会导致消费者重新消费到一条它已经处理过的消息</p>
+</li>
+<li><p>所有到原来的主镜像的连接都将被取消</p>
+</li>
+</ul>
+</li>
+<li><p>不管是主镜像掉线还是从镜像掉线，都不会影响到发布者的发布确认，因此从发布者的角度来讲，发布消息到镜像集群中和发布消息到其它任何类型的队列中是没有区别的. 另外，在掉线期间发布的消息也不会丢失，因为所有的消息都是直接发布到镜像集群中的所有节点中</p>
+</li>
+</ul>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ol>
+<li><a href="https://www.rabbitmq.com/ha.html" target="_blank" rel="external">HA方案</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/24/设计模式/迭代器模式/" rel="next" title="迭代器模式">
+                <i class="fa fa-chevron-left"></i> 迭代器模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/24/Web/Spring的IoC框架/" rel="prev" title="Spring的IoC框架">
+                Spring的IoC框架 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/"
+           data-title="RabbitMQ的HA方案" data-url="http://yoursite.com/2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RabbitMQ的HA方案"><span class="nav-text">RabbitMQ的HA方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置镜像"><span class="nav-text">配置镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#节点间的同步机制和故障转移"><span class="nav-text">节点间的同步机制和故障转移</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-同步机制"><span class="nav-text">1. 同步机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-故障转移"><span class="nav-text">2. 故障转移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HA方案下消息发送确认及事务的语义"><span class="nav-text">HA方案下消息发送确认及事务的语义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HA方案下节点掉线的处理和语义"><span class="nav-text">HA方案下节点掉线的处理和语义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-text">参考文档</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

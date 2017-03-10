@@ -1,0 +1,898 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="[TOC]
+#Hibernate
+##OverviewHibernate在应用程序和数据库之间增加了一层，用于管理POJO与DB之间的映射关系, 如下图所示
+##Bootstrap progress
+###Hibernate native bootstrap    ServiceRegistryBuilder –&amp;gt; ServiceRegistry –&amp;gt; MetaSources –&amp;gt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hibernate">
+<meta property="og:url" content="http://yoursite.com/2016/01/25/doc/hibernate/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="[TOC]
+#Hibernate
+##OverviewHibernate在应用程序和数据库之间增加了一层，用于管理POJO与DB之间的映射关系, 如下图所示
+##Bootstrap progress
+###Hibernate native bootstrap    ServiceRegistryBuilder –&amp;gt; ServiceRegistry –&amp;gt; MetaSources –&amp;gt">
+<meta property="og:image" content="http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/images/overview.png">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hibernate">
+<meta name="twitter:description" content="[TOC]
+#Hibernate
+##OverviewHibernate在应用程序和数据库之间增加了一层，用于管理POJO与DB之间的映射关系, 如下图所示
+##Bootstrap progress
+###Hibernate native bootstrap    ServiceRegistryBuilder –&amp;gt; ServiceRegistry –&amp;gt; MetaSources –&amp;gt">
+<meta name="twitter:image" content="http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/images/overview.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/01/25/doc/hibernate/"/>
+
+
+
+
+
+  <title> hibernate | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/doc/hibernate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                hibernate
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-25T10:20:54+08:00">
+                2016-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/01/25/doc/hibernate/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/doc/hibernate/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<p>#Hibernate</p>
+<p>##Overview<br>Hibernate在应用程序和数据库之间增加了一层，用于管理POJO与DB之间的映射关系, 如下图所示<br><img src="http://docs.jboss.org/hibernate/orm/5.0/userGuide/en-US/html_single/images/overview.png" alt="Overview"></p>
+<p>##Bootstrap progress</p>
+<p>###Hibernate native bootstrap<br>    ServiceRegistryBuilder –&gt; ServiceRegistry –&gt; MetaSources –&gt; MetadataBuilder –&gt; Metadata –&gt; SessionFactoryBuilder –&gt; SessionFactory –&gt; Session –&gt; Transaction ——&gt; transaction save/commit</p>
+<blockquote>
+<p>The native bootstrapping API is quite flexible, but in most cases it makes the most sense to think of it as a 3 step process:</p>
+<ol>
+<li>Build the StandardServiceRegistry</li>
+<li>Build the Metadata</li>
+<li>Use those 2 things to build the SessionFactory</li>
+</ol>
+</blockquote>
+<p>###JPA-compliant bootstrap</p>
+<ul>
+<li><p>container-bootstrapping</p>
+<blockquote>
+<p>For compliant container-bootstrapping, the container will build an EntityManagerFactory for each persistent-unit defined in the deployment’s META-INF/persistence.xml and make that available to the application for injection via the javax.persistence.PersistenceUnit annotation or via JNDI lookup.</p>
+</blockquote>
+</li>
+<li><p>application-bootstrapping</p>
+<blockquote>
+<p>For compliant application-bootstrapping, rather than the container building the EntityManagerFactory for the application, the application builds the EntityManagerFactory itself using the javax.persistence.Persistence bootstrap class. The application creates an entity manager factory by calling the createEntityManagerFactory method.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="Persistence-context"><a href="#Persistence-context" class="headerlink" title="Persistence context"></a>Persistence context</h2><h3 id="Entity-states"><a href="#Entity-states" class="headerlink" title="Entity states"></a>Entity states</h3><blockquote>
+<p><strong>transient</strong> - the entity has just been instantiated and is not associated with a persistence context. It has no persistent transient - the entity has just been instantiated and is not associated with a persistence context. It has no persistent representation in the database and typically no identifier value has been assigned.</p>
+<p><strong>managed, or persistent</strong> - the entity has an associated identifier and is associated with a persistence context. It may or may not physically exist in the database yet.</p>
+<p><strong>detached</strong> - the entity has an associated identifier, but is no longer associated with a persistence context (usually because the persistence context was closed or the instance was evicted from the context)</p>
+<p><strong>removed</strong> - the entity has an associated identifier and is associated with a persistence context, however it is scheduled for removal from the database.</p>
+</blockquote>
+<p>###Change states</p>
+<ul>
+<li>save/persist</li>
+<li>delete/remove</li>
+<li>getReference, load</li>
+<li>refresh(database –&gt; context)</li>
+<li>flush</li>
+<li>saveOrUpdate</li>
+<li>merge</li>
+</ul>
+<p>##Database Access</p>
+<p>###Dialect</p>
+<blockquote>
+<p>Although SQL is relatively standardized, each database vendor uses a subset and superset of ANSI SQL defined syntax. This is referred to as the database’s dialect.</p>
+</blockquote>
+<p>##锁机制</p>
+<p>###乐观锁</p>
+<ul>
+<li><p>@Version</p>
+<blockquote>
+<ul>
+<li>int, or Integer</li>
+<li>short, or Short</li>
+<li>long, or Long</li>
+<li>java.sql.Timestamp</li>
+</ul>
+</blockquote>
+</li>
+<li><p>@OptimisticLocking</p>
+<ul>
+<li>NONE</li>
+<li>VERSION(default)</li>
+<li>DIRTY</li>
+<li>ALL</li>
+</ul>
+</li>
+</ul>
+<p>###悲观锁<br>通过JDBC的锁机制来实现，用户只需要指定锁的级别即可</p>
+<p>##拦截器与事件</p>
+<p>###拦截器<br>Interceptor: 可以在session域，也可以在sessionFactory域，不过在sessionFactory域的拦截器需要考虑线程安全问题</p>
+<p>###事件<br>所有定义的事件都有相应的监听器，业务层通过实现这些监听器接口来实现监听的功能，注意监听器的实现必须是无状态</p>
+<p>###回调<br>暂时没看明白….</p>
+<p>##HQL</p>
+<p>###select</p>
+<blockquote>
+<p>select_statement :: =<br>     [select_clause]<br>     from_clause<br>     [where_clause]<br>     [groupby_clause]<br>     [having_clause]<br>     [orderby_clause]</p>
+<p>e.g. <code>from User</code></p>
+</blockquote>
+<p>###update</p>
+<blockquote>
+<p>update_statement ::= update_clause [where_clause]</p>
+<p>update_clause ::= UPDATE entity_name [[AS] identification_variable]<br>       SET update_item {, update_item}*</p>
+<p>update_item ::= [identification_variable.]{state_field | single_valued_object_field}<br>      = new_value</p>
+<p>new_value ::= scalar_expression |<br>               simple_entity_expression |<br>              NULL</p>
+<p><em>e.g.</em> </p>
+<ul>
+<li><code>update Customer c set c.name = &quot;sunyiwei&quot;, c.age = 27 where c.id = 27</code></li>
+<li><code>update versioned Customer c set c.name = &quot;patrick&quot; where c.id = 27 //version</code></li>
+</ul>
+</blockquote>
+<p>###delete</p>
+<blockquote>
+<p>delete_statement ::= delete_clause [where_clause]<br>delete_clause ::= DELETE FROM entity_name [[AS] identification_variable]<br><em>e.g.</em></p>
+<ul>
+<li>delete from Custom c where c.id = 27</li>
+</ul>
+</blockquote>
+<p>###insert(HQL only)</p>
+<blockquote>
+<p>insert_statement ::= insert_clause select_statement<br>insert_clause ::= INSERT INTO entity_name (attribute_list)<br>attribute_list ::= state_field[, state_field ]*</p>
+<p><em>e.g.</em><br>insert into Custom c (name, age)  select name, age from Custom where id=27</p>
+</blockquote>
+<p>###from</p>
+<p>####1. identification variables(alias)</p>
+<p>####2. root entity reference</p>
+<p>####3. explicit join: [left join, inner join] fetch sth with someCondition</p>
+<p>####4. implicit join</p>
+<blockquote>
+<p><em>e.g.</em><br>select c<br>from Customer c<br>where c.chiefExecutive.age &lt; 25</p>
+<p>// same as<br>select c<br>from Customer c<br>   inner join c.chiefExecutive ceo<br>where ceo.age &lt; 25</p>
+</blockquote>
+<p>===========&gt; 13.4</p>
+<p>##类型映射 </p>
+<p>###基本类型</p>
+<ul>
+<li>@Basic: 基本上可以不用</li>
+<li>@Column: 当默认的列名不符合需要时，可以通过这个注解来进行修改</li>
+</ul>
+<p>###枚举类型</p>
+<ul>
+<li>@Enumerated<ul>
+<li>ORDINAL: 整型数据，按enum中的ordinal来映射</li>
+<li>NAME: 字符串类型，按enum中的name来映射</li>
+</ul>
+</li>
+<li>AttributeConverter + @Converter</li>
+</ul>
+<p>###复合类型</p>
+<ul>
+<li>@Embeddable</li>
+<li>@Embedded</li>
+<li>多个复合类型时，会遇到类型匹配的问题，此时需要引入@AttributeOverride来解决，具体可以查看AttributeOverride的注解</li>
+</ul>
+<p>###容器类型<br>文档中没有做详细的描述，这块还需要进一步阅读其它文档来补充</p>
+<p>###标识符</p>
+<ul>
+<li><p>简单类型</p>
+<blockquote>
+<p>According to JPA only the following types should be used as identifier attribute types: </p>
+<ul>
+<li>any Java primitive type</li>
+<li>any primitive wrapper type</li>
+<li>java.lang.String</li>
+<li>java.util.Date (TemporalType#DATE)</li>
+<li>java.sql.Date</li>
+<li>java.math.BigDecimal</li>
+<li>java.math.BigInteger</li>
+</ul>
+</blockquote>
+</li>
+<li><p>复杂类型: <a href="http://docs.jboss.org/hibernate/orm/5.0/mappingGuide/en-US/html_single/#identifiers-composite" target="_blank" rel="external">说明</a></p>
+<ul>
+<li>@EmbeddedId</li>
+<li>@IdClass</li>
+</ul>
+</li>
+<li><p>自动产生ID的策略: GenerationType</p>
+<ul>
+<li>AUTO (顺序为: SequenctGenerator –&gt; TableGenerator –&gt; GenericGenerator)</li>
+<li>IDENTITY</li>
+<li>SEQUENCE</li>
+<li>TABLE</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/01/25/安全/shiro学习笔记/" rel="next" title="shiro学习笔记">
+                <i class="fa fa-chevron-left"></i> shiro学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/25/doc/RESTful Spring/" rel="prev" title="RESTful Spring">
+                RESTful Spring <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/01/25/doc/hibernate/"
+           data-title="hibernate" data-url="http://yoursite.com/2016/01/25/doc/hibernate/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Persistence-context"><span class="nav-text">Persistence context</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Entity-states"><span class="nav-text">Entity states</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

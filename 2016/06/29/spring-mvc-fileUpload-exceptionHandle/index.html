@@ -1,0 +1,766 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SpringMVC fileUpload exceptionHandle," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="文件上传Spring中对于文件上传的支持是通过MultipartResolver接口来实现的，默认情况下，spring关于文件上传的支持是关闭的，如果需要，需要在上下文中配置相应的multipartResolver对象，并指定它的名字为“multipartResolver”. spring框架中自带了两种multipartResolver的实现， 配置的样例如下：
+
+CommonsMultipar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC学习(4)">
+<meta property="og:url" content="http://yoursite.com/2016/06/29/spring-mvc-fileUpload-exceptionHandle/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="文件上传Spring中对于文件上传的支持是通过MultipartResolver接口来实现的，默认情况下，spring关于文件上传的支持是关闭的，如果需要，需要在上下文中配置相应的multipartResolver对象，并指定它的名字为“multipartResolver”. spring框架中自带了两种multipartResolver的实现， 配置的样例如下：
+
+CommonsMultipar">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC学习(4)">
+<meta name="twitter:description" content="文件上传Spring中对于文件上传的支持是通过MultipartResolver接口来实现的，默认情况下，spring关于文件上传的支持是关闭的，如果需要，需要在上下文中配置相应的multipartResolver对象，并指定它的名字为“multipartResolver”. spring框架中自带了两种multipartResolver的实现， 配置的样例如下：
+
+CommonsMultipar">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/29/spring-mvc-fileUpload-exceptionHandle/"/>
+
+
+
+
+
+  <title> SpringMVC学习(4) | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/29/spring-mvc-fileUpload-exceptionHandle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC学习(4)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-29T18:54:00+08:00">
+                2016-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/06/29/spring-mvc-fileUpload-exceptionHandle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/29/spring-mvc-fileUpload-exceptionHandle/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h1><p>Spring中对于文件上传的支持是通过MultipartResolver接口来实现的，默认情况下，spring关于文件上传的支持是关闭的，如果需要，需要在上下文中配置相应的multipartResolver对象，并指定它的名字为“multipartResolver”. spring框架中自带了两种multipartResolver的实现， 配置的样例如下：</p>
+<ul>
+<li><p>CommonsMultipartResolver: 使用这个解析器需要引用o.s.web.multipart包</p>
+</li>
+<li><p>StandardServletMultipartResolver: spring内部提供的multipartResolver的标准实现</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;multipartResolver&quot;</div><div class="line">        class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;&gt;</div><div class="line"></div><div class="line">    &lt;!-- one of the properties available; the maximum file size in bytes --&gt;</div><div class="line">    &lt;property name=&quot;maxUploadSize&quot; value=&quot;100000&quot;/&gt;</div><div class="line"></div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<p>在配置了multipartResolver之后，后续所有的请求都会被解析，如果判断出该请求是文件上传请求，则会调用multipartResolver的resolveMultipart方法，将request包装成MultipartHttpServletRequest. </p>
+<h2 id="在表单中使用multipartResolver"><a href="#在表单中使用multipartResolver" class="headerlink" title="在表单中使用multipartResolver"></a>在表单中使用multipartResolver</h2><p>在表单中使用multipartResolver分为两个步骤， 示例代码如下, 可以看出，在控制器的实现中基本没有什么变化，只是将原来的HttpServletRequest包装成了MultipartHttpServletRequest，这步是在请求进入DispatcherServlet的doDispatch方法时被调用的（后续会对DispatcherServlet的doDispatch方法做源码分析)： </p>
+<ol>
+<li><p>指定表单的enctype为“multipart/form-data”</p>
+</li>
+<li><p>在控制器相应的处理方法中，通过MultipartFile或者MultipartHttpServletRequest获取相应的请求对象，并获取上传的文件</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">//表单内容</div><div class="line">&lt;html&gt;</div><div class="line">	&lt;body&gt;</div><div class="line">		&lt;form action=&quot;/form&quot; enctype=&quot;multipart/form-data&quot; method=&quot;post&quot;&gt;</div><div class="line">			&lt;input type=&quot;input&quot; name=&quot;name&quot; /&gt;</div><div class="line">			&lt;input type=&quot;file&quot; name=&quot;file&quot; /&gt;</div><div class="line">			&lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;submit&quot;/&gt;</div><div class="line">		&lt;/form&gt;</div><div class="line">	&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div><div class="line"></div><div class="line">//控制器实现</div><div class="line">@Controller</div><div class="line">public class FileUploadController &#123;</div><div class="line"></div><div class="line">    @PostMapping(&quot;/form&quot;)</div><div class="line">    public String handleFormUpload(@RequestParam(&quot;name&quot;) String name,</div><div class="line">            @RequestParam(&quot;file&quot;) MultipartFile file) &#123;</div><div class="line"></div><div class="line">        if (!file.isEmpty()) &#123;</div><div class="line">            byte[] bytes = file.getBytes();</div><div class="line">            // store the bytes somewhere</div><div class="line">            return &quot;redirect:uploadSuccess&quot;;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        return &quot;redirect:uploadFailure&quot;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="在编码客户端中使用MultipartResolver"><a href="#在编码客户端中使用MultipartResolver" class="headerlink" title="在编码客户端中使用MultipartResolver"></a>在编码客户端中使用MultipartResolver</h2><p>通过代码向服务端上传文件时，绝大部分的逻辑和上述通过表单上传是一致的，但是通过代码上传文件时，可以一次性上传多个文件内容，并且上传的文件内容格式可以互不相同，下面的代码展示了这样的上传样例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">POST /someUrl</div><div class="line">Content-Type: multipart/mixed</div><div class="line"></div><div class="line">--edt7Tfrdusa7r3lNQc79vXuhIIMlatb7PQg7Vp</div><div class="line">Content-Disposition: form-data; name=&quot;meta-data&quot;</div><div class="line">Content-Type: application/json; charset=UTF-8</div><div class="line">Content-Transfer-Encoding: 8bit</div><div class="line"></div><div class="line">&#123;</div><div class="line">	&quot;name&quot;: &quot;value&quot;</div><div class="line">&#125;</div><div class="line">--edt7Tfrdusa7r3lNQc79vXuhIIMlatb7PQg7Vp</div><div class="line">Content-Disposition: form-data; name=&quot;file-data&quot;; filename=&quot;file.properties&quot;</div><div class="line">Content-Type: text/xml</div><div class="line">Content-Transfer-Encoding: 8bit</div><div class="line">... File Data ...</div><div class="line"></div><div class="line">//控制器的实现</div><div class="line">@PostMapping(&quot;/someUrl&quot;)</div><div class="line">public String onSubmit(@RequestPart(&quot;meta-data&quot;) MetaData metadata,</div><div class="line">        @RequestPart(&quot;file-data&quot;) MultipartFile file) &#123;</div><div class="line"></div><div class="line">    // ...</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在这种情况下，可以通过@RequestPart或者@RequestParam来指定获取哪部分的数据，并且可以通过HttpMessageConverter自动完成相应的类型转换，其它的逻辑与表单完全一致.</p>
+<h1 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h1><p>在springMVC中，当请求在被处理的过程中，如果出现了异常情况，异常情况会交由HandlerExcetionResolver接口处理. 在SpringMVC框架中，可以通过三种方式进行异常处理: </p>
+<ol>
+<li><p>实现HandlerExceptionResolver接口: 这个接口定义了resolveException方法来处理在发生异常的情况下返回的ModelAndView对象</p>
+</li>
+<li><p>使用SimpleMappingExceptionResolver实现: 这个实现提供了异常类型到视图类的映射关系</p>
+</li>
+<li><p>使用@ExceptionHandler注解: 这个注解的作用是当异常产生的时候，调用有这个注解的方法来处理异常. 它可以指定要处理的异常类型，默认为方法参数的异常类型. </p>
+</li>
+</ol>
+<p>@ExceptionHandler可以只作用于某个Controller类中的方法，也可以通过ControllerAdvise注解作用于多个控制器类. 在需要使用多个HandlerExceptionResolver的场合，可以通过HandlerExceptionResolverComposite类进行组合. </p>
+<h2 id="ExceptionHandler注解"><a href="#ExceptionHandler注解" class="headerlink" title="@ExceptionHandler注解"></a>@ExceptionHandler注解</h2><p>在SpringMVC中，使用ExceptionHandlerExceptionResolver来处理@ExceptionHandler注解的异常信息. 它特别适合于不需要返回错误视图，只是简单地返回错误代码及错误说明的场景, 例如在RESTful接口的使用中，就可以使用这个注解对异常信息进行处理. 以下是示例代码， 当请求/exception地址时会抛出运行时异常，这个运行时异常会被@ExceptionHandler注解的方法处理，最终返回响应码为400，响应信息为“Bad Request.”: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@RequestMapping</div><div class="line">@Controller</div><div class="line">public class ExceptionHandlerController &#123;</div><div class="line">    @RequestMapping(&quot;/exception&quot;)</div><div class="line">    public String throwException() &#123;</div><div class="line">        throw new RuntimeException();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @ExceptionHandler(value = RuntimeException.class)</div><div class="line">    @ResponseBody</div><div class="line">    public String handleException(HttpServletResponse response) &#123;</div><div class="line">        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);</div><div class="line">        return &quot;Bad request.&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="标准的spring异常"><a href="#标准的spring异常" class="headerlink" title="标准的spring异常"></a>标准的spring异常</h2><p>在Spring进行处理的过程中，可能会产生许多类型的异常信息，使用SimpleMappingExceptionResolver可以将这些异常信息映射成相应的错误视图，但是有的时候可能希望将这些异常信息映射成相应的错误代码, spring中提供了DefaultHandlerExceptionResolver来实现这个功能. </p>
+<p>DefaultHandlerExceptionResolver默认被注册到spring中, 它当一些标准的spring异常类型转换成相应的错误代码，如BindException转化成400， HttpMediaTypeNotSupportedException转化成415等等，具体的对应关系可以查阅参考文献.</p>
+<h2 id="ResponseStatus"><a href="#ResponseStatus" class="headerlink" title="@ResponseStatus"></a>@ResponseStatus</h2><p>在Spring中自定义异常类时，可以使用@ResponseStatus注解, 它可以指定相应的错误代码和错误信息，当处理器抛出这种类型的异常信息时，spring会自动将它转化成相应的错误代码和错误信息. 在spring内部，使用ResponseStatusExceptionResolver进行这个注解的处理，默认情况下spring就会注册这个解析器</p>
+<p>除此之外，Servlet也支持将异常信息通过错误码和异常类型映射成相应的处理器进行处理. </p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>官方文档: <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#mvc-multipart" target="_blank" rel="external">官方文档</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringMVC-fileUpload-exceptionHandle/" rel="tag"># SpringMVC fileUpload exceptionHandle</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/28/spring-mvc-handler-mapping/" rel="next" title="SpringMVC学习(3)">
+                <i class="fa fa-chevron-left"></i> SpringMVC学习(3)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/02/spring-mvc-code-based-servlet-container-config/" rel="prev" title="Spring学习(5)">
+                Spring学习(5) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/29/spring-mvc-fileUpload-exceptionHandle/"
+           data-title="SpringMVC学习(4)" data-url="http://yoursite.com/2016/06/29/spring-mvc-fileUpload-exceptionHandle/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文件上传"><span class="nav-text">文件上传</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#在表单中使用multipartResolver"><span class="nav-text">在表单中使用multipartResolver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在编码客户端中使用MultipartResolver"><span class="nav-text">在编码客户端中使用MultipartResolver</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异常处理"><span class="nav-text">异常处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ExceptionHandler注解"><span class="nav-text">@ExceptionHandler注解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准的spring异常"><span class="nav-text">标准的spring异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ResponseStatus"><span class="nav-text">@ResponseStatus</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

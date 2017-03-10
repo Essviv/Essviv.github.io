@@ -1,0 +1,757 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Reactor模型Reactor模型的中心思想是将所有要处理的IO事件及其处理器注册到一个中心的IO多路复用器上，并将主线程阻塞在多路复用器上；当有相应的IO事件到达时，多路复用器将IO事件分发给相应的处理器进行处理.Reactor模型的模型图如下所示， 其中包括几个核心组件：
+
+Initiation Dispatcher（分发器）： 这是Reactor模型的中心组件，所有的IO事件及其处理器都要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="reactor模型">
+<meta property="og:url" content="http://yoursite.com/2017/01/25/IO/netty/reactor模型/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="Reactor模型Reactor模型的中心思想是将所有要处理的IO事件及其处理器注册到一个中心的IO多路复用器上，并将主线程阻塞在多路复用器上；当有相应的IO事件到达时，多路复用器将IO事件分发给相应的处理器进行处理.Reactor模型的模型图如下所示， 其中包括几个核心组件：
+
+Initiation Dispatcher（分发器）： 这是Reactor模型的中心组件，所有的IO事件及其处理器都要">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/reactor-uml.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/reactor-single-thread.png?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/reactor-multi-thread.png?raw=true">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="reactor模型">
+<meta name="twitter:description" content="Reactor模型Reactor模型的中心思想是将所有要处理的IO事件及其处理器注册到一个中心的IO多路复用器上，并将主线程阻塞在多路复用器上；当有相应的IO事件到达时，多路复用器将IO事件分发给相应的处理器进行处理.Reactor模型的模型图如下所示， 其中包括几个核心组件：
+
+Initiation Dispatcher（分发器）： 这是Reactor模型的中心组件，所有的IO事件及其处理器都要">
+<meta name="twitter:image" content="https://github.com/Essviv/images/blob/master/reactor-uml.jpg?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/01/25/IO/netty/reactor模型/"/>
+
+
+
+
+
+  <title> reactor模型 | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/reactor模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                reactor模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
+                2017-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/25/IO/netty/reactor模型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/reactor模型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Reactor模型"><a href="#Reactor模型" class="headerlink" title="Reactor模型"></a>Reactor模型</h1><p>Reactor模型的中心思想是将所有要处理的IO事件及其处理器注册到一个中心的IO多路复用器上，并将主线程阻塞在多路复用器上；当有相应的IO事件到达时，多路复用器将IO事件分发给相应的处理器进行处理.Reactor模型的模型图如下所示， 其中包括几个核心组件：</p>
+<ul>
+<li><p>Initiation Dispatcher（分发器）： 这是Reactor模型的中心组件，所有的IO事件及其处理器都要在这里进行注册，同时它还拥有一个多路复用器（Synchronous event demultiplexer），在进程启动时，它会阻塞多路复用器以监听注册的IO事件，当有IO事件到达时，多路复用器会通知分发器，而分发器会调用之前注册的事件处理器对相应的IO事件进行处理.</p>
+</li>
+<li><p>Synchronous event demultiplexer(多路复用器）:  多路复用器负责监听相应的IO事件，当IO事件到达时，由多路复用器负责通知到分发器. </p>
+</li>
+<li><p>事件处理器： 通常情况下，事件处理器会将它要处理的事件及其自己注册到分发器中，当分发器得到多路复用器的事件通知后，就会回调这些事件处理器进行处理， IO事件中往往有发生当前IO事件的句柄信息（handle）</p>
+</li>
+<li><p>事件： Reactor中的事件基本上可以认为是IO事件， 这些IO事件都会发生在一定的句柄中(handle)， 它是用来标识网络设备的标识.</p>
+</li>
+</ul>
+<p><img src="https://github.com/Essviv/images/blob/master/reactor-uml.jpg?raw=true" alt="reactor-uml"></p>
+<p>拿JAVA中的NIO编程举例（以下的例子）， ServerSocketChannel就是图中的handle, 它可能发生的事件包括Accept, Read, Write等等， 而Selector就是NIO中的多路复用器，整个程序的实现就是分发器. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">       <span class="comment">//handle</span></div><div class="line">       ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();</div><div class="line">       serverSocketChannel.socket().bind(<span class="keyword">new</span> InetSocketAddress(HOST, PORT));</div><div class="line">       serverSocketChannel.configureBlocking(<span class="keyword">false</span>);</div><div class="line"></div><div class="line">       <span class="comment">//demultiplexer</span></div><div class="line">       Selector selector = Selector.open();</div><div class="line">       <span class="keyword">int</span> insteresSet = SelectionKey.OP_ACCEPT;</div><div class="line"></div><div class="line">       <span class="comment">//register</span></div><div class="line">       serverSocketChannel.register(selector, insteresSet);</div><div class="line"></div><div class="line">       <span class="comment">//event loop</span></div><div class="line">       <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">           <span class="comment">//阻塞等待事件</span></div><div class="line">           selector.select();</div><div class="line">           Set&lt;SelectionKey&gt; selectionKeyset = selector.selectedKeys();</div><div class="line">           Iterator&lt;SelectionKey&gt; iter = selectionKeyset.iterator();</div><div class="line"></div><div class="line">           <span class="keyword">while</span> (iter.hasNext()) &#123;</div><div class="line">               SelectionKey selectionKey = iter.next();</div><div class="line"></div><div class="line">               <span class="keyword">if</span> (selectionKey.isAcceptable()) &#123;</div><div class="line">                   <span class="comment">//accept event handler</span></div><div class="line">                   acceptProcessor(selectionKey);</div><div class="line">               &#125; <span class="keyword">else</span> <span class="keyword">if</span> (selectionKey.isReadable()) &#123;</div><div class="line">                   <span class="comment">//read event handler</span></div><div class="line">                   readProcessor(selectionKey);</div><div class="line">               &#125; <span class="keyword">else</span> &#123;</div><div class="line">                   System.out.println(<span class="string">"Unknown op."</span>);</div><div class="line">               &#125;</div><div class="line"></div><div class="line">               iter.remove();</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   <span class="comment">//read事件处理器</span></div><div class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readProcessor</span><span class="params">(SelectionKey selectionKey)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">       SocketChannel sc = (SocketChannel) selectionKey.channel();</div><div class="line">       ByteBuffer byteBuffer = ByteBuffer.allocate(<span class="number">64</span>);</div><div class="line"></div><div class="line">       sc.read(byteBuffer);</div><div class="line">       byteBuffer.flip();</div><div class="line"></div><div class="line">       String content = Charset.forName(<span class="string">"utf-8"</span>).newDecoder().decode(byteBuffer).toString();</div><div class="line">       String response = <span class="string">"你好, 客户端. 我已经收到你的消息, 内容为\""</span> + content + <span class="string">"\""</span>;</div><div class="line"></div><div class="line">       sc.write(ByteBuffer.wrap(response.getBytes()));</div><div class="line">       sc.close();</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   <span class="comment">//accept事件处理器</span></div><div class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">acceptProcessor</span><span class="params">(SelectionKey selectionKey)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">       ServerSocketChannel ssc = (ServerSocketChannel) selectionKey.channel();</div><div class="line">       SocketChannel sc = ssc.accept();</div><div class="line">       sc.configureBlocking(<span class="keyword">false</span>);</div><div class="line"></div><div class="line">       sc.register(selectionKey.selector(), SelectionKey.OP_READ);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<h2 id="Reactor的实现"><a href="#Reactor的实现" class="headerlink" title="Reactor的实现"></a>Reactor的实现</h2><p>在java nio中，提供了Reactor实现需要的组件， Selector实现了多路复用器的角色， SelectionKey代表了通道到多路复用器间的注册关系（在Reactor模型中， 事件及其处理器是注册到分发器中， 这里有点小小的区别，但不影响实现 ），同时也代表了相应的IO事件； 对比下来，如果想用JAVA NIO实现Reactor模型，还需要提供分发器（Dispatcher）， 事件处理器， 并在通道注册到多路复用器时绑定相应的事件处理器（这个可以在调用注册方法时提供相应的attachment来实现）, 因此， 实现的关键点就是提供分发器和事件处理器. 根据实现方式的不同，又可以进一步细分为：</p>
+<h3 id="1-单线程版本"><a href="#1-单线程版本" class="headerlink" title="1. 单线程版本"></a>1. 单线程版本</h3><p>参见代码<a href="https://github.com/Essviv/nio/tree/master/src/main/java/com/cmcc/syw/reactor/singlethread" target="_blank" rel="external">Reactor单线程</a>（版本号： ea3714f）， 查看这个版本的代码可以看出，分发器自始至终只启动了一个线程，这个线程负责监听IO事件，当IO事件到达时，它依次调用相应的事件处理器进行处理， 待所有IO事件被处理完后，分发器将开启下一轮监听. 这样的实现代码逻辑简单，思路清晰，不需要处理多线程时存在的竞争条件和锁的问题，但它有个致命的缺点，当客户端数量增加时，可能会有大量的IO事件产生，这些事件的处理过程都是串行进行的，必然会导致分发器的处理效率下降，无法满足业务量扩展的需要.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/reactor-single-thread.png?raw=true" alt="reactor-uml"></p>
+<h3 id="2-多线程版本"><a href="#2-多线程版本" class="headerlink" title="2. 多线程版本"></a>2. 多线程版本</h3><p>参见代码<a href="https://github.com/Essviv/nio/tree/master/src/main/java/com/cmcc/syw/reactor/singlethread" target="_blank" rel="external">Reactor线程池版本</a>（版本号：4019213), 这个版本的代码要注意的是事件处理器的处理逻辑被放到了线程池中进行，这也就意味着，程序必须要考虑并发的情况（比如，同一个读事件被多次分发， 读事件处理的过程中注册的事件类型被改变等等问题）. 在代码中每个处理器都引入了当前的处理模式（读或者写），以此来避免处理过程中事件类型被改变的问题； 同时引入了“正在处理中”的状态，防止同一次读事件被多次分发多次处理. 但值得一提的是，这个版本只是将事件的处理放到线程池中，而对于事件的分发(比如连接事件)还是保持单线程，在客户端连接数增加时，会出现性能瓶颈</p>
+<p><img src="https://github.com/Essviv/images/blob/master/reactor-multi-thread.png?raw=true" alt="reactor-uml"></p>
+<h3 id="3-扩展的多线程版本"><a href="#3-扩展的多线程版本" class="headerlink" title="3. 扩展的多线程版本"></a>3. 扩展的多线程版本</h3><p>略</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><p><a href="http://www.cs.wustl.edu/~schmidt/PDF/reactor-siemens.pdf" target="_blank" rel="external">Reactor的论文</a> </p>
+</li>
+<li><p><a href="http://blog.csdn.net/u013074465/article/details/46276967" target="_blank" rel="external">http://blog.csdn.net/u013074465/article/details/46276967</a></p>
+</li>
+<li><p><a href="http://jeewanthad.blogspot.jp/2013/02/reactor-pattern-explained-part-1.html" target="_blank" rel="external">http://jeewanthad.blogspot.jp/2013/02/reactor-pattern-explained-part-1.html</a></p>
+</li>
+<li><p><a href="http://www.puncsky.com/blog/2015/01/13/understanding-reactor-pattern-for-highly-scalable-i-o-bound-web-server/" target="_blank" rel="external">RI</a></p>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/25/zookeeper学习摘要/" rel="next" title="zookeeper学习摘要">
+                <i class="fa fa-chevron-left"></i> zookeeper学习摘要
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/25/IO/netty/备忘/" rel="prev" title="备忘">
+                备忘 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/25/IO/netty/reactor模型/"
+           data-title="reactor模型" data-url="http://yoursite.com/2017/01/25/IO/netty/reactor模型/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Reactor模型"><span class="nav-text">Reactor模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reactor的实现"><span class="nav-text">Reactor的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-单线程版本"><span class="nav-text">1. 单线程版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-多线程版本"><span class="nav-text">2. 多线程版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-扩展的多线程版本"><span class="nav-text">3. 扩展的多线程版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

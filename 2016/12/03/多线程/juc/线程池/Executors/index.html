@@ -1,0 +1,779 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="ExecutorsExecutors是并发包中提供的工具类，它可以用来创建以下这些对象:
+
+ExecutorService
+
+ScheduledExecutorService
+
+ThreadFactory
+
+Callable
+
+
+1. Executor接口首先先来看看并发包中的Executor接口的结构图. Executor接口只提供了一个方法，就是execute方法，它定义了执行Runnable">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Executors">
+<meta property="og:url" content="http://yoursite.com/2016/12/03/多线程/juc/线程池/Executors/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="ExecutorsExecutors是并发包中提供的工具类，它可以用来创建以下这些对象:
+
+ExecutorService
+
+ScheduledExecutorService
+
+ThreadFactory
+
+Callable
+
+
+1. Executor接口首先先来看看并发包中的Executor接口的结构图. Executor接口只提供了一个方法，就是execute方法，它定义了执行Runnable">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/executor-hierarchy.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/executor-service-methods.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/executor-service-methods-2.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/callable-methods.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/callable-methods-2.jpg?raw=true">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Executors">
+<meta name="twitter:description" content="ExecutorsExecutors是并发包中提供的工具类，它可以用来创建以下这些对象:
+
+ExecutorService
+
+ScheduledExecutorService
+
+ThreadFactory
+
+Callable
+
+
+1. Executor接口首先先来看看并发包中的Executor接口的结构图. Executor接口只提供了一个方法，就是execute方法，它定义了执行Runnable">
+<meta name="twitter:image" content="https://github.com/Essviv/images/blob/master/executor-hierarchy.jpg?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/12/03/多线程/juc/线程池/Executors/"/>
+
+
+
+
+
+  <title> Executors | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/03/多线程/juc/线程池/Executors/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Executors
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-03T10:20:54+08:00">
+                2016-12-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/03/多线程/juc/线程池/Executors/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/03/多线程/juc/线程池/Executors/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Executors"><a href="#Executors" class="headerlink" title="Executors"></a>Executors</h1><p>Executors是并发包中提供的工具类，它可以用来创建以下这些对象:</p>
+<ul>
+<li><p>ExecutorService</p>
+</li>
+<li><p>ScheduledExecutorService</p>
+</li>
+<li><p>ThreadFactory</p>
+</li>
+<li><p>Callable</p>
+</li>
+</ul>
+<h2 id="1-Executor接口"><a href="#1-Executor接口" class="headerlink" title="1. Executor接口"></a>1. Executor接口</h2><p>首先先来看看并发包中的Executor接口的结构图. Executor接口只提供了一个方法，就是execute方法，它定义了执行Runnable对象， 至于以什么样的方式执行任务，执行任务的生命周期等其它方面的操作均没有涉及. ExecutorService在executor接口的基础上，增加了对执行任务生命周期的管理，也就是说，提交到executorService接口中执行的任务，可以通过提交任务时返回的future对象，判断任务是否已经执行结束，或进行取消操作.</p>
+<p>ExecutorService又可以进一步细分为<strong>AbstractExecutorService</strong>与<strong>ScheduledExeuctorService</strong>两大类，前者代表了ExecutorService的默认实现. 后者定义了定时操作的接口. </p>
+<p><img src="https://github.com/Essviv/images/blob/master/executor-hierarchy.jpg?raw=true" alt="executor-hierarchy"></p>
+<h2 id="2-ThreadFactory"><a href="#2-ThreadFactory" class="headerlink" title="2. ThreadFactory"></a>2. ThreadFactory</h2><p>这个接口提供了创建线程的方法， 避免显式地调用Thread对象的创建方法， Executors中提供了默认的线程工厂实现DefaultThreadFactory， 这个实现给每个创建的线程指定了特定的名称. </p>
+<h2 id="3-ExecutorService-和-ScheduledExecutorService"><a href="#3-ExecutorService-和-ScheduledExecutorService" class="headerlink" title="3. ExecutorService 和 ScheduledExecutorService"></a>3. ExecutorService 和 ScheduledExecutorService</h2><p>Executors提供了创建ExecutorService和ScheduledExecutorService的方法， 两种类型都可以分为两类，一种是创建线程池，一种是创建单个线程. 创建的过程很简单，就是调用相应的线程池实现的构造函数，根据不同类型传入不同的构造函数参数即可, 代码如下所示.  </p>
+<p><img src="https://github.com/Essviv/images/blob/master/executor-service-methods.jpg?raw=true" alt="executor-service-methods"></p>
+<p><img src="https://github.com/Essviv/images/blob/master/executor-service-methods-2.jpg?raw=true" alt="executor-service-methods"></p>
+<p>这里值得注意的是创建单个线程的代码. 以创建单个线程的executorService为例， 可以看到在构造完threadPoolExecutor对象之后， 又用FinalizableDelegatedExecutorService做了层封装,  这个类继承自DelegatedExecutorService, 而DelegatedExecutorService的作用就是封装底层的实现，只对外暴露ExecutorService接口的方法（这算是外观模式吗？）可以看到，通过这层封装，隐藏了底层的和线程池相关的一些操作，只对外暴露了executorService的API方法, 相当于是缩小了threadPoolExecutor对象的操作能力， 这种方式在一些用具体实现完成特定功能时会很有用（比如，单个线程的ExecutorService可以认为是通用线程池的特殊情况， 这时候就可以用线程池来实现单个线程的功能，但为了防止对外暴露过多的操作，就可以使用上述的方式进行包装，以达到隐藏线程池其它方法的功能）</p>
+<h2 id="4-Callable"><a href="#4-Callable" class="headerlink" title="4. Callable"></a>4. Callable</h2><p>Executors中提供的创建callable的方法都使用了RunnableAdapter类，从这个类的名字中就可以看出，这个类是适配器，它接受一个runnable和一个可选的返回值，然后将它们包装成一个Callable对象.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/callable-methods.jpg?raw=true" alt="callable-methods"></p>
+<p><img src="https://github.com/Essviv/images/blob/master/callable-methods-2.jpg?raw=true" alt="callable-methods"></p>
+<p>可以看到，Executors作为工具类，并没有实现太多新的功能，它只是对已有的一些功能进行包装，如果想要深入地了解线程池的实现，还是需要看看ThreadPoolExecutor的源码才行.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/02/IO/netty/netty源码学习系列----channelHandler/" rel="next" title="netty源码学习系列----channelHandler">
+                <i class="fa fa-chevron-left"></i> netty源码学习系列----channelHandler
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/06/多线程/等待通知机制/" rel="prev" title="等待通知机制">
+                等待通知机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/03/多线程/juc/线程池/Executors/"
+           data-title="Executors" data-url="http://yoursite.com/2016/12/03/多线程/juc/线程池/Executors/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Executors"><span class="nav-text">Executors</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Executor接口"><span class="nav-text">1. Executor接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-ThreadFactory"><span class="nav-text">2. ThreadFactory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-ExecutorService-和-ScheduledExecutorService"><span class="nav-text">3. ExecutorService 和 ScheduledExecutorService</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Callable"><span class="nav-text">4. Callable</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

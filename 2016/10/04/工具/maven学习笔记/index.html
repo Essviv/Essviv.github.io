@@ -1,0 +1,766 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Maven学习笔记构件的坐标groupId, artifactId, version
+管理依赖通过构件的坐标来唯一指定123456&amp;lt;dependency&amp;gt;         &amp;lt;groupId&amp;gt;&amp;lt;/groupId&amp;gt;         &amp;lt;artifactId&amp;gt;&amp;lt;/artifactId&amp;gt;         &amp;lt;version&amp;gt;&amp;lt;/ve">
+<meta property="og:type" content="article">
+<meta property="og:title" content="maven学习笔记">
+<meta property="og:url" content="http://yoursite.com/2016/10/04/工具/maven学习笔记/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="Maven学习笔记构件的坐标groupId, artifactId, version
+管理依赖通过构件的坐标来唯一指定123456&amp;lt;dependency&amp;gt;         &amp;lt;groupId&amp;gt;&amp;lt;/groupId&amp;gt;         &amp;lt;artifactId&amp;gt;&amp;lt;/artifactId&amp;gt;         &amp;lt;version&amp;gt;&amp;lt;/ve">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="maven学习笔记">
+<meta name="twitter:description" content="Maven学习笔记构件的坐标groupId, artifactId, version
+管理依赖通过构件的坐标来唯一指定123456&amp;lt;dependency&amp;gt;         &amp;lt;groupId&amp;gt;&amp;lt;/groupId&amp;gt;         &amp;lt;artifactId&amp;gt;&amp;lt;/artifactId&amp;gt;         &amp;lt;version&amp;gt;&amp;lt;/ve">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/04/工具/maven学习笔记/"/>
+
+
+
+
+
+  <title> maven学习笔记 | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/工具/maven学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                maven学习笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-04T10:20:54+08:00">
+                2016-10-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/10/04/工具/maven学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/工具/maven学习笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Maven学习笔记"><a href="#Maven学习笔记" class="headerlink" title="Maven学习笔记"></a>Maven学习笔记</h1><h2 id="构件的坐标"><a href="#构件的坐标" class="headerlink" title="构件的坐标"></a>构件的坐标</h2><p>groupId, artifactId, version</p>
+<h2 id="管理依赖"><a href="#管理依赖" class="headerlink" title="管理依赖"></a>管理依赖</h2><h3 id="通过构件的坐标来唯一指定"><a href="#通过构件的坐标来唯一指定" class="headerlink" title="通过构件的坐标来唯一指定"></a>通过构件的坐标来唯一指定</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">         &lt;groupId&gt;&lt;/groupId&gt;</div><div class="line">         &lt;artifactId&gt;&lt;/artifactId&gt;</div><div class="line">         &lt;version&gt;&lt;/version&gt;  //快照版本： SNAPSHOT</div><div class="line">         &lt;scope&gt;&lt;/scope&gt; //可取值包括: compile, runtime, provided, test, system(不常用)</div><div class="line">    &lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<h3 id="间接依赖-gt-依赖冲突"><a href="#间接依赖-gt-依赖冲突" class="headerlink" title="间接依赖 ===&gt; 依赖冲突"></a>间接依赖 ===&gt; 依赖冲突</h3><ul>
+<li><p>路径最短</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">A  ==&gt;  B  ==&gt;  C(V1.0)（selected)        A  ==&gt;  D  ==&gt;  E  ==&gt; C(V2.0)</div></pre></td></tr></table></figure>
+</li>
+<li><p>声明优先</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">A  ==&gt;  B  ==&gt;  C(V1.0) (selected)       A  ==&gt;  D  ==&gt;  C(V2.0)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="生命周期和阶段（抽象概念，-具体实现由指定的插件目标决定）"><a href="#生命周期和阶段（抽象概念，-具体实现由指定的插件目标决定）" class="headerlink" title="生命周期和阶段（抽象概念， 具体实现由指定的插件目标决定）"></a>生命周期和阶段（抽象概念， 具体实现由指定的插件目标决定）</h2><h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><ul>
+<li>clean: pre-clean, clean, post-clean</li>
+<li>default: process-resources, compile, process-test-resources, test-compile, test, package, install, deploy</li>
+<li>site: pre-site, site, post-site, site-deploy</li>
+</ul>
+<h3 id="阶段"><a href="#阶段" class="headerlink" title="阶段"></a>阶段</h3><p>同一个周期内的阶段按顺序执行，不同周期的阶段没有先后顺序关系</p>
+<ul>
+<li>mvn clean: 执行clean周期的pre-clean, clean两个阶段</li>
+<li>mvn clean test: 执行clean周期的pre-clean， clean， 然后再执行default周期的process-resources, compile……test</li>
+<li>mvn clean package:  执行clean周期的pre-clean, clean，然后再执行default周期的process-resources … package</li>
+</ul>
+<h3 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h3><p>生命周期定义的阶段均为抽象的概念，具体的操作由插件目标来实现，maven为一些关键的阶段定义了默认的插件目标</p>
+<ul>
+<li><p>默认绑定： maven-clean-plugin: clean  ===&gt; clean</p>
+</li>
+<li><p>自定义绑定： 将指定坐标的构件的A目标绑定到test阶段</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;plugin&gt;</div><div class="line">     &lt;groupId&gt;&lt;/groupId&gt;</div><div class="line">     &lt;artifactId&gt;&lt;/artifactId&gt;</div><div class="line">     &lt;version&gt;&lt;/version&gt;</div><div class="line">     </div><div class="line">     &lt;executions&gt;</div><div class="line">          &lt;execution&gt;</div><div class="line">               &lt;id&gt;&lt;/id&gt;</div><div class="line">               &lt;phase&gt;test&lt;/phase&gt; //指定绑定的阶段</div><div class="line">               &lt;goals&gt;</div><div class="line">                    &lt;goal&gt;A&lt;/goal&gt;  //定义插件的目标</div><div class="line">               &lt;/goals&gt;</div><div class="line">          &lt;/execution&gt;</div><div class="line">     &lt;/excutions&gt;</div><div class="line">&lt;/plugin&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="聚合和继承"><a href="#聚合和继承" class="headerlink" title="聚合和继承"></a>聚合和继承</h2><h3 id="聚合-一次性构建多个项目"><a href="#聚合-一次性构建多个项目" class="headerlink" title="聚合: 一次性构建多个项目"></a>聚合: 一次性构建多个项目</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;groupId /&gt;</div><div class="line">&lt;artifactId /&gt;</div><div class="line">&lt;version /&gt;</div><div class="line">&lt;packaging&gt;POM&lt;/packaging&gt; //聚合项目的打包方式必须为POM</div><div class="line"></div><div class="line">&lt;modules&gt;</div><div class="line">     &lt;module /&gt; //第一个被聚合的项目</div><div class="line">     &lt;module /&gt; //第二个被聚合的项目</div><div class="line">&lt;/modules&gt;</div></pre></td></tr></table></figure>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>继承的目的是为了减少重复的配置，子项目会从父项目中继承相应的配置，如果有必要，子项目也可以重写一些配置属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">父POM：</div><div class="line">  &lt;groupId /&gt;</div><div class="line">  &lt;artifactId /&gt;</div><div class="line">  &lt;version /&gt;</div><div class="line">  &lt;packaging&gt;POM&lt;packaging&gt; //父工程的打包方式也必须为POM</div><div class="line"></div><div class="line">子POM</div><div class="line">  &lt;artifactId /&gt;</div><div class="line">  &lt;parent&gt;</div><div class="line">       &lt;groupId /&gt;</div><div class="line">       &lt;artifactId /&gt;</div><div class="line">       &lt;version /&gt;</div><div class="line">       &lt;relativePath&gt;&lt;/relativePath&gt; //父POM的路径</div><div class="line">  &lt;/parent&gt;</div></pre></td></tr></table></figure>
+<h2 id="多环境构建：-基于属性-filter和profile实现-通过-访问"><a href="#多环境构建：-基于属性-filter和profile实现-通过-访问" class="headerlink" title="多环境构建： 基于属性, filter和profile实现, 通过${}访问"></a>多环境构建： 基于属性, filter和profile实现, 通过${}访问</h2><h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><ul>
+<li><p>自定义属性: <helloworld>JAVA</helloworld></p>
+</li>
+<li><p>POM属性: ${project.baseDir}, ${project.artifactId}, ${project.build.sourceDirectory}</p>
+</li>
+</ul>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p>资源过滤： 解析资源文件中的Maven属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;resources&gt;</div><div class="line">  &lt;resource&gt;</div><div class="line">       &lt;directory /&gt;</div><div class="line">       &lt;filtering&gt;true&lt;/filtering&gt;</div><div class="line">  &lt;/resource&gt;</div><div class="line">&lt;/resources&gt;</div></pre></td></tr></table></figure>
+<h3 id="profile"><a href="#profile" class="headerlink" title="profile"></a>profile</h3><p>针对不同的环境采用不用的属性, 命令行激活， 如： -Pdev</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&lt;profiles&gt;</div><div class="line">  &lt;profile&gt;</div><div class="line">       &lt;id&gt;dev&lt;/id&gt;</div><div class="line">       &lt;properties&gt;</div><div class="line">            &lt;msg&gt;hello world&lt;/msg&gt;</div><div class="line">       &lt;/properties&gt;</div><div class="line"></div><div class="line">       &lt;activation&gt;</div><div class="line">            &lt;activateByDefault&gt;true&lt;/activateByDefault&gt; //默认启用的profile</div><div class="line">       &lt;/activation&gt;</div><div class="line">  &lt;/profile&gt;</div><div class="line"></div><div class="line">  &lt;profile&gt;</div><div class="line">       &lt;id&gt;prod&lt;/id&gt;</div><div class="line">       &lt;properties&gt;</div><div class="line">            &lt;msg&gt;Holy god!&lt;/msg&gt;</div><div class="line">       &lt;/properties&gt;</div><div class="line">  &lt;/profile&gt;</div><div class="line">&lt;/profiles&gt;</div></pre></td></tr></table></figure>
+<h2 id="约定大于配置（Convention-Over-Configuration）"><a href="#约定大于配置（Convention-Over-Configuration）" class="headerlink" title="约定大于配置（Convention Over Configuration）"></a>约定大于配置（Convention Over Configuration）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">src/main/java, </div><div class="line">src/main/resources, </div><div class="line">src/test/java, </div><div class="line">src/test/resources</div></pre></td></tr></table></figure>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li>maven实战  机械工业出版社  许晓斌</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/04/SOA/WSDL/" rel="next" title="WSDL">
+                <i class="fa fa-chevron-left"></i> WSDL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/10/集合/HashMap/" rel="prev" title="HashMap">
+                HashMap <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/04/工具/maven学习笔记/"
+           data-title="maven学习笔记" data-url="http://yoursite.com/2016/10/04/工具/maven学习笔记/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Maven学习笔记"><span class="nav-text">Maven学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#构件的坐标"><span class="nav-text">构件的坐标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管理依赖"><span class="nav-text">管理依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过构件的坐标来唯一指定"><span class="nav-text">通过构件的坐标来唯一指定</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#间接依赖-gt-依赖冲突"><span class="nav-text">间接依赖 ===> 依赖冲突</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生命周期和阶段（抽象概念，-具体实现由指定的插件目标决定）"><span class="nav-text">生命周期和阶段（抽象概念， 具体实现由指定的插件目标决定）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生命周期"><span class="nav-text">生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阶段"><span class="nav-text">阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插件"><span class="nav-text">插件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚合和继承"><span class="nav-text">聚合和继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合-一次性构建多个项目"><span class="nav-text">聚合: 一次性构建多个项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#继承"><span class="nav-text">继承</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多环境构建：-基于属性-filter和profile实现-通过-访问"><span class="nav-text">多环境构建： 基于属性, filter和profile实现, 通过${}访问</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性"><span class="nav-text">属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter"><span class="nav-text">filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#profile"><span class="nav-text">profile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#约定大于配置（Convention-Over-Configuration）"><span class="nav-text">约定大于配置（Convention Over Configuration）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

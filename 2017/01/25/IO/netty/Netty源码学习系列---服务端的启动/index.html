@@ -1,0 +1,797 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Netty源码学习系列—服务端的启动netty作为一套NIO框架，它封装了JAVA中的原生的NIO操作逻辑. 在学习netty源码的时候，我们就遵循这样的思路，先用JAVA原生的NIO API实现服务端程序，然后对照这些步骤，一步步地去netty中寻找相应的实现，看看作为框架，它是怎么封装基本的操作，并实现良好的扩展性.
+原生JAVA NIO API实现服务端代码如下所示，从代码中可以将整个服务端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty源码学习系列---服务端的启动">
+<meta property="og:url" content="http://yoursite.com/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="Netty源码学习系列—服务端的启动netty作为一套NIO框架，它封装了JAVA中的原生的NIO操作逻辑. 在学习netty源码的时候，我们就遵循这样的思路，先用JAVA原生的NIO API实现服务端程序，然后对照这些步骤，一步步地去netty中寻找相应的实现，看看作为框架，它是怎么封装基本的操作，并实现良好的扩展性.
+原生JAVA NIO API实现服务端代码如下所示，从代码中可以将整个服务端">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-2.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-3.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-4.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-5.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-6.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-7.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-8.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-9.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-10.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-11.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-12.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-13.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-14.jpg?raw=true">
+<meta property="og:image" content="https://github.com/Essviv/images/blob/master/netty-server-15.jpg?raw=true">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netty源码学习系列---服务端的启动">
+<meta name="twitter:description" content="Netty源码学习系列—服务端的启动netty作为一套NIO框架，它封装了JAVA中的原生的NIO操作逻辑. 在学习netty源码的时候，我们就遵循这样的思路，先用JAVA原生的NIO API实现服务端程序，然后对照这些步骤，一步步地去netty中寻找相应的实现，看看作为框架，它是怎么封装基本的操作，并实现良好的扩展性.
+原生JAVA NIO API实现服务端代码如下所示，从代码中可以将整个服务端">
+<meta name="twitter:image" content="https://github.com/Essviv/images/blob/master/netty-server.jpg?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/"/>
+
+
+
+
+
+  <title> Netty源码学习系列---服务端的启动 | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Netty源码学习系列---服务端的启动
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
+                2017-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Netty源码学习系列—服务端的启动"><a href="#Netty源码学习系列—服务端的启动" class="headerlink" title="Netty源码学习系列—服务端的启动"></a>Netty源码学习系列—服务端的启动</h1><p>netty作为一套NIO框架，它封装了JAVA中的原生的NIO操作逻辑. 在学习netty源码的时候，我们就遵循这样的思路，先用JAVA原生的NIO API实现服务端程序，然后对照这些步骤，一步步地去netty中寻找相应的实现，看看作为框架，它是怎么封装基本的操作，并实现良好的扩展性.</p>
+<h2 id="原生JAVA-NIO-API实现服务端"><a href="#原生JAVA-NIO-API实现服务端" class="headerlink" title="原生JAVA NIO API实现服务端"></a>原生JAVA NIO API实现服务端</h2><p>代码如下所示，从代码中可以将整个服务端的启动过程分为以下几个步骤：</p>
+<ol>
+<li><p>创建ServerSocketChannel, 初始化成非阻塞模式，并将它绑定到指定的地址</p>
+</li>
+<li><p>初始化selector（多路复用器）</p>
+</li>
+<li><p>将serverSocketChannel注册到selector， 并监听accept事件</p>
+</li>
+<li><p>开启轮询操作，将对IO事件进行处理，在IO事件的处理中，还会变化ssc的监听事件</p>
+</li>
+</ol>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server.jpg?raw=true" alt="netty-server"></p>
+<h2 id="Netty是怎么做的"><a href="#Netty是怎么做的" class="headerlink" title="Netty是怎么做的"></a>Netty是怎么做的</h2><p>在阅读netty源码之前，比照之前的原生java代码实现，我们要试图回答这样的一个问题，netty是分别在哪里实现这些“标准”操作的？</p>
+<p>netty实现的服务端代码如下，表面上看来，和上面那段代码看起来完全不一样，但作为java nio框架，底层的操作一定离不开那些原生的API，现在看到的不过是被高度封装后的代码而已， OK，那就顺着这段代码开始阅读netty源码.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-2.jpg?raw=true" alt="netty-server"></p>
+<h3 id="ServerSocketChannel的初始化"><a href="#ServerSocketChannel的初始化" class="headerlink" title="ServerSocketChannel的初始化"></a>ServerSocketChannel的初始化</h3><p>源码的第一行初始了ServerBootStrap对象，它继承自AbstractBootStrap对象，从名字上可以看出，这个对象的作用就是引导服务端的启动程序，通过这个对象可以配置服务端启动过程中需要用到的参数.  从上面的“标准”代码中可以看到，对于服务端来讲，需要配置的参数包括<strong>绑定的地址和服务端channel</strong>，但在netty的配置中除了这两项还多了其它的一些配置：</p>
+<ul>
+<li><p>bossEventGroup和workerEventLoopGroup: netty框架在实现的过程中，使用了Reactor模型，这两个参数就是在reactor模型中定义的，关于Reactor模型的详细内容，可以参考<a href="https://github.com/Essviv/blogs/blob/master/IO/netty/reactor%E6%A8%A1%E5%9E%8B.md" target="_blank" rel="external">这里</a>. 简单来讲，reactor模型的实现中，可以定义两组线程池，一组用来处理来自客户端的连接请求，而另一组用来处理已连接的客户端产生的IO事件， 从而提高处理连接和IO事件的效率.</p>
+</li>
+<li><p>childHandler: 这个参数配置是客户端连接完成后，后续的IO事件的处理器， 事件处理器的概念也是来自reactor模型， 在netty中，事件处理器被组织成channelPipeline的形式，当通道中有IO事件发生时，这些事件会顺着pipeline依次通过每个事件处理器，事件处理器会根据需要选择对IO事件进行处理或发往下一个处理器，关于pipeline和处理器的更多内容，会在后续的文章中进行阐述。</p>
+</li>
+</ul>
+<p>初始化完serverBootStrap后，就会调用bind方法执行绑定操作. bind方法中会调用doBind方法， 在doBind方法中，netty会根据之前配置的引导参数，完成SSC的初始化和绑定.    doBind方法的实现可以简单的分成两个步骤： initAndRegister和doBind0, 前者完成初始化和注册（后续会讲到），后者完成真正的绑定操作. </p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-3.jpg?raw=true" alt="netty-server"></p>
+<h4 id="1-初始化"><a href="#1-初始化" class="headerlink" title="1. 初始化"></a>1. 初始化</h4><p>SSC的初始化是在initAndRegister方法中完成的， 可以看到，首先调用了channelFactory这个工厂类获取一个新的channel对象， 还记得在serverBootStrap对象中配置的channel参数吗？这里工厂类就是根据配置的这个channel参数通过反射机制生成新的对象. 反射机制中调用ServerSocketChannel的无参数构造函数，并通过一系列的父类构造函数完成了包括pipeline、unsafe、channel的非阻塞模式以及监听事件的初始化操作.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-4.jpg?raw=true" alt="netty-server"></p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-5.jpg?raw=true" alt="netty-server"></p>
+<p>在完成channel对象的构造之后， 会调用init方法继续完成对channel对象的初始化操作. 这里初始化的内容也是根据serverBootStrap中的配置参数进行的， 这里值得注意的是第181行，在这里往pipeline中增加了一个ChannelInitializer处理器，这个处理器在通道注册(channelRegister事件)的时候，会往pipeline中添加ServerBootstrapAcceptor处理器，而这个sba处理器会对新进来的连接进行处理, 后续会再次对这个地方进行说明. 到这里为止，netty就完成了SSC的初始化操作.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-6.jpg?raw=true" alt="netty-server"></p>
+<h4 id="2-注册操作"><a href="#2-注册操作" class="headerlink" title="2. 注册操作"></a>2. 注册操作</h4><p>在完成SSC的初始化操作后，netty会马上将这个SSC通道注册到eventLoop中， 也就是在这个注册操作中，完成了IO事件的轮询及SSC到Selector的注册. register方法会最终调用AbstractNioChannel对象的doRegister方法，如下所示，在doRegister方法中调用了java nio原生的register方法，将创建的SSC注册到相应的selector（多路复用器）中. 这里值得一提的是，在register的时候，设置的interestOps为0， 这意味着当selector进行轮询的时候，并不会监听SSC的任何IO事件，那么netty又是怎么实现监听客户端的连接的呢（这种情况下，要注册的InterestOps为OP_ACCEPT），这个问题会在后面提到.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-7.jpg?raw=true" alt="netty-server"></p>
+<h4 id="3-绑定操作"><a href="#3-绑定操作" class="headerlink" title="3. 绑定操作"></a>3. 绑定操作</h4><p>回到ServerBootStrap的doBind操作， 在完成了InitAndRegister操作后，serverBootStrap会继续调用doBind0操作， 这个操作会沿着pipeline传播到unsafe对象，并由unsafe调用java原生的bind方法执行绑定操作.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-8.jpg?raw=true" alt="netty-server"></p>
+<h3 id="SSC监听客户端的连接"><a href="#SSC监听客户端的连接" class="headerlink" title="SSC监听客户端的连接"></a>SSC监听客户端的连接</h3><p>在前面的描述中我们提到，在SSC注册到多路复用器的时候，设置的interesOps为0，那么它是怎么实现监听连接事件的呢？ 回到之前的注册方法， 将SSC注册到多路复用器之后，netty会通过pipeline触发channelRegister的事件，这个事件会沿着pipeline往下传播，还记得SSC在初始化的时候，往pipeline里设置的那个ChannelInitializer处理器吗？这个处理器会处理channelRegister事件，并往pipeline中添加一个ServerBootstrapAcceptor的处理器，这个处理器会监听channelRead事件，而客户端的连接请求就是在这个处理器中被处理的. 可以看到，在serverBootstrapAcceptor的处理中，在初始化新建的客户端连接之后，将它注册到了workerEventLoopGroup之中.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-9.jpg?raw=true" alt="netty-server"></p>
+<p>那么，现在的问题就变成了，这个channelRead事件是在哪里被触发，又是怎么被传递给这个sba的呢？回头看“标准”实现代码，服务端启动后，是通过selector不断轮询的方式，来及时地处理客户端连接以及其它的IO事件. 那么在netty实现的代码中，肯定也有哪些地方完成了这些操作，执行那些操作的地方也必然会触发这个channelRead事件，并传递给sba. 再回头来看看绑定部分的代码.</p>
+<p>在SSC发起bind操作之后，它会将绑定操作委托给它的pipeline, 后者又进一步委托给channelHandlerContext(关于channel, channelPipeline, channelHandler, ChannelHandlerContext之间的关系，可以参考<a href="https://github.com/Essviv/blogs/blob/master/IO/netty/netty%E6%80%BB%E8%A7%88%E5%9B%BE-%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6.md" target="_blank" rel="external">这里</a>.）查看channelHandlerContext的绑定操作，我们会发现以下这样的代码，这段代码在netty的源码中经常可以看到，简单来说，它的意思是判断一下当前操作的线程是不是当前channel绑定的那个eventLoop线程，如果是就直接执行相应操作，否则，将要执行的操作包装成一个task扔给eventLoop线程中的任务队列，在它方便的时候执行. 这样的机制保证了netty中任何一个channel的所有事件，都是由同一个eventLoop线程执行的, 即使是在同时有多个channel的情况下，也可以保证同一个channel的所有事件是按顺序执行的，而不用考虑多线程情况下的竞争条件和锁等问题（这个实现后续会在其它文章中进一步说明，这里点到为止）</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-10.jpg?raw=true" alt="netty-server"></p>
+<p>在了解了以上的执行方式之后，我们就会发现channelHandlerContext的bind操作是在ssc的eventLoop中被调用的，因此它要执行的任务也是被包装成了task对象放到eventLoop的消息队列中等待执行.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-11.jpg?raw=true" alt="netty-server"></p>
+<p>继续查看eventLoop的代码，终于看到了熟悉的for循环轮询操作，这段代码的实现逻辑把任务分成两种类型，一种是IO事件（select操作），还有一种是消息队列中的任务. 两者执行的时候由ioRatio分配.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-12.jpg?raw=true" alt="netty-server"></p>
+<p>继续追踪代码，可以发现在processSelectedKeysOptimized方法中调用了处理selectionKey的方法，后者在处理accept事件时，会调用unsafe的read方法，这个方法最终会调用doReadMessage方法，doReadMessage中我们再次看到了熟悉的“标准”代码， SSC先是执行了accept操作，然后为每个新建立的客户端连接创建NioSocketChannel对象，并把这些对象作为pipeline的channelRead事件发布，这些事件会被ServerBootstrapAcceptor处理，完成客户端的连接.</p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-13.jpg?raw=true" alt="netty-server"></p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-14.jpg?raw=true" alt="netty-server"></p>
+<p>现在还剩下最后一个问题，SSC初始化时，注册到selector中的interesOps为0， 那它是什么时候修改了这个interesOps的呢？（要不然即使进入了processSelectedKey方法，也是处理不了accept事件的啊）. 再回头来看看SSC的注册过程吧，在SSC完成第一次注册后，SSC会触发channelActive事件，这个事件会最终触发channel的doBeginRead操作，在这个方法中，会根据SSC在生成时设置好的interesOps来修改注册参数. </p>
+<p><img src="https://github.com/Essviv/images/blob/master/netty-server-15.jpg?raw=true" alt="netty-server"></p>
+<p>到此为止，我们已经从netty源码中找到了所有服务端启动的关键步骤. 总结一下：</p>
+<ul>
+<li><p>ServerBootStrap中包含了整个服务端启动过程中需要的所有配置参数</p>
+</li>
+<li><p>SSC构造函数中完成了SSC初始化， 并设置了相应的pipeline， pipeline中预置了客户端连接事件的处理器(ServerBootstrapAcceptor)，在后续的initAndRegister方法中完成了包括注册到selector, 关联eventLoop, 启动监听线程，设置interesOps等操作</p>
+</li>
+<li><p>在NioEventLoop的轮询中，会将新建立的客户端连接作为channelRead事件传播，并最终由ServerBootstrapAcceptor处理</p>
+</li>
+<li><h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2></li>
+</ul>
+<ol>
+<li><a href="http://blog.jobbole.com/105565/" target="_blank" rel="external">服务启动的代码</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/25/JVM/ClassLoader的双亲委派模型/" rel="next" title="ClassLoader的双亲委派模型">
+                <i class="fa fa-chevron-left"></i> ClassLoader的双亲委派模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/25/JVM/注解/" rel="prev" title="注解">
+                注解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/"
+           data-title="Netty源码学习系列---服务端的启动" data-url="http://yoursite.com/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">155</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty源码学习系列—服务端的启动"><span class="nav-text">Netty源码学习系列—服务端的启动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原生JAVA-NIO-API实现服务端"><span class="nav-text">原生JAVA NIO API实现服务端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty是怎么做的"><span class="nav-text">Netty是怎么做的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ServerSocketChannel的初始化"><span class="nav-text">ServerSocketChannel的初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-初始化"><span class="nav-text">1. 初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-注册操作"><span class="nav-text">2. 注册操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-绑定操作"><span class="nav-text">3. 绑定操作</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSC监听客户端的连接"><span class="nav-text">SSC监听客户端的连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
