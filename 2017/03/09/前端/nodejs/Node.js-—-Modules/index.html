@@ -1,0 +1,833 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs,Modules," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="ModulesNode.js的模块加载系统非常简单. 在Node.js中，文件和模块是一一对应的. 例如：在foo.js文件中定义以下代码
+123//foo.jsconst circle = require(&apos;./circle.js&apos;);console.log(`The area of a circle of radius 4 is $&amp;#123;circle.area(4)&amp;#125;`);
+在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js — Modules">
+<meta property="og:url" content="http://yoursite.com/2017/03/09/前端/nodejs/Node.js-—-Modules/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="ModulesNode.js的模块加载系统非常简单. 在Node.js中，文件和模块是一一对应的. 例如：在foo.js文件中定义以下代码
+123//foo.jsconst circle = require(&apos;./circle.js&apos;);console.log(`The area of a circle of radius 4 is $&amp;#123;circle.area(4)&amp;#125;`);
+在">
+<meta property="og:updated_time" content="2017-03-10T06:23:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js — Modules">
+<meta name="twitter:description" content="ModulesNode.js的模块加载系统非常简单. 在Node.js中，文件和模块是一一对应的. 例如：在foo.js文件中定义以下代码
+123//foo.jsconst circle = require(&apos;./circle.js&apos;);console.log(`The area of a circle of radius 4 is $&amp;#123;circle.area(4)&amp;#125;`);
+在">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/09/前端/nodejs/Node.js-—-Modules/"/>
+
+
+
+
+
+  <title> Node.js — Modules | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/09/前端/nodejs/Node.js-—-Modules/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Node.js — Modules
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-09T16:40:00+08:00">
+                2017-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/09/前端/nodejs/Node.js-—-Modules/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/09/前端/nodejs/Node.js-—-Modules/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h1><p>Node.js的模块加载系统非常简单. 在Node.js中，文件和模块是一一对应的. 例如：在foo.js文件中定义以下代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//foo.js</span></div><div class="line"><span class="keyword">const</span> circle = <span class="built_in">require</span>(<span class="string">'./circle.js'</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">`The area of a circle of radius 4 is <span class="subst">$&#123;circle.area(<span class="number">4</span>)&#125;</span>`</span>);</div></pre></td></tr></table></figure>
+<p>在foo.js的第一行中加载了circle.js模块，这个模块与foo.js位于同一个路径下. 以下是circle.js的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//circle.js</span></div><div class="line"><span class="keyword">const</span> PI = <span class="built_in">Math</span>.PI;</div><div class="line">exports.area = <span class="function">(<span class="params">r</span>) =&gt;</span> PI * r * r;</div><div class="line">exports.circumference = <span class="function">(<span class="params">r</span>) =&gt;</span> <span class="number">2</span> * PI * r;</div></pre></td></tr></table></figure>
+<p>circle.js模块导出了area()方法和circumference()方法. 如果要将更多的对象和函数导出模块，只需要将它们回到特殊的exports对象即可.</p>
+<p>模块中的局部变量是私有变量，对外部不可见，因为模块中的代码会被Node.js进一步包装(参见“模块包装器”一节). 在上面这个例子中，PI变量就是circle.js模块的私有变量，对外部不可见.</p>
+<p>如果希望将函数(如构造函数)或者完整的对象导出模块，需使用module.exports来导出，而不是exports.(原因可参见： <a href="http://eloquentjavascript.net/10_modules.html" target="_blank" rel="external">Eloquent Javascript 第10章</a>). 下面的例子中，bar.js依赖于square模块，在square模块中，导出了它的构造函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//bar.js</span></div><div class="line"><span class="keyword">const</span> square = <span class="built_in">require</span>(<span class="string">'./square.js'</span>);</div><div class="line"><span class="keyword">var</span> mySquare = square(<span class="number">2</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">`The area of my square is <span class="subst">$&#123;mySquare.area()&#125;</span>`</span>);</div><div class="line"></div><div class="line"><span class="comment">//square.js</span></div><div class="line"><span class="comment">// 这里如果使用exports来导出，将不会影响模块的输出，必须使用module.exports</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">width</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">area</span>: <span class="function"><span class="params">()</span> =&gt;</span> width * width</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Node.js中的模块系统是通过require(“module”)来实现的</p>
+<h2 id="访问主模块"><a href="#访问主模块" class="headerlink" title="访问主模块"></a>访问主模块</h2><p>当某个模块被Node.js直接加载运行时，require.main变量就被设置成module. 这就意味着，可以通过以下的表达式来测试某个模块是否由Node.js直接运行，还是通过其它模块依赖加载.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">require</span>.main === <span class="built_in">module</span></div></pre></td></tr></table></figure>
+<p>例如，对于foo.js模块而言，当通过node foo.js来运行时，上述的表达式返回true; 但当通过require(‘./foo’)来加载运行时，上述的表达式返回的是false.</p>
+<p>因为module变量提供了filename属性(通常情况下等于__filename变量)，因此当前模块的路径信息可以通过require.main.filename来获取.</p>
+<h2 id="补充说明：包管理"><a href="#补充说明：包管理" class="headerlink" title="补充说明：包管理"></a>补充说明：包管理</h2><p>Node.js中定义的require()方法的语义非常通用，因此能支持不同的文件目录结构. 目前常见的包管理工具，如dpkg, rpm，npm， 都可以在不修改模块内容的前提下，直接基于Node.js的模块结构来生成相应的目录结构.</p>
+<p>接下来我们将给出建议的目录结构. </p>
+<p>例如： 我们希望将指定版本的模块内容放于/usr/lib/node/<package>/<version>目录下. 模块之间可以存在依赖关系. 在加载foo模块之前，可能需要先加载某个版本的bar模块. 而bar模块可能又需要依赖于其它的模块，在某种情况下，这种依赖链可能会导致版本冲突和循环依赖.</version></package></p>
+<p>由于Node.js会通过真实路径来加载模块(软链接会被解析)，并且会按照”node_moduls”一节描述的方法来查找依赖，因此上述的情景可以通过很简单的方式来解决：</p>
+<ol>
+<li>/usr/lib/node/foo/1.2.3 - foo模块的内容，版本号为1.2.3</li>
+<li>/usr/lib/node/bar/4.3.2 - bar模块的内容，foo模块依赖于此模块</li>
+<li>/usr/lib/node/foo/1.2.3/node_modules/bar - 软链接到/usr/lib/node/bar/4.3.2</li>
+<li>/usr/lib/node/bar/4.3.2/node_modules/* - 软链接到bar模块依赖的模块</li>
+</ol>
+<p>因此，即使有循环依赖和版本冲突的情况，每个模块都可以正确依赖指定版本的其它模块，并正常执行.</p>
+<p>当foo模块中调用require(‘bar’)方法时，它会得到上述第3步中指定的模块内容，即版本号为4.3.2的bar模块. 当bar模块中调用require(“quux”)方法，它会得到第4步中指定的模块，该模块位于/usr/lib/node/bar/4.3.2/node_modules/quux. 而且, 为了进一步优化模块路径的查找，除了将模块直接放在/usr/lib/node目录下，我们也可以将它们放于/usr/lib/node_modules/<name>/<version>中，这样当Node.js要查找依赖关系时，就不用再去/usr/node_modules目录以及/node_modules目录下查找了.</version></name></p>
+<p>为了在Node.js的REPL中使用模块，最好将/usr/lib/node_modules路径加到$NODE_PATH环境变量中. 由于在node_modules中的模块都是基于相对路径来解析的，同时，这些相对路径都是相对于调用require()方法的模块而言的，因此这些模块可以被放在任何地方. </p>
+<h3 id="放在一起"><a href="#放在一起" class="headerlink" title="放在一起"></a>放在一起</h3><p>为了准确获取require方法加载的文件路径信息，可以使用require.resolve()方法.</p>
+<p>把上面所有的内容放在一起，则会得到以下的伪码，它阐述了require.resolve()的工作机制:</p>
+<p>简单概括如下：</p>
+<ol>
+<li>如果是核心模块，直接加载返回</li>
+<li>如果模块名是以”./“, “/“或者”../“开头，那么分别按文件和目录的方式加载</li>
+<li>如果不满足2的情况，那么按node_modeuls的方式加载</li>
+<li>到这里还没找到，抛出异常</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">require</span>(X) <span class="keyword">from</span> <span class="built_in">module</span> at path Y   <span class="comment">//当前模块所在的路径为Y, 它依赖于X模块，以下是require(X)的解析过程</span></div><div class="line"><span class="number">1.</span> If X is a core <span class="built_in">module</span>,     <span class="comment">//如果X是核心模块，直接返回并退出</span></div><div class="line">   a. return the core <span class="built_in">module</span></div><div class="line">   b. STOP</div><div class="line"><span class="number">2.</span> If X begins <span class="keyword">with</span> <span class="string">'./'</span> or <span class="string">'/'</span> or <span class="string">'../'</span>  <span class="comment">//如果X是以/或者./或者../开头</span></div><div class="line">   a. LOAD_AS_FILE(Y + X)                 <span class="comment">//尝试使用loadAsFile加载</span></div><div class="line">   b. LOAD_AS_DIRECTORY(Y + X)            <span class="comment">//再尝试使用loadAsDir加载</span></div><div class="line">   <span class="comment">//尝试使用loadNodeModule加载, 注：这里的else是自己加上的</span></div><div class="line"><span class="number">3.</span> Else LOAD_NODE_MODULES(X, dirname(Y))       </div><div class="line"><span class="number">4.</span> THROW <span class="string">"not found"</span>                      <span class="comment">//到这里如果还是没有加载到，则抛出异常</span></div><div class="line"></div><div class="line">LOAD_AS_FILE(X)  <span class="comment">//loadAsFile的工作机制</span></div><div class="line"><span class="number">1.</span> If X is a file, load X <span class="keyword">as</span> JavaScript text.  STOP   <span class="comment">//尝试将X作为JS脚本加载</span></div><div class="line"><span class="number">2.</span> If X.js is a file, load X.js <span class="keyword">as</span> JavaScript text.  STOP <span class="comment">//尝试将X.js作为JS脚本加载 </span></div><div class="line"><span class="number">3.</span> If X.json is a file, parse X.json to a JavaScript <span class="built_in">Object</span>.  STOP  <span class="comment">//尝试将X.json作为JS对象加载</span></div><div class="line"><span class="number">4.</span> If X.node is a file, load X.node <span class="keyword">as</span> binary addon.  STOP   <span class="comment">//尝试将x.node作为二进制插件加载</span></div><div class="line"></div><div class="line">LOAD_AS_DIRECTORY(X)   <span class="comment">//loadAsDir的工作机制</span></div><div class="line"><span class="comment">//尝试寻找X/package.json文件，并寻找main属性，并尝试加载X+main属性指定的路径</span></div><div class="line"><span class="number">1.</span> If X/package.json is a file,   </div><div class="line">   a. Parse X/package.json, and look <span class="keyword">for</span> <span class="string">"main"</span> field.</div><div class="line">   b. let M = X + (json main field)</div><div class="line">   c. LOAD_AS_FILE(M)</div><div class="line"><span class="comment">//尝试寻找X目录下的index.js文件，并将它作为JS脚本加载</span></div><div class="line"><span class="number">2.</span> If X/index.js is a file, load X/index.js <span class="keyword">as</span> JavaScript text.  STOP </div><div class="line"><span class="comment">//尝试寻找X目录下的index.json文件，并将它作为json对象加载</span></div><div class="line"><span class="number">3.</span> If X/index.json is a file, parse X/index.json to a JavaScript object. STOP</div><div class="line"><span class="comment">//尝试寻找X目录下的index.node文件，将将它作为二进制插件加载</span></div><div class="line"><span class="number">4.</span> If X/index.node is a file, load X/index.node <span class="keyword">as</span> binary addon.  STOP</div><div class="line"></div><div class="line">LOAD_NODE_MODULES(X, START)  <span class="comment">//loadNodeModule的工作机制</span></div><div class="line"><span class="comment">//获取START目录所有的祖先目录，并在所有的祖先目录下搜索node_modules目录</span></div><div class="line"><span class="number">1.</span> <span class="keyword">let</span> DIRS=NODE_MODULES_PATHS(START)  </div><div class="line"><span class="number">2.</span> <span class="keyword">for</span> each DIR <span class="keyword">in</span> DIRS:  <span class="comment">//对于每个目录下的node_modules，尝试加载X模块</span></div><div class="line">   a. LOAD_AS_FILE(DIR/X)</div><div class="line">   b. LOAD_AS_DIRECTORY(DIR/X)</div><div class="line"></div><div class="line">NODE_MODULES_PATHS(START)  <span class="comment">//nodeModulePaths的工作机制</span></div><div class="line"><span class="number">1.</span> <span class="keyword">let</span> PARTS = path split(START)  <span class="comment">//拆分目录， 如/a/b/c/d ===&gt;  [a, b, c, d]</span></div><div class="line"><span class="number">2.</span> <span class="keyword">let</span> I = count <span class="keyword">of</span> PARTS - <span class="number">1</span>    </div><div class="line"><span class="number">3.</span> <span class="keyword">let</span> DIRS = []</div><div class="line"><span class="number">4.</span> <span class="keyword">while</span> I &gt;= <span class="number">0</span>, <span class="comment">//依次沿目录而上，除非遇到目录名为node_modules，否则直接在目录上搜索node_modules目录</span></div><div class="line">   a. if PARTS[I] = <span class="string">"node_modules"</span> CONTINUE</div><div class="line">   b. DIR = path join(PARTS[<span class="number">0</span> .. I] + <span class="string">"node_modules"</span>)</div><div class="line">   c. DIRS = DIRS + DIR</div><div class="line">   d. let I = I - <span class="number">1</span></div><div class="line"><span class="number">5.</span> <span class="keyword">return</span> DIRS</div></pre></td></tr></table></figure>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>模块在第一次被加载后就会被缓存起来. 这意味着每次调用require(‘foo’)都会得到同一个对象，前提上模块被解析到同一个文件名. 另外，这也意味着，即使多次引用同一个模块，被引用的模块代码可能也不会被执行多次，这是个很重要的特性，这个特性将允许”部分完成”的对象被返回，即使在有循环依赖的情况下，也能正常地处理依赖传递. </p>
+<p>如果希望能多次运行同一个模块的代码，那么请将该模块作为函数导出，然后多次执行该函数即可.</p>
+<p>但是，还有一点值得注意的就是，<strong>模块的缓存是基于解析得到的文件名</strong>. 由于不同模块在加载同一个模块时，有可能会解析到不同的文件名（上述第3种情况，从node_modules加载的时候），因此并不能保证对同一个模块的引用会得到同一个对象.  另外，在一些大小写不敏感的系统中，不同的文件名也可能指向同一个文件，但是缓存系统会把它们当作不同的对象，也会导致模块被加载多次. 例如，require(‘./foo’)和require(‘./FOO’)会返回两个不同的模块对象，即使这两个路径指向的是同一个文件.</p>
+<h2 id="核心模块"><a href="#核心模块" class="headerlink" title="核心模块"></a>核心模块</h2><p>Node.js中打包了一些核心模块， 这些模块的使用将会在文档的其它地方有更详细的描述. 它们的源码位于lib目录下. </p>
+<p>核心模块总是会被优先加载，即使在目录中存在相应的文件名. 例如，require(“http”)总是会加载内置的http模块.</p>
+<h2 id="循环依赖"><a href="#循环依赖" class="headerlink" title="循环依赖"></a>循环依赖</h2><p>当有循环依赖出现时，模块可能会在初始化完成前就被返回. 考虑以下这种场景： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">//a.js</div><div class="line">console.log(&apos;a starting&apos;);</div><div class="line">exports.done = false;</div><div class="line">const b = require(&apos;./b.js&apos;);</div><div class="line">console.log(&apos;in a, b.done = %j&apos;, b.done);</div><div class="line">exports.done = true;</div><div class="line">console.log(&apos;a done&apos;);</div><div class="line"></div><div class="line">//b.js</div><div class="line">console.log(&apos;b starting&apos;);</div><div class="line">exports.done = false;</div><div class="line">const a = require(&apos;./a.js&apos;);  //这里返回的是&quot;部分完成&quot;的对象</div><div class="line">console.log(&apos;in b, a.done = %j&apos;, a.done);</div><div class="line">exports.done = true;</div><div class="line">console.log(&apos;b done&apos;);</div><div class="line"></div><div class="line">//main.js</div><div class="line">console.log(&apos;main starting&apos;);</div><div class="line">const a = require(&apos;./a.js&apos;);</div><div class="line">const b = require(&apos;./b.js&apos;);</div><div class="line">console.log(&apos;in main, a.done=%j, b.done=%j&apos;, a.done, b.done);</div></pre></td></tr></table></figure>
+<p>当main.js中加载a.js时，a.js又进一步依赖于b.js, 而在加载b.js时，它又反过来依赖于a.js. 为了防止发生无限循环，“部分完成”的a模块在b模块中被返回，然后b模块完成代码，然后a模块完成执行. 而当main模块要加载这两个模块时，它们已经都完成了自己的初始化工作，因此上述代码的输出将会是: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ node main.js</div><div class="line">main starting</div><div class="line">a starting</div><div class="line">b starting</div><div class="line"><span class="keyword">in</span> b, a.done = <span class="literal">false</span></div><div class="line">b done</div><div class="line"><span class="keyword">in</span> a, b.done = <span class="literal">true</span></div><div class="line">a done</div><div class="line"><span class="keyword">in</span> main, a.done=<span class="literal">true</span>, b.done=<span class="literal">true</span></div></pre></td></tr></table></figure>
+<p>如果知道在代码中存在”循环依赖”的情况，那么需要谨慎考虑代码的实现顺序.</p>
+<h2 id="文件模块"><a href="#文件模块" class="headerlink" title="文件模块"></a>文件模块</h2><p>如果根据提供的文件名无法解析到相应的模块，那么Node.js将会依次在文件名后加上.js, .json和.node后缀继续查找.</p>
+<p>.js后缀的文件内容将会被解析成js脚本，.json后缀的文件内容将会被解析成JSON对象，而.node后缀的文件内容将被会编译成插件模块，然后用dlopen来加载.</p>
+<ul>
+<li>如果文件名是以/开头，那么它将被当成是<strong>绝对路径</strong>.例如， require(“/home/marco/foo.js”)将会从/home/marco/foo.js加载该文件. </li>
+<li>如果文件名是以./开头，那么文件名被解析成相对于当前模块的路径. 例如， 在foo.js中调用了require(“./circle.js”)，那么circle.js必须和foo.js出现在同一个目录下，否则将无法找到这个模块.</li>
+<li>如果文件不是以”/“，”./“和”../“开头，那么模块将会被当成是核心模块，或者是从node_modules中加载的模块</li>
+</ul>
+<p>如果无法加载到提供的模块，那么Node.js会抛出异常Error, 它的code属性将会被设置成MODULE_NOT_FOUND</p>
+<h2 id="目录模块"><a href="#目录模块" class="headerlink" title="目录模块"></a>目录模块</h2><p>实际应用中，通常会将一组相关的程序和库文件放在同一个目录下，形成自包含的结构，并对外提供单独的入口 ，以方便后续使用. Node.js中提供以下的方式来通过目录名解析模块.</p>
+<ul>
+<li>第一种方式是在目录根路径下创建package.json文件，并在该文件中指定main属性，该属性指定了主模块的路径. </li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="string">"name"</span>: <span class="string">"some-library"</span>,</div><div class="line">  <span class="string">"main"</span>: <span class="string">"./lib/some-library.js"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果目录的名称为./some-library, 那么require(“./some-library”)操作将会加载./some-library/lib/some-library.js文件. </p>
+<p>如果package.json中缺少main属性的定义，那么Node.js将会抛出以下的错误：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Error</span>: Cannot find <span class="built_in">module</span> <span class="string">'some-library'</span></div></pre></td></tr></table></figure>
+<ul>
+<li>如果目录下没有提供package.json文件，那么Node.js将尝试加载根路径下的index.js文件和index.node文件. 例如： require(“./some-library”)操作将会依次尝试加载./some-libray/index.js和./some-library/index.node</li>
+</ul>
+<h2 id="从node-modules目录中加载"><a href="#从node-modules目录中加载" class="headerlink" title="从node_modules目录中加载"></a>从node_modules目录中加载</h2><p>如果传递给require()方法的参数不是核心模块标识，而且也不是以”/“, “./“和”../“开头的，那么Node.js将从当前模块的父目录开始，逐级向上查找node_modules目录，并尝试从node_modules中加载模块. 如果目录名称以node_modules结尾，那么将路过该目录.</p>
+<p>例如， 如果在/home/ry/projects/foo.js模块中调用require(“bar.js”), 那么Node.js将依次从以下路径中搜索该模块：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">/home/ry/projects/node_modules/bar.js</div><div class="line">/home/ry/node_modules/bar.js</div><div class="line">/home/node_modules/bar.js</div><div class="line">/node_modules/bar.js</div></pre></td></tr></table></figure>
+<p>另外，你还可以通过在模块名称后加“路径后缀”的方式来加载模块. 例如： 当调用require(“example-module/path/to/file”)时，path/to/file会相对于example-module模块来加载，加载时使用同样的机制.</p>
+<h2 id="从全局目录中加载"><a href="#从全局目录中加载" class="headerlink" title="从全局目录中加载"></a>从全局目录中加载</h2><p>如果设置了环境变量NODE_PATH，那么Node.js会在其它地方搜索不到模块的时候，从这个环境变量指定的目录中进行查找. NODE_PATH环境变量是在当前的路径搜索机制完全确定之前，用来支持各种各样的路径搜索.</p>
+<p>目前仍然可以使用NODE_PATH环境变量设置模块搜索的路径，但已经不是那么必要了，Node.js生态已经对模块搜索的路径有了一致的认识. 有时候，部署那些依赖于NODE_PATH环境变量的模块时，如果忘了设置这个变量的值，可能会导致一些很奇怪的现象产生. 例如，依赖的模块版本号会发生变更（有时候甚至是不同的模块）</p>
+<p>另外，Node.js也将会在以下目录搜索模块, 其中$PREFIX是在Node.js中设置的. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>: $HOME/.node_modules</div><div class="line"><span class="number">2</span>: $HOME/.node_libraries</div><div class="line"><span class="number">3</span>: $PREFIX/lib/node</div></pre></td></tr></table></figure>
+<p>值得一提的是，这些搜索路径大部分是由于历史原因被保留，当前Node.js强烈建议将依赖的模块放在本地的node_modules， 这样不但能加快模块的加载速度，还能提高模块加载的稳定性.</p>
+<h2 id="模块包装器"><a href="#模块包装器" class="headerlink" title="模块包装器"></a>模块包装器</h2><p>在模块中的代码被执行之前，Node.js会使用类似于以下的方法对模块中的代码进行包装: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">exports, require, module, __filename, __dirname</span>) </span>&#123;</div><div class="line"><span class="comment">// Your module code actually lives in here</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>通过这种包装，Node.js可以有以下的优势:</p>
+<ul>
+<li>避免了全局变量污染，通过包装器，模块的顶级变量被限制在模块内部，成为模块的私有变量，而不是全局变量</li>
+<li>同时，通过包装器，它还提供了这样一些变量，它们看起来像是全局变量，但实际是模块的私有变量，如module, exports以及require等<ul>
+<li>module和exports变量是CommonJS规范中，用于导出模块变量时使用</li>
+<li>__filename和__dirname可以很方便地用来获取当前模块的文件路径信息和目录信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="module对象"><a href="#module对象" class="headerlink" title="module对象"></a>module对象</h2><p>在每个模块中，module变量都被用来指向当前模块. 为了方便，通常可以使用exports变量来指代module.exports. 事实上，module变量只是模块的局部变量，而不是全局变量（具体原因见“模块包装器”一节）</p>
+<h3 id="module-children"><a href="#module-children" class="headerlink" title="module.children"></a>module.children</h3><p>这个变量表示被当前模块依赖的所有模块对象，类型为数组</p>
+<h3 id="module-exports"><a href="#module-exports" class="headerlink" title="module.exports"></a>module.exports</h3><p>这个对象是由Module系统创建的，但是有时候模块需要导出由它们自己创建的对象. <strong>为了达到这点，需要重新将module.exports指向新的对象，从而达到导出对象的目的. 值得注意的是，如果是让exports变量重新指向新的对象，那么模块将不会导出这个对象. 根本原因是模块最后导出的是module.exports, 而不是exports.</strong> 例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//a.js</span></div><div class="line"><span class="keyword">const</span> EventEmitter = <span class="built_in">require</span>(<span class="string">'events'</span>);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = <span class="keyword">new</span> EventEmitter();</div><div class="line"></div><div class="line"><span class="comment">// Do some work, and after some time emit</span></div><div class="line"><span class="comment">// the 'ready' event from the module itself.</span></div><div class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="built_in">module</span>.exports.emit(<span class="string">'ready'</span>);</div><div class="line">&#125;, <span class="number">1000</span>);</div><div class="line"></div><div class="line"><span class="comment">//b.js</span></div><div class="line"><span class="comment">//那么我们可以在另一个文件中加载该模块</span></div><div class="line"><span class="keyword">const</span> a = <span class="built_in">require</span>(<span class="string">"./a"</span>);</div><div class="line">a.on(<span class="string">"ready"</span>, ()=&gt;&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">"module a is ready"</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>注意这里重新将module.exports指向新的对象，而不是exports. 另外，必须是直接导出对象，而不能通过回调函数来导出.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//x.js</span></div><div class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="built_in">module</span>.exports = &#123; <span class="attr">a</span>: <span class="string">'hello'</span> &#125;;</div><div class="line">&#125;, <span class="number">0</span>);</div><div class="line"></div><div class="line"><span class="comment">//y.js</span></div><div class="line"><span class="keyword">const</span> x = <span class="built_in">require</span>(<span class="string">'./x'</span>);</div><div class="line"><span class="built_in">console</span>.log(x.a);</div></pre></td></tr></table></figure>
+<h3 id="exports"><a href="#exports" class="headerlink" title="exports"></a>exports</h3><p>exports变量在模块内可见，并且在模块被加载之前，exports的值被设置为module.exports的值. 在使用exports变量的时候，可以对它赋予新的属性，如exports.f = …. 但是，不能将新的对象和函数赋予exports， 因为这将导致exports和module.exports变量指向的对象不是同一个，而模块在最后导出的是module.exports指向的变量，因此指定的新对象将不会被导出. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports.hello = <span class="literal">true</span>; <span class="comment">// Exported from require of module</span></div><div class="line">exports = &#123; <span class="attr">hello</span>: <span class="literal">false</span> &#125;;  <span class="comment">// Not exported, only available in the module</span></div></pre></td></tr></table></figure>
+<p>当将一个新的对象赋予module.exports变量时，常见的方式是同时将它也赋予exports， 这样后续还是可以使用exports增加属性. 例如: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = exports = <span class="function"><span class="keyword">function</span> <span class="title">Constructor</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// ... etc.</span></div></pre></td></tr></table></figure>
+<p>为了更好地说明module.exports和exports变量的作用，以下是require()方法的模拟实现，它与Node.js中真实的实现非常的类似: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">require</span>(<span class="params">...</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> <span class="built_in">module</span> = &#123; <span class="attr">exports</span>: &#123;&#125; &#125;;</div><div class="line">  <span class="function">(<span class="params">(<span class="built_in">module</span>, exports</span>) =&gt;</span> &#123;</div><div class="line">    <span class="comment">// Your module code here. In this example, define a function.</span></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">some_func</span>(<span class="params"></span>) </span>&#123;&#125;;</div><div class="line">    exports = some_func;</div><div class="line">    <span class="comment">// At this point, exports is no longer a shortcut to module.exports, and</span></div><div class="line">    <span class="comment">// this module will still export an empty default object.</span></div><div class="line">    <span class="built_in">module</span>.exports = some_func;</div><div class="line">    <span class="comment">// At this point, the module will now export some_func, instead of the</span></div><div class="line">    <span class="comment">// default object.</span></div><div class="line">  &#125;)(<span class="built_in">module</span>, <span class="built_in">module</span>.exports);</div><div class="line">  <span class="keyword">return</span> <span class="built_in">module</span>.exports;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="module-filename"><a href="#module-filename" class="headerlink" title="module.filename"></a>module.filename</h3><p>该变量指向当前模块的路径名</p>
+<h3 id="module-id"><a href="#module-id" class="headerlink" title="module.id"></a>module.id</h3><p>当前模块的id， 通常情况下就是当前模块的路径名</p>
+<h3 id="module-loaded"><a href="#module-loaded" class="headerlink" title="module.loaded"></a>module.loaded</h3><p>指示当前模块是否已经加载完成，还是正在加载中</p>
+<h3 id="module-parent"><a href="#module-parent" class="headerlink" title="module.parent"></a>module.parent</h3><p>第一个依赖于当前模块的模块</p>
+<h3 id="module-require-id"><a href="#module-require-id" class="headerlink" title="module.require(id)"></a>module.require(id)</h3><p>module.require()方法提供了一种方法，可以从module中来加载指定id的模块. 这里首先要获取到module对象，通常情况下，模块导出的都是module.exports, 因此必须显式地导出module对象，从而调用这个方法.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/Modules/" rel="tag"># Modules</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/08/前端/nodejs/Events/" rel="next" title="Node.js - Events">
+                <i class="fa fa-chevron-left"></i> Node.js - Events
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/13/前端/nodejs/Node.js---Console/" rel="prev" title="Node.js - Console">
+                Node.js - Console <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/09/前端/nodejs/Node.js-—-Modules/"
+           data-title="Node.js — Modules" data-url="http://yoursite.com/2017/03/09/前端/nodejs/Node.js-—-Modules/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">156</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Modules"><span class="nav-text">Modules</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#访问主模块"><span class="nav-text">访问主模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#补充说明：包管理"><span class="nav-text">补充说明：包管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#放在一起"><span class="nav-text">放在一起</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存"><span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心模块"><span class="nav-text">核心模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环依赖"><span class="nav-text">循环依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件模块"><span class="nav-text">文件模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录模块"><span class="nav-text">目录模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从node-modules目录中加载"><span class="nav-text">从node_modules目录中加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从全局目录中加载"><span class="nav-text">从全局目录中加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块包装器"><span class="nav-text">模块包装器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#module对象"><span class="nav-text">module对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#module-children"><span class="nav-text">module.children</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#module-exports"><span class="nav-text">module.exports</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exports"><span class="nav-text">exports</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#module-filename"><span class="nav-text">module.filename</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#module-id"><span class="nav-text">module.id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#module-loaded"><span class="nav-text">module.loaded</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#module-parent"><span class="nav-text">module.parent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#module-require-id"><span class="nav-text">module.require(id)</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
