@@ -1,0 +1,808 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs,stream.Writable," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="流在node.js中，流对象是用来操作流数据的抽象接口. Stream模块提供了基础的API接口，以方便应用程序实现相应的接口来构建对象.Node.js提供了多种流对象，比如说，httpServer中request对象，以及process中的标准输出对象stdout，都属于流接口的实现.
+流对象可以是只读的，只写的，也可以是支持读写的. 所有的流对象都是EventEmitter的实例.Stream">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js — Stream(1)">
+<meta property="og:url" content="http://yoursite.com/2017/03/14/前端/nodejs/Nodejs.stream.1/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="流在node.js中，流对象是用来操作流数据的抽象接口. Stream模块提供了基础的API接口，以方便应用程序实现相应的接口来构建对象.Node.js提供了多种流对象，比如说，httpServer中request对象，以及process中的标准输出对象stdout，都属于流接口的实现.
+流对象可以是只读的，只写的，也可以是支持读写的. 所有的流对象都是EventEmitter的实例.Stream">
+<meta property="og:updated_time" content="2017-03-14T03:16:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js — Stream(1)">
+<meta name="twitter:description" content="流在node.js中，流对象是用来操作流数据的抽象接口. Stream模块提供了基础的API接口，以方便应用程序实现相应的接口来构建对象.Node.js提供了多种流对象，比如说，httpServer中request对象，以及process中的标准输出对象stdout，都属于流接口的实现.
+流对象可以是只读的，只写的，也可以是支持读写的. 所有的流对象都是EventEmitter的实例.Stream">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/14/前端/nodejs/Nodejs.stream.1/"/>
+
+
+
+
+
+  <title> Node.js — Stream(1) | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/14/前端/nodejs/Nodejs.stream.1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Node.js — Stream(1)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-14T08:30:00+08:00">
+                2017-03-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/14/前端/nodejs/Nodejs.stream.1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/14/前端/nodejs/Nodejs.stream.1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="流"><a href="#流" class="headerlink" title="流"></a>流</h1><p>在node.js中，流对象是用来操作流数据的抽象接口. Stream模块提供了基础的API接口，以方便应用程序实现相应的接口来构建对象.Node.js提供了多种流对象，比如说，httpServer中request对象，以及process中的标准输出对象stdout，都属于流接口的实现.</p>
+<p>流对象可以是只读的，只写的，也可以是支持读写的. <strong>所有的流对象都是EventEmitter的实例.</strong>Stream模块可以通过以下代码进行访问: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> stream = <span class="built_in">require</span>(<span class="string">"stream"</span>);</div></pre></td></tr></table></figure>
+<p>虽然对于所有的node.js用户而言，理解流是如何工作是非常重要的，但是stream模块本身是为那些意在创建新类型的流对象的开发者设计的. 对于那些只需要使用流对象的开发者而言，通常情况下并不需要直接使用stream模块.</p>
+<h2 id="文档的组织"><a href="#文档的组织" class="headerlink" title="文档的组织"></a>文档的组织</h2><p>这篇文档可以分成两个基础章节，另外还有一个章节用于备注一些细节. 第一小节中详述了在应用中使用stream模块需要用到的api， 第二小节主要阐述实现新的stream对象所需要用到的API接口.</p>
+<h2 id="流对象的类型"><a href="#流对象的类型" class="headerlink" title="流对象的类型"></a>流对象的类型</h2><p>Node.js中提供了四种基础的流类型：</p>
+<ul>
+<li>只读: 用于读取流数据（如fs.createReadStream())</li>
+<li>只写: 用于写入流数据（如fs.createWriteStream())</li>
+<li>可读写: 可同时用于读和写(如net.socket)</li>
+<li>转换流: 这也是一种可读写流，但是它在读写操作的时候，可以对流数据进行一些变化(如zlib.createDeflate())</li>
+</ul>
+<h2 id="对象模式"><a href="#对象模式" class="headerlink" title="对象模式"></a>对象模式</h2><p>所有由node.js的api创建的流对象都可以直接操作String类型和Buffer对象. 但是，流对象也可以用于直接操作js中的其它类型（除了null, 在流中null有特殊的含义）这种直接操作其它类型对象的流被称为是处于“对象模式”（Object Mode).</p>
+<p>流对象在创建时可以通过设置objectMode参数来进入“对象模式”，但是尝试将已有的流对象转化成“对象模式”不是个安全的操作.</p>
+<h2 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h2><p>可写流(Writable)和可读流(Readable)在存储数据时，会分别在内部通过writable._writeableState.getBuffer()和readable._readbleState.buffer来缓冲数据. 缓冲区的大小取决于构造流对象时传入的highWaterMark参数值. 对于一般的流对象来讲，highWaterMark参数定义是缓冲区的字节大小，但对于处在“对象模式”的流对象来讲，highWaterMark参数定义是缓冲的对象个数.</p>
+<p>当可读流对象调用stream.push(chunk)方法时，数据就会被存储于缓冲区中，如果流的消费者没有调用 stream.read()方法，那么数据将一直存在内部的队列中，直到被消费为止. 一旦缓冲的数据大小达到了highWaterMark参数设置的值，可读流对象就会暂时停止从底层的资源中读取数据，直到缓冲区中的数据被消费了为止.（也就是说，可读流对象将停止调用内部的readable._read()方法来填充缓冲区）</p>
+<p>可写流对象是通过不断调用writable.write(chunk)方法来缓冲数据的，当内部缓冲的数据没有超过highWaterMark参数设置的上限值时，调用writable.write()方法将返回true,一旦缓冲区里的数据大小超过了highWaterMark设置的值时，调用writable.write()方法将返回false.</p>
+<p>Stream模块中API设计的主要目标，尤其是stream.pipe()方法，是为了将缓冲区的数据量限制在可接受的水平，这样当源和目标对象的处理速度有差异时，不至于占用所有可用的内存.</p>
+<p>由于Duplex和Transform类型的流对象既是可读的，也是可写的，因此它们内部都维护了两个缓冲区，分别用于读和写操作，以此来保证读写操作相互不受影响. 例如，net.socket对象是Duplex类的实例，它的读缓冲区里缓冲了从socket中接收到的数据，同时写缓冲区里缓冲了往socket里写的数据. 因为往socket中写数据的速度与读数据的速度存在差异，所以有必要为两种操作分别使用相应的缓冲区.</p>
+<h2 id="使用流的API"><a href="#使用流的API" class="headerlink" title="使用流的API"></a>使用流的API</h2><p>几乎所有的Node.js程序，不论它多么简单，都会以某种方式使用流对象. 以下是一个在node.js中使用流对象的例子，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">const</span> server = http.createServer( <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</div><div class="line">  <span class="comment">// req is an http.IncomingMessage, which is a Readable Stream</span></div><div class="line">  <span class="comment">// res is an http.ServerResponse, which is a Writable Stream</span></div><div class="line"></div><div class="line">  <span class="keyword">let</span> body = <span class="string">''</span>;</div><div class="line">  <span class="comment">// Get the data as utf8 strings.</span></div><div class="line">  <span class="comment">// If an encoding is not set, Buffer objects will be received.</span></div><div class="line">  req.setEncoding(<span class="string">'utf8'</span>);</div><div class="line"></div><div class="line">  <span class="comment">// Readable streams emit 'data' events once a listener is added</span></div><div class="line">  req.on(<span class="string">'data'</span>, (chunk) =&gt; &#123;</div><div class="line">    body += chunk;</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  <span class="comment">// the end event indicates that the entire body has been received</span></div><div class="line">  req.on(<span class="string">'end'</span>, () =&gt; &#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      <span class="keyword">const</span> data = <span class="built_in">JSON</span>.parse(body);</div><div class="line">      <span class="comment">// write back something interesting to the user:</span></div><div class="line">      res.write(<span class="keyword">typeof</span> data);</div><div class="line">      res.end();</div><div class="line">    &#125; <span class="keyword">catch</span> (er) &#123;</div><div class="line">      <span class="comment">// uh oh!  bad json!</span></div><div class="line">      res.statusCode = <span class="number">400</span>;</div><div class="line">      <span class="keyword">return</span> res.end(<span class="string">`error: <span class="subst">$&#123;er.message&#125;</span>`</span>);</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">server.listen(<span class="number">1337</span>);</div><div class="line"></div><div class="line"><span class="comment">// $ curl localhost:1337 -d '&#123;&#125;'</span></div><div class="line"><span class="comment">// object</span></div><div class="line"><span class="comment">// $ curl localhost:1337 -d '"foo"'</span></div><div class="line"><span class="comment">// string</span></div><div class="line"><span class="comment">// $ curl localhost:1337 -d 'not json'</span></div><div class="line"><span class="comment">// error: Unexpected token o</span></div></pre></td></tr></table></figure>
+<p>可写流(Writable)对象，如res对象，对外提供了write()方法以及end()方法来将数据写入流对象. 可读流（Readable）对象使用EventEmitter对象的事件机制来从流中读取数据. 可读流中的数据可以以多种方式来读取. 不管是可写流，还是可读流，都使用EventEmitter类的消息机制来判断当前流的状态. Duplex和Tranform流是可读写流的两种实现. </p>
+<p>应用程序如果只是要从流中读取数据，或者是往流中写入数据，那么它不需要直接使用流接口，因此也就没必要通过require(“stream”)方法引用stream模块. 开发者若是想要实现新的流类型，可参阅“流接口的实现API”一节.</p>
+<h2 id="可写流（Writable-Stream"><a href="#可写流（Writable-Stream" class="headerlink" title="可写流（Writable Stream)"></a>可写流（Writable Stream)</h2><p>可写流是对可写入数据的“目标”的一种抽象. 可写流的例子包括：</p>
+<ul>
+<li>客户端的Http请求对象</li>
+<li>服务端的Http响应对象</li>
+<li>fs文件流对象</li>
+<li>zlib流对象</li>
+<li>crypto流对象</li>
+<li>TCP socket对象</li>
+<li>子进程stdin对象</li>
+<li>process.stdout, process.stderr</li>
+</ul>
+<p><strong>注意：</strong> 以上的例子中，有些对象其实是Duplex流对象</p>
+<p>所有可写流对象实现了stream.writable接口定义的方法. 虽然说不同的可写流可能会有些区别，但是它们都遵循基本的使用模式，如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> myStream = getWritableStreamSomehow();</div><div class="line">myStream.write(<span class="string">'some data'</span>);</div><div class="line">myStream.write(<span class="string">'some more data'</span>);</div><div class="line">myStream.end(<span class="string">'done writing data'</span>);</div></pre></td></tr></table></figure>
+<h2 id="stream-Writable类"><a href="#stream-Writable类" class="headerlink" title="stream.Writable类"></a>stream.Writable类</h2><h3 id="close事件"><a href="#close事件" class="headerlink" title="close事件"></a>close事件</h3><p>close事件是当可写流对象被关闭时，或者其底层的资源被关闭时（如文件描述符,fd)被触发. 这个事件意味着后续不再会有其它的事件被触发，也不会再有新的数据产生. <strong>但是，并不是所有的可写流对象都会触发close事件.</strong></p>
+<h3 id="drain事件"><a href="#drain事件" class="headerlink" title="drain事件"></a>drain事件</h3><p>当调用stream.write(chunk)返回false时，意味着缓冲区里的数据已经到达了highWaterMark设置的上限值，后续如果缓冲区里的数据被消费了，缓冲区将可以继续接收新的数据，这时候就会触发drain事件. 示例如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Write the data to the supplied writable stream one million times.</span></div><div class="line"><span class="comment">// Be attentive to back-pressure.</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">writeOneMillionTimes</span>(<span class="params">writer, data, encoding, callback</span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> i = <span class="number">1000000</span>;</div><div class="line">  write();</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">write</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> ok = <span class="literal">true</span>;</div><div class="line">    <span class="keyword">do</span> &#123;</div><div class="line">      i--;</div><div class="line">      <span class="keyword">if</span> (i === <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">// last time!</span></div><div class="line">        writer.write(data, encoding, callback);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// see if we should continue, or wait</span></div><div class="line">        <span class="comment">// don't pass the callback, because we're not done yet.</span></div><div class="line">        ok = writer.write(data, encoding);</div><div class="line">      &#125;</div><div class="line">    &#125; <span class="keyword">while</span> (i &gt; <span class="number">0</span> &amp;&amp; ok);</div><div class="line">    <span class="keyword">if</span> (i &gt; <span class="number">0</span>) &#123;</div><div class="line">      <span class="comment">// had to stop early!</span></div><div class="line">      <span class="comment">// write some more once it drains</span></div><div class="line">      writer.once(<span class="string">'drain'</span>, write);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="error事件"><a href="#error事件" class="headerlink" title="error事件"></a>error事件</h3><ul>
+<li><error>： error对象</error></li>
+</ul>
+<p>当写入数据时(包括pipe)，如果发生错误则会触发error事件. 监听器的回调方法中会包含一个error参数，表示当前的错误信息. <strong>注意：</strong>当error事件被触发时，流对象还没有关闭.</p>
+<h3 id="finish事件"><a href="#finish事件" class="headerlink" title="finish事件"></a>finish事件</h3><p>在调用完stream.end()方法，并且所有的数据已经被flush到底层系统后，finish事件才会被触发.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> writer = getWritableStreamSomehow();</div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i ++) &#123;</div><div class="line">  writer.write(<span class="string">'hello, #$&#123;i&#125;!\n'</span>);</div><div class="line">&#125;</div><div class="line">writer.end(<span class="string">'This is the end\n'</span>);</div><div class="line">writer.on(<span class="string">'finish'</span>, () =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.error(<span class="string">'All writes are now complete.'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="pipe事件"><a href="#pipe事件" class="headerlink" title="pipe事件"></a>pipe事件</h3><p>​    * src: <stream.readable>  连接到当前可写流对象的源可读对象</stream.readable></p>
+<p>当某个可读流对象调用了stream.pipe()方法，并且把当前可写流对象当成是目标时，会触发当前对象的pipe事件，事件的回调参数中带有src参数，它表示连接到当前可写流对象的源可读对象.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> writer = getWritableStreamSomehow();</div><div class="line"><span class="keyword">const</span> reader = getReadableStreamSomehow();</div><div class="line">writer.on(<span class="string">'pipe'</span>, (src) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.error(<span class="string">'something is piping into the writer'</span>);</div><div class="line">  assert.equal(src, reader);</div><div class="line">&#125;);</div><div class="line">reader.pipe(writer);</div></pre></td></tr></table></figure>
+<h3 id="unpipe事件"><a href="#unpipe事件" class="headerlink" title="unpipe事件"></a>unpipe事件</h3><ul>
+<li>src: <stream.readable> 与当前可写流对象断开连接的源可读流对象</stream.readable></li>
+</ul>
+<p>当某个可读流对象调用stream.unpipe()方法，将当前可写流对象从目标中移除中时，会触发unpipe事件，事件的回调函数带有src参数，它表示发起unpipe操作的源可读对象.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> writer = getWritableStreamSomehow();</div><div class="line"><span class="keyword">const</span> reader = getReadableStreamSomehow();</div><div class="line">writer.on(<span class="string">'unpipe'</span>, (src) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.error(<span class="string">'Something has stopped piping into the writer.'</span>);</div><div class="line">  assert.equal(src, reader);</div><div class="line">&#125;);</div><div class="line">reader.pipe(writer);</div><div class="line">reader.unpipe(writer);</div></pre></td></tr></table></figure>
+<h3 id="writable-cork"><a href="#writable-cork" class="headerlink" title="writable.cork()"></a>writable.cork()</h3><p>writable.cork()方法强制将写入的数据放到缓冲区中，这些数据在调用stream.uncork()方法或者stream.end()方法后才会被flush. 这个方法的主要目的是避免在大量写入小块数据到流中时，不会利用内部缓冲从而导致性能急剧下降的问题. 在这种场景下，writable._writev()方法的实现可以通过缓冲区的机制达到更好的性能.</p>
+<h3 id="writable-end-chunk-encoding-callback"><a href="#writable-end-chunk-encoding-callback" class="headerlink" title="writable.end([chunk][,encoding][,callback])"></a>writable.end([chunk][,encoding][,callback])</h3><ul>
+<li>chunk: String | Buffer | any  需写入的数据(可选)，对于不是工作在“对象模式”的流对象而言，chunk必须是String类型或者是buffer类型. 而对于工作在“对象模式”的流来讲，chunk可以是任意的js类型，除了null</li>
+<li>encoding: String 如果chunk的类型是string, 那么该参数定义了其编码格式</li>
+<li>callback： Function  当stream操作完成时的回调函数，可选</li>
+</ul>
+<p>调用writable.end()方法意味着后续不再会有数据被写入流对象. 可选的chunk参数和encoding参数可被用于在关闭stream对象前，最后一次写入数据. 如果提供了callback参数，那么它将会被用于监听finish事件. 在调用了stream.end()方法之后，如果再调用stream.write()方法会产生错误.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// write 'hello, ' and then end with 'world!'</span></div><div class="line"><span class="keyword">const</span> file = fs.createWriteStream(<span class="string">'example.txt'</span>);</div><div class="line">file.write(<span class="string">'hello, '</span>);</div><div class="line">file.end(<span class="string">'world!'</span>);</div><div class="line"><span class="comment">// writing more now is not allowed!</span></div></pre></td></tr></table></figure>
+<h3 id="writable-setDefaultEncoding-encoding"><a href="#writable-setDefaultEncoding-encoding" class="headerlink" title="writable.setDefaultEncoding(encoding)"></a>writable.setDefaultEncoding(encoding)</h3><ul>
+<li>encoding: String 默认的编码方式</li>
+<li>返回： this</li>
+</ul>
+<p>该方法用于设置可写流对象默认的编码方式</p>
+<h3 id="writable-uncork"><a href="#writable-uncork" class="headerlink" title="writable.uncork()"></a>writable.uncork()</h3><p>调用该方法会导致之前调用writable.cork()方法缓冲的数据被flush. 当使用writable.cork()和writable.uncork()方法来管理缓冲区的数据时，建议使用process.nextTick()来延迟writable.uncork()方法的调用，这样可以允许node.js在一个事件loop中，批量进行writable.write()操作. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">stream.cork();</div><div class="line">stream.write(<span class="string">'some '</span>);</div><div class="line">stream.write(<span class="string">'data '</span>);</div><div class="line">process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> stream.uncork());</div></pre></td></tr></table></figure>
+<p>如果多次调用了writable.cork()方法，那么也必须多次调用writable.uncork()方法才能flush所有的缓冲数据.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">stream.cork();</div><div class="line">stream.write(<span class="string">'some '</span>);</div><div class="line">stream.cork();</div><div class="line">stream.write(<span class="string">'data '</span>);</div><div class="line">process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  stream.uncork();</div><div class="line">  <span class="comment">// The data will not be flushed until uncork() is called a second time.</span></div><div class="line">  stream.uncork();</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="writable-write-chunk-encoding-callback"><a href="#writable-write-chunk-encoding-callback" class="headerlink" title="writable.write(chunk[,encoding][,callback])"></a>writable.write(chunk[,encoding][,callback])</h3><ul>
+<li>chunk: String | Buffer 要写入的数据</li>
+<li>encoding: String 当chunk参数是string类型时，该参数指定了它的编码格式</li>
+<li>callback: Function  当数据被flush时的回调函数</li>
+<li>返回: Boolean  如果当前流的缓冲区大小已经达到highWaterMark设置的上限，可写流希望调用代码在drain事件触发时再次写入数据，则会返回false, 否则返回true.</li>
+</ul>
+<p>writable.write()方法往流中写入数据，并在数据被处理完时调用callback方法. 如果在写入的时候发生错误， 那么回调方法有可能不会被触发，也有可能会被触发，此时error会作为它的第一个参数. 为了更有效的处理写操作中可能发生的错误，可以监听error事件. </p>
+<p>当内部的缓冲区存储的数据不超过highWaterMark值时，该方法会返回true. 如果方法返回了false, 那么后续的写操作应该暂停，直到drain事件被触发. 但是，false返回值只是建议，即使在drain事件被触发之前，可写流对象还是会无条件的接收后续写入的数据. </p>
+<p>另外，处于“对象模式”的可流读对象会忽略encoding参数. </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/stream-Writable/" rel="tag"># stream.Writable</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/13/前端/nodejs/Nodejs.debugger/" rel="next" title="nodejs — debugger">
+                <i class="fa fa-chevron-left"></i> nodejs — debugger
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/14/前端/nodejs/Nodejs.stream.2/" rel="prev" title="Node.js — Stream(2)">
+                Node.js — Stream(2) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/14/前端/nodejs/Nodejs.stream.1/"
+           data-title="Node.js — Stream(1)" data-url="http://yoursite.com/2017/03/14/前端/nodejs/Nodejs.stream.1/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">159</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#流"><span class="nav-text">流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文档的组织"><span class="nav-text">文档的组织</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流对象的类型"><span class="nav-text">流对象的类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象模式"><span class="nav-text">对象模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓冲区"><span class="nav-text">缓冲区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用流的API"><span class="nav-text">使用流的API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可写流（Writable-Stream"><span class="nav-text">可写流（Writable Stream)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stream-Writable类"><span class="nav-text">stream.Writable类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#close事件"><span class="nav-text">close事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#drain事件"><span class="nav-text">drain事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error事件"><span class="nav-text">error事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#finish事件"><span class="nav-text">finish事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pipe事件"><span class="nav-text">pipe事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unpipe事件"><span class="nav-text">unpipe事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writable-cork"><span class="nav-text">writable.cork()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writable-end-chunk-encoding-callback"><span class="nav-text">writable.end([chunk][,encoding][,callback])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writable-setDefaultEncoding-encoding"><span class="nav-text">writable.setDefaultEncoding(encoding)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writable-uncork"><span class="nav-text">writable.uncork()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writable-write-chunk-encoding-callback"><span class="nav-text">writable.write(chunk[,encoding][,callback])</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

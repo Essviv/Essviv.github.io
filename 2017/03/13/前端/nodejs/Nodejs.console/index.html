@@ -1,0 +1,776 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="node.js,console," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Consoleconsole模块提供了类似于web浏览器中命令行的功能. 这个模块主要导出了两个组件：
+
+Console类： 这个类提供了console.log, console.error以及console.warn等方法，这些方法可以输出到任何node.js定义的流对象中
+全局的console对象: 该对象的输出流被定义到stdout和stderr中，由于该实例是全局对象，因此不需要通过req">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js - Console">
+<meta property="og:url" content="http://yoursite.com/2017/03/13/前端/nodejs/Nodejs.console/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="Consoleconsole模块提供了类似于web浏览器中命令行的功能. 这个模块主要导出了两个组件：
+
+Console类： 这个类提供了console.log, console.error以及console.warn等方法，这些方法可以输出到任何node.js定义的流对象中
+全局的console对象: 该对象的输出流被定义到stdout和stderr中，由于该实例是全局对象，因此不需要通过req">
+<meta property="og:updated_time" content="2017-03-13T04:10:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js - Console">
+<meta name="twitter:description" content="Consoleconsole模块提供了类似于web浏览器中命令行的功能. 这个模块主要导出了两个组件：
+
+Console类： 这个类提供了console.log, console.error以及console.warn等方法，这些方法可以输出到任何node.js定义的流对象中
+全局的console对象: 该对象的输出流被定义到stdout和stderr中，由于该实例是全局对象，因此不需要通过req">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/13/前端/nodejs/Nodejs.console/"/>
+
+
+
+
+
+  <title> Node.js - Console | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/13/前端/nodejs/Nodejs.console/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Node.js - Console
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-13T08:40:00+08:00">
+                2017-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/13/前端/nodejs/Nodejs.console/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/13/前端/nodejs/Nodejs.console/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Console"><a href="#Console" class="headerlink" title="Console"></a>Console</h1><p>console模块提供了类似于web浏览器中命令行的功能. 这个模块主要导出了两个组件：</p>
+<ul>
+<li>Console类： 这个类提供了console.log, console.error以及console.warn等方法，这些方法可以输出到任何node.js定义的流对象中</li>
+<li>全局的console对象: 该对象的输出流被定义到stdout和stderr中，由于该实例是全局对象，因此不需要通过require(‘console’)方法导入</li>
+</ul>
+<p>使用全局console实例的方法如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'hello world'</span>);</div><div class="line"><span class="comment">// Prints: hello world, to stdout</span></div><div class="line"><span class="built_in">console</span>.log(<span class="string">'hello %s'</span>, <span class="string">'world'</span>);</div><div class="line"><span class="comment">// Prints: hello world, to stdout</span></div><div class="line"><span class="built_in">console</span>.error(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Whoops, something bad happened'</span>));</div><div class="line"><span class="comment">// Prints: [Error: Whoops, something bad happened], to stderr</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> name = <span class="string">'Will Robinson'</span>;</div><div class="line"><span class="built_in">console</span>.warn(<span class="string">`Danger <span class="subst">$&#123;name&#125;</span>! Danger!`</span>);</div><div class="line"><span class="comment">// Prints: Danger Will Robinson! Danger!, to stderr</span></div></pre></td></tr></table></figure>
+<p>使用Console类的方法示例如下: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> out = getStreamSomehow();</div><div class="line"><span class="keyword">const</span> err = getStreamSomehow();</div><div class="line"><span class="keyword">const</span> myConsole = <span class="keyword">new</span> <span class="built_in">console</span>.Console(out, err);</div><div class="line"></div><div class="line">myConsole.log(<span class="string">'hello world'</span>);</div><div class="line"><span class="comment">// Prints: hello world, to out</span></div><div class="line">myConsole.log(<span class="string">'hello %s'</span>, <span class="string">'world'</span>);</div><div class="line"><span class="comment">// Prints: hello world, to out</span></div><div class="line">myConsole.error(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Whoops, something bad happened'</span>));</div><div class="line"><span class="comment">// Prints: [Error: Whoops, something bad happened], to err</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> name = <span class="string">'Will Robinson'</span>;</div><div class="line">myConsole.warn(<span class="string">`Danger <span class="subst">$&#123;name&#125;</span>! Danger!`</span>);</div><div class="line"><span class="comment">// Prints: Danger Will Robinson! Danger!, to err</span></div></pre></td></tr></table></figure>
+<p>虽然Console类中的API提供了与浏览器终端类似的功能，但它并没有覆盖终端的所有方法.</p>
+<h2 id="异步终端-VS-同步终端"><a href="#异步终端-VS-同步终端" class="headerlink" title="异步终端 VS 同步终端"></a>异步终端 VS 同步终端</h2><p>除非输出流对象为文件流，否则console提供的方法均为异步输出. 通常情况下，操作系统会为写操作提供缓冲操作. 虽然写操作被阻塞的机会很少，但它还是有可能会发生.</p>
+<p>另外，在OSX系统中，当输出的流对象为TTY终端时，console方法是同步输出，以此来解决OSX中缓冲区只有1KB的问题，另外，这也解决了stdout和stderr相互交叉输出的问题.</p>
+<h2 id="Console类"><a href="#Console类" class="headerlink" title="Console类"></a>Console类</h2><p>Console类对象可以通过require(“console”).Console方法或者console.Console来获取，它的构造函数中接受两个参数，分别用于设置stdout和stderr的输入流对象，由此提供简单的日志输出功能.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> output = fs.createWriteStream(<span class="string">'./stdout.log'</span>);</div><div class="line"><span class="keyword">const</span> errorOutput = fs.createWriteStream(<span class="string">'./stderr.log'</span>);</div><div class="line"><span class="comment">// custom simple logger</span></div><div class="line"><span class="keyword">const</span> logger = <span class="keyword">new</span> Console(output, errorOutput);</div><div class="line"><span class="comment">// use it like console</span></div><div class="line"><span class="keyword">const</span> count = <span class="number">5</span>;</div><div class="line">logger.log(<span class="string">'count: %d'</span>, count);</div><div class="line"><span class="comment">// in stdout.log: count 5</span></div></pre></td></tr></table></figure>
+<p>全局的console对象是Console类的特例，它的stdout和stderr分别被设置为stdout和stderr对象，可以认为是由以下语句生成的:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> Console(process.stdout, process.stderr)</div></pre></td></tr></table></figure>
+<h3 id="console-assert-value-message-…args"><a href="#console-assert-value-message-…args" class="headerlink" title="console.assert(value[, message][, …args])"></a>console.assert(value[, message][, …args])</h3><p>该方法用于测试value值是否为true, 如果不是true， 则抛出AssertException异常，且异常信息由message与args定义，输出的格式为util.format()定义的格式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.assert(<span class="literal">true</span>, <span class="string">'does nothing'</span>);</div><div class="line"><span class="comment">// OK</span></div><div class="line"><span class="built_in">console</span>.assert(<span class="literal">false</span>, <span class="string">'Whoops %s'</span>, <span class="string">'didn\'t work'</span>);</div><div class="line"><span class="comment">// AssertionError: Whoops didn't work</span></div></pre></td></tr></table></figure>
+<p><strong>注</strong>: 这里的assert方法的实现与web浏览器中assert方法的实现不同. 具体来讲，在web浏览器调用console.assert()方法时，如果值为false, message信息会被打印，但它并不会打断后续代码的执行；但是在node.js中，如果assert方法的结果为false, 它会抛出AssertExcetion异常. </p>
+<p>当然，也可以通过重新Console类的assert()方法，以提供与web浏览器的console.assert()方法类似的功能，以下是相应的示例代码: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"></div><div class="line"><span class="comment">// Creates a simple extension of console with a</span></div><div class="line"><span class="comment">// new impl for assert without monkey-patching.</span></div><div class="line"><span class="keyword">const</span> myConsole = <span class="built_in">Object</span>.create(<span class="built_in">console</span>, &#123;</div><div class="line">  <span class="attr">assert</span>: &#123;</div><div class="line">    <span class="attr">value</span>: <span class="function"><span class="keyword">function</span> <span class="title">assert</span>(<span class="params">assertion, message, ...args</span>) </span>&#123;</div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">        <span class="built_in">console</span>.assert(assertion, message, ...args);</div><div class="line">      &#125; <span class="keyword">catch</span> (err) &#123;</div><div class="line">        <span class="built_in">console</span>.error(err.stack);</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">configurable</span>: <span class="literal">true</span>,</div><div class="line">    <span class="attr">enumerable</span>: <span class="literal">true</span>,</div><div class="line">    <span class="attr">writable</span>: <span class="literal">true</span>,</div><div class="line">  &#125;,</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = myConsole;</div></pre></td></tr></table></figure>
+<p>这样，就可以直接替换默认的console.assert()方法了: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="built_in">console</span> = <span class="built_in">require</span>(<span class="string">'./myConsole'</span>);</div><div class="line"><span class="built_in">console</span>.assert(<span class="literal">false</span>, <span class="string">'this message will print, but no error thrown'</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'this will also print'</span>);</div></pre></td></tr></table></figure>
+<h3 id="console-dir-obj-options"><a href="#console-dir-obj-options" class="headerlink" title="console.dir(obj[, options])"></a>console.dir(obj[, options])</h3><p>该方法会使用util.inspect(obj)方法，并将结果打印到stdout上. 这个方法会忽略obj上定义的inspect()方法. options参数可用来改变输出的信息格式： </p>
+<ul>
+<li>showHidden： 如果设置为true, 那么non-numberable和链接属性也会被打印出来，默认设置为false</li>
+<li>depth: 该参数将被传递到util.inspect(), 以确定输出信息时遍历的对象深度， 常用于输出大型对象. 默认为2，如果设置null， 则表示不限制递归深度.</li>
+<li>colors: 如果设置为true, 则输出时信息会以ANSI风格的颜色来展示，默认为false. 输出的颜色也可以自定义，具体方法见util.inspect()的颜色配置方法</li>
+</ul>
+<h3 id="console-error-data-…args"><a href="#console-error-data-…args" class="headerlink" title="console.error([data], [, …args])"></a>console.error([data], [, …args])</h3><p>将错误信息输出到stderr中，第一个参数为定义的错误信息格式，后续的参数为具体的信息参数，该方法接受的参数与printf(3)类似，所有的参数被传递给util.format()方法. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> code = <span class="number">5</span>;</div><div class="line"><span class="built_in">console</span>.error(<span class="string">'error #%d'</span>, code);</div><div class="line"><span class="comment">// Prints: error #5, to stderr</span></div><div class="line"><span class="built_in">console</span>.error(<span class="string">'error'</span>, code);</div><div class="line"><span class="comment">// Prints: error 5, to stderr</span></div></pre></td></tr></table></figure>
+<p>如果格式化元素（如上述的%d)在第一个参数中没有出现， 那么util.inspect()将作用到后续的每个参数，并将所有的结果进行组合. 对于util.inspect()方法的具体实现方式， 可参见util.inspect()的文档.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">"hello, world."</span>, <span class="string">"---from essviv"</span>, <span class="keyword">new</span> <span class="built_in">Date</span>());</div><div class="line"><span class="comment">//Prints: hello, world ---from essviv 2017-03-13T03:50:53.568Z</span></div></pre></td></tr></table></figure>
+<h3 id="console-info-data-…args"><a href="#console-info-data-…args" class="headerlink" title="console.info([data], [, …args])"></a>console.info([data], [, …args])</h3><p>该方法是console.log()的别名</p>
+<h3 id="console-log-data-…args"><a href="#console-log-data-…args" class="headerlink" title="console.log([data], [, …args])"></a>console.log([data], [, …args])</h3><p>该方法与console.error类似，区别在于该方法将信息输出到stdout中，而console.error将信息输出到stderr中.</p>
+<h3 id="console-time-label"><a href="#console-time-label" class="headerlink" title="console.time(label)"></a>console.time(label)</h3><p>该方法会开启一个定时器，定时器的标识为label, 以用于统计某个操作所需要的时间. 当需要终止定时器时，可以调用console.timeEnd()方法，并传入同一个label值，这样就会在stdout中输出从调用console.time()方法到console.timeEnd()方法之间的时间长度， 时间精确到毫秒级别.</p>
+<h3 id="console-timeEnd-label"><a href="#console-timeEnd-label" class="headerlink" title="console.timeEnd(label)"></a>console.timeEnd(label)</h3><p>该方法会关闭之前的console.time(lable)方法，并在stdout中输出从调用console.time(label)方法到调用该方法之间的时间长度.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.time(<span class="string">'100-elements'</span>);</div><div class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;</div><div class="line">  ;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'100-elements'</span>);</div><div class="line"><span class="comment">// prints 100-elements: 225.438ms</span></div></pre></td></tr></table></figure>
+<p><strong>注</strong>：在node.js v6.0.0以后，该方法会删除定时器对象以防止内存泄露，但在之前的版本中，该定时器会被保留，这意味着可以多次调用console.timeEnd(label)方法, 以多次输出时间长度. 这个功能在v6.0.0之后已被移除.</p>
+<h3 id="console-trace-data-…args"><a href="#console-trace-data-…args" class="headerlink" title="console.trace([data], [, …args])"></a>console.trace([data], [, …args])</h3><p>该方法在stderr中输出当前的堆栈信息，堆栈信息的格式由util.format()方法确定, 如下： </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.trace(<span class="string">'Show me'</span>);</div><div class="line"><span class="comment">// Prints: (stack trace will vary based on where trace is called)</span></div><div class="line"><span class="comment">//  Trace: Show me</span></div><div class="line"><span class="comment">//    at repl:2:9</span></div><div class="line"><span class="comment">//    at REPLServer.defaultEval (repl.js:248:27)</span></div><div class="line"><span class="comment">//    at bound (domain.js:287:14)</span></div><div class="line"><span class="comment">//    at REPLServer.runBound [as eval] (domain.js:300:12)</span></div><div class="line"><span class="comment">//    at REPLServer.&lt;anonymous&gt; (repl.js:412:12)</span></div><div class="line"><span class="comment">//    at emitOne (events.js:82:20)</span></div><div class="line"><span class="comment">//    at REPLServer.emit (events.js:169:7)</span></div><div class="line"><span class="comment">//    at REPLServer.Interface._onLine (readline.js:210:10)</span></div><div class="line"><span class="comment">//    at REPLServer.Interface._line (readline.js:549:8)</span></div><div class="line"><span class="comment">//    at REPLServer.Interface._ttyWrite (readline.js:826:14)</span></div></pre></td></tr></table></figure>
+<h3 id="console-warn-data-…args"><a href="#console-warn-data-…args" class="headerlink" title="console.warn([data], [, …args])"></a>console.warn([data], [, …args])</h3><p>该方法为console.error()的别名方法.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node-js/" rel="tag"># node.js</a>
+          
+            <a href="/tags/console/" rel="tag"># console</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/09/前端/nodejs/Nodejs.modules/" rel="next" title="Node.js — Modules">
+                <i class="fa fa-chevron-left"></i> Node.js — Modules
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/13/前端/nodejs/Nodejs.debugger/" rel="prev" title="nodejs — debugger">
+                nodejs — debugger <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/13/前端/nodejs/Nodejs.console/"
+           data-title="Node.js - Console" data-url="http://yoursite.com/2017/03/13/前端/nodejs/Nodejs.console/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">159</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Console"><span class="nav-text">Console</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#异步终端-VS-同步终端"><span class="nav-text">异步终端 VS 同步终端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Console类"><span class="nav-text">Console类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#console-assert-value-message-…args"><span class="nav-text">console.assert(value[, message][, …args])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-dir-obj-options"><span class="nav-text">console.dir(obj[, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-error-data-…args"><span class="nav-text">console.error([data], [, …args])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-info-data-…args"><span class="nav-text">console.info([data], [, …args])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-log-data-…args"><span class="nav-text">console.log([data], [, …args])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-time-label"><span class="nav-text">console.time(label)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-timeEnd-label"><span class="nav-text">console.timeEnd(label)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-trace-data-…args"><span class="nav-text">console.trace([data], [, …args])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#console-warn-data-…args"><span class="nav-text">console.warn([data], [, …args])</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
