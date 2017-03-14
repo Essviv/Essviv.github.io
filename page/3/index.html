@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/JVM/ClassLoader的双亲委派模型/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/集合/java集合学习之Queue的实现5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +278,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/JVM/ClassLoader的双亲委派模型/" itemprop="url">
-                  ClassLoader的双亲委派模型
+                <a class="post-title-link" href="/2017/01/25/集合/java集合学习之Queue的实现5/" itemprop="url">
+                  java集合学习之Queue的实现5
                 </a>
               
             
@@ -314,8 +314,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/JVM/ClassLoader的双亲委派模型/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/JVM/ClassLoader的双亲委派模型/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/集合/java集合学习之Queue的实现5/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/集合/java集合学习之Queue的实现5/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,16 +343,13 @@
       
         
           
-          ClassLoader的双亲委派模型ClassLoader的层次在java中，ClassLoader的层次可细分为： 
+          java集合学习之Queue的实现5Queue接口这个接口的类继承图如下所示，可以看到，这个接口主要有三种实现， AbstractQueue、Deque以及BlockingQueue（在图中未展示）. 
 
-BootStrap ClassLoader： 负责加载JDK中的核心类库
-
-Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
-
+这个接口只定义了6个方法，可以分成两组，一组在操作无法完成时会抛出异常，一组在操作无法完成时会
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/JVM/ClassLoader的双亲委派模型/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/集合/java集合学习之Queue的实现5/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -395,7 +392,7 @@ Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/Bytebuf学习/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -417,8 +414,8 @@ Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/" itemprop="url">
-                  Netty源码学习系列---服务端的启动
+                <a class="post-title-link" href="/2017/01/25/IO/netty/Bytebuf学习/" itemprop="url">
+                  Bytebuf学习
                 </a>
               
             
@@ -453,8 +450,8 @@ Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/IO/netty/Bytebuf学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/Bytebuf学习/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -482,11 +479,13 @@ Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
       
         
           
-          Netty源码学习系列—服务端的启动netty作为一套NIO框架，它封装了JAVA中的原生的NIO操作逻辑. 在学习netty源码的时候，我们就遵循这样的思路，先用JAVA原生的NIO API实现服务端程序，然后对照这些步骤，一步步地去netty中寻找相应的实现，看看作为框架，它是怎么封装基本的操作
+          Bytebuf学习ByteBuf同时支持随机和序列化的方式读取byte数组， 它是nio buffer以及byte数组的抽象视图类. 
+ByteBuf的指针ByteBuf中定义了两个指针， readerIndex和writerIndex， 分别指示当前的读位置与写位置;
+整个ByteBuf被这两个指
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/IO/netty/Bytebuf学习/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -529,7 +528,7 @@ Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/reactor模型/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/zookeeper学习摘要/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -551,8 +550,8 @@ Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/IO/netty/reactor模型/" itemprop="url">
-                  reactor模型
+                <a class="post-title-link" href="/2017/01/25/zookeeper学习摘要/" itemprop="url">
+                  zookeeper学习摘要
                 </a>
               
             
@@ -587,8 +586,8 @@ Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/IO/netty/reactor模型/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/reactor模型/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/zookeeper学习摘要/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/zookeeper学习摘要/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -616,13 +615,15 @@ Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
       
         
           
-          Reactor模型Reactor模型的中心思想是将所有要处理的IO事件及其处理器注册到一个中心的IO多路复用器上，并将主线程阻塞在多路复用器上；当有相应的IO事件到达时，多路复用器将IO事件分发给相应的处理器进行处理.Reactor模型的模型图如下所示， 其中包括几个核心组件：
-
-Initiatio
+          Stat结构
+zxid: zookeeper transaction id, 这个ID表示了全局的顺序, zxid的值越小，那么该操作发生的时间越早.
+czxid: 导致这个节点创建的操作zxid编号
+ctime: 创建这个节点的时间
+mzxid： 最近一次编辑这个节点数据的zxid编号（注意，这里
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/IO/netty/reactor模型/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/zookeeper学习摘要/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -665,7 +666,7 @@ Initiatio
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/JVM/注解/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/JVM/JVM的方法调用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -687,8 +688,8 @@ Initiatio
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/JVM/注解/" itemprop="url">
-                  注解
+                <a class="post-title-link" href="/2017/01/25/JVM/JVM的方法调用/" itemprop="url">
+                  JVM的方法调用
                 </a>
               
             
@@ -723,8 +724,8 @@ Initiatio
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/JVM/注解/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/JVM/注解/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/JVM/JVM的方法调用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/JVM/JVM的方法调用/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -752,15 +753,14 @@ Initiatio
       
         
           
-          注解元注解元注解是注解的注解，JAVA中提供了四种元注解
-
-@Target: 它是用来标识注解的使用范围，可选的范围包括包、类型、方法、构造方法、成员变量、局部变量以及方法变量等
-
-@Retention: 它是用来标识注解的生命周期，可选的生命周期由RetentionPolicy定义，可选的值包括源
+          JVM的方法调用关键字： 编译时静态多分派，运行时动态单分派
+”静态多分派“是指在编译阶段，编译器根据方法接收者以及参数的静态类型来决定选用的方法版本
+”动态单分派“是指在运行阶段，只根据方法接收者的实际类型来决定调用的实际方法
+方法调用并不等于于方法执行，方法调用阶段唯一的任务就是确定被调用方法的
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/JVM/注解/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/JVM/JVM的方法调用/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -803,7 +803,7 @@ Initiatio
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/工具/snowflake/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/设计模式/设计模式总述/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -825,8 +825,8 @@ Initiatio
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/工具/snowflake/" itemprop="url">
-                  snowflake
+                <a class="post-title-link" href="/2017/01/25/设计模式/设计模式总述/" itemprop="url">
+                  设计模式总述
                 </a>
               
             
@@ -842,8 +842,8 @@ Initiatio
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
+                2017-01-25
               </time>
             
 
@@ -861,8 +861,8 @@ Initiatio
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/工具/snowflake/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/工具/snowflake/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/设计模式/设计模式总述/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/设计模式/设计模式总述/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -890,13 +890,17 @@ Initiatio
       
         
           
-          Snoaflake
-snowflake算法背后的思想是： 时间 + 空间 + 序列号
+          总述参考文献
+https://sourcemaking.com/design_patterns/facade
+
+http://design-patterns.readthedocs.io/zh_CN/latest/structural_patterns/adapter.html
+
+
 
           
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/工具/snowflake/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/设计模式/设计模式总述/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -939,7 +943,7 @@ snowflake算法背后的思想是： 时间 + 空间 + 序列号
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/多线程/多线程进阶/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/前端/备忘/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -961,8 +965,8 @@ snowflake算法背后的思想是： 时间 + 空间 + 序列号
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/多线程/多线程进阶/" itemprop="url">
-                  多线程进阶
+                <a class="post-title-link" href="/2017/01/25/前端/备忘/" itemprop="url">
+                  WEB前端学习备忘
                 </a>
               
             
@@ -978,8 +982,8 @@ snowflake算法背后的思想是： 时间 + 空间 + 序列号
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
+                2017-01-25
               </time>
             
 
@@ -997,8 +1001,8 @@ snowflake算法背后的思想是： 时间 + 空间 + 序列号
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/多线程/多线程进阶/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/多线程/多线程进阶/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/前端/备忘/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/前端/备忘/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1026,147 +1030,14 @@ snowflake算法背后的思想是： 时间 + 空间 + 序列号
       
         
           
-          多线程进阶
-锁对象synchronized关键字内部使用的是一种较为简单的重入锁机制，可以通过Lock接口来实现相应的功能。Lock接口的好处在于在尝试获取对象锁时，可以直接返回或者等待一段时间后再返回，更为灵活
-另外，读写锁提供了更为精巧的方式来控制同时读写的问题，它特别适合于解决读写互斥，写写互
+          备忘学习路线： https://www.zhihu.com/question/31059577
+学习JS的路线: http://blog.xiayf.cn/2013/03/25/learning-js/
+JS推荐教材： Eloquent Javascript
+HTML和CSS推荐教材： Head F
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/多线程/多线程进阶/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/缓存/Memcached/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Essviv">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Essviv">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/24/缓存/Memcached/" itemprop="url">
-                  Memcached
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/24/缓存/Memcached/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/缓存/Memcached/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Memcached命令格式123456   &lt;command&gt; &lt;key&gt; &lt;flags&gt; &lt;expireTime&gt; &lt;bytes&gt;   &lt;datablock&gt;e.g. set name 0 0 8           suny
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/缓存/Memcached/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/前端/备忘/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1347,142 +1218,6 @@ snowflake算法背后的思想是： 时间 + 空间 + 序列号
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/设计模式/迭代器模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Essviv">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Essviv">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/24/设计模式/迭代器模式/" itemprop="url">
-                  迭代器模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/24/设计模式/迭代器模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/设计模式/迭代器模式/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          迭代器模式迭代器模式中涉及到两个关键的组件， 集合类与迭代器. 迭代器简化了遍历集合类元素的操作，使得外界可以不用了解集合类中的数据组织情况就可以访问其中的所有元素， 它的UML图比较简单，如下所示，
-
-UML图中定义了两个抽象接口，Aggregate和Iterator， 分别对应于上面所说的集合类
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/设计模式/迭代器模式/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/集合/memo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1619,6 +1354,279 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/Web/Spring的IoC框架/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/24/Web/Spring的IoC框架/" itemprop="url">
+                  Spring的IoC框架
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
+                2017-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/24/Web/Spring的IoC框架/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/Web/Spring的IoC框架/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          容器的含义Spring中的ApplicationContext继承自BeanFactory， 除了提供了BeanFactory的功能外，还额外提供了依赖管理，消息、生命周期监听等等功能，它就是所谓的“容器”
+Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括：
+
+完
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/01/24/Web/Spring的IoC框架/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/工具/snowflake/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/24/工具/snowflake/" itemprop="url">
+                  snowflake
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
+                2017-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/24/工具/snowflake/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/工具/snowflake/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          Snoaflake
+snowflake算法背后的思想是： 时间 + 空间 + 序列号
+
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/01/24/工具/snowflake/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
   </section>
 
   
@@ -1668,7 +1676,7 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">157</span>
+                <span class="site-state-item-count">159</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1681,7 +1689,7 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">35</span>
+                <span class="site-state-item-count">37</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
