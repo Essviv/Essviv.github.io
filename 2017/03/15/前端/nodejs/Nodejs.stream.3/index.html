@@ -1,0 +1,908 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs,stream.Readable,stream.Duplex,stream.Transform," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="实现Stream接口的APIstream模块基于js的原型继承的方式，对外提供了简洁的api，让应用程序可以很方便地实现Stream接口.
+首先，开发者需要声明一个类，这个类继承自四个基本的stream接口(stream.Writable, stream.Readable, stream.Duplex, stream.Transform), 并确保调用了相应父类的构造方法:
+1234567cons">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js — Stream(3)">
+<meta property="og:url" content="http://yoursite.com/2017/03/15/前端/nodejs/Nodejs.stream.3/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="实现Stream接口的APIstream模块基于js的原型继承的方式，对外提供了简洁的api，让应用程序可以很方便地实现Stream接口.
+首先，开发者需要声明一个类，这个类继承自四个基本的stream接口(stream.Writable, stream.Readable, stream.Duplex, stream.Transform), 并确保调用了相应父类的构造方法:
+1234567cons">
+<meta property="og:updated_time" content="2017-03-15T15:43:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node.js — Stream(3)">
+<meta name="twitter:description" content="实现Stream接口的APIstream模块基于js的原型继承的方式，对外提供了简洁的api，让应用程序可以很方便地实现Stream接口.
+首先，开发者需要声明一个类，这个类继承自四个基本的stream接口(stream.Writable, stream.Readable, stream.Duplex, stream.Transform), 并确保调用了相应父类的构造方法:
+1234567cons">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/15/前端/nodejs/Nodejs.stream.3/"/>
+
+
+
+
+
+  <title> Node.js — Stream(3) | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/15/前端/nodejs/Nodejs.stream.3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Node.js — Stream(3)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-15T16:30:00+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/15/前端/nodejs/Nodejs.stream.3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/15/前端/nodejs/Nodejs.stream.3/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="实现Stream接口的API"><a href="#实现Stream接口的API" class="headerlink" title="实现Stream接口的API"></a>实现Stream接口的API</h1><p>stream模块基于js的原型继承的方式，对外提供了简洁的api，让应用程序可以很方便地实现Stream接口.</p>
+<p>首先，开发者需要声明一个类，这个类继承自四个基本的stream接口(stream.Writable, stream.Readable, stream.Duplex, stream.Transform), 并确保调用了相应父类的构造方法:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Writable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Writable;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyWritable</span> <span class="keyword">extends</span> <span class="title">Writable</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(options) &#123;</div><div class="line">    <span class="keyword">super</span>(options);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其次，新声明的类需要根据继承的接口，实现一个或多个以下的方法:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">使用场景</th>
+<th style="text-align:center">要继承的类</th>
+<th style="text-align:center">要实现的方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">只读</td>
+<td style="text-align:center">Readable</td>
+<td style="text-align:center">_read</td>
+</tr>
+<tr>
+<td style="text-align:center">只写</td>
+<td style="text-align:center">Writable</td>
+<td style="text-align:center">_write, _writev</td>
+</tr>
+<tr>
+<td style="text-align:center">可读写</td>
+<td style="text-align:center">Duplex</td>
+<td style="text-align:center">_read, _write, _writev</td>
+</tr>
+<tr>
+<td style="text-align:center">基于读到的内容写数据</td>
+<td style="text-align:center">Transfrom</td>
+<td style="text-align:center">_transform, _flush</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注：</strong>在实现stream接口的时候，不要调用公有的接口，这些公有接口是供stream接口的使用者使用的(见”使用Stream接口的API”一节). 如果在实现接口的过程中使用了这些方法，将会导致接口的使用者在使用这些接口时出现不可预期的问题.</p>
+<h3 id="简化构造"><a href="#简化构造" class="headerlink" title="简化构造"></a>简化构造</h3><p>对于很多简单的场景而言，可以不依赖于继承来构造新的stream类， 这是通过直接构造四个基本类型的stream接口实例，并在构造函数中传入相应的方法来实现的. 如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Writable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Writable;</div><div class="line"></div><div class="line"><span class="keyword">const</span> myWritable = <span class="keyword">new</span> Writable(&#123;</div><div class="line">  write(chunk, encoding, callback) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="实现Writable接口"><a href="#实现Writable接口" class="headerlink" title="实现Writable接口"></a>实现Writable接口</h2><p>Writable接口可用于扩展可写流对象. 自定义的可写流对象应该调用new stream.Writable()构造方法，并实现writable._write()方法, 可根据需要实现writable._writev()方法.</p>
+<h4 id="Writable-options-构造器"><a href="#Writable-options-构造器" class="headerlink" title="Writable([options])构造器"></a>Writable([options])构造器</h4><ul>
+<li>options: Object<ul>
+<li>highWaterMark: Number  可写流对象内部缓冲区的大小，默认为16384字节(16kb)，或16个对象</li>
+<li>decodeStrings: Boolean  标识将字符串传递给_write()方法之前，是否进行解码操作，默认为true</li>
+<li>objectMode: Boolean  标识当前可写流是否处于“对象模式”, 这意味着stream.write(anyOjb)是否为有效地操作. 当设置了这个标识后，stream.write()方法就可以接收除了string和buffer类型之外的其它js类型. 默认情况下为false.</li>
+<li>write: Function  stream._write()方法的实现</li>
+<li>writev: Function stream._writev()方法的实现</li>
+</ul>
+</li>
+</ul>
+<p>例如： </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Writable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Writable;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyWritable</span> <span class="keyword">extends</span> <span class="title">Writable</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(options) &#123;</div><div class="line">    <span class="comment">// Calls the stream.Writable() constructor</span></div><div class="line">    <span class="keyword">super</span>(options);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//或者使用ES6风格的构造器</span></div><div class="line"><span class="keyword">const</span> Writable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Writable;</div><div class="line"><span class="keyword">const</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyWritable</span>(<span class="params">options</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> MyWritable))</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MyWritable(options);</div><div class="line">  Writable.call(<span class="keyword">this</span>, options);</div><div class="line">&#125;</div><div class="line">util.inherits(MyWritable, Writable);</div><div class="line"></div><div class="line"><span class="comment">//或者使用简化的构造器</span></div><div class="line"><span class="keyword">const</span> Writable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Writable;</div><div class="line"></div><div class="line"><span class="keyword">const</span> myWritable = <span class="keyword">new</span> Writable(&#123;</div><div class="line">  write(chunk, encoding, callback) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;,</div><div class="line">  writev(chunks, callback) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="writable-write-chunk-encoding-callback"><a href="#writable-write-chunk-encoding-callback" class="headerlink" title="writable._write(chunk, encoding, callback)"></a>writable._write(chunk, encoding, callback)</h3><ul>
+<li>chunk: String | Buffer 写入的数据块. 如果没有设置decodeStrings参数，那么传入的永远都是个buffer</li>
+<li>encoding: String  如果chunk为字符串类型，那么这个参数标识了字符串的编码格式. 如果chunk为buffer类型，或者可写流处于“对象模式”,那么该参数将被忽略</li>
+<li>callback: Function  在处理完数据块之后的回调函数，函数可能会带有错误参数.</li>
+</ul>
+<p>所有自定义的Writable实现必须要实现writable._write()方法. 另外，不管这个方法对数据的处理结果是成功还是抛出错误. 都必须调用callback()回调方法，当处理的过程发生错误时，callback()回调函数的第一个参数为错误对象，否则为null.</p>
+<p><strong>注：</strong>Transform接口提供了特定格式的writable._write()实现. </p>
+<p><strong>注：</strong> 应用程序不能直接调用该方法. 这个方法是给子类继承时实现的，它只能在实现内部被调用.</p>
+<p>另外，值得注意的是，在调用writable._write()方法和callback()回调方法之间，如果调用了writable().write()方法，那么这些数据将被存储在缓冲区中. 一旦调用了callback()方法，那么可写流对象将会触发drain事件. 如果实现的流对象可以一次性处理多个数据块，那么这个实现应该实现_writev()方法.</p>
+<p>如果在构造函数的options参数中设置了decodeStrings标识，那么chunk参数就是字符串类型，而不是buffer类型，此时，encoding参数标识了当前字符串的编码格式. 这种方式可以针对某种编码格式进行一些优化处理. 如果decodeStrings标识被显式设置为false, 那么encoding参数将被忽略, chunk参数保持与传入writable.write()方法时一致.</p>
+<p>writable._write()方法名加上了下划线作为前缀，这是用来标识该方法是内部方法，仅供实现类内部使用，不能被外部的API使用者调用. </p>
+<h3 id="writable-writev-chunks-callback"><a href="#writable-writev-chunks-callback" class="headerlink" title="writable._writev(chunks, callback)"></a>writable._writev(chunks, callback)</h3><ul>
+<li>chunks: Array  写入的数据块数组. 每个数据块的格式为{chunk: …, encoding: …}</li>
+<li>callback: Function  数据块处理完成后的回调函数，可能会提供相应的错误参数</li>
+</ul>
+<p><strong>备注：</strong>这个方法仅供实现类内部使用，应用程序不能直接调用该方法. </p>
+<p>writable._writev()方法可以用来一次性处于多个数据块的场景. 如果实现了这个方法，缓冲区中所有的数据将会通过这个方法被调用. 该方法名加上了下划线作为前缀，这是用来标识该方法是内部方法，仅供实现类内部使用，不能被外部API的使用者调用. </p>
+<h3 id="写入数据时发生错误"><a href="#写入数据时发生错误" class="headerlink" title="写入数据时发生错误"></a>写入数据时发生错误</h3><p>当在调用writable._write()方法或writable._writev()方法的过程产生错误时，建议使用callback回调函数，并将错误信息作为其第一个参数回传，这样可以触发error事件. 如果只是在方法中抛出error异常，方法的具体行为将取决于该可写流是如何被使用的，因此可能会导致不一致的行为. 使用callback回调函数的方式，可以保证错误信息总是能被正确地处理.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Writable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Writable;</div><div class="line"></div><div class="line"><span class="keyword">const</span> myWritable = <span class="keyword">new</span> Writable(&#123;</div><div class="line">  write(chunk, encoding, callback) &#123;</div><div class="line">    <span class="keyword">if</span> (chunk.toString().indexOf(<span class="string">'a'</span>) &gt;= <span class="number">0</span>) &#123;</div><div class="line">      callback(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'chunk is invalid'</span>));</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      callback();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="可写流实现示例"><a href="#可写流实现示例" class="headerlink" title="可写流实现示例"></a>可写流实现示例</h3><p>以下的例子是一个非常简单的Writable接口的实现样例. 虽然这个实现没有实际作用，但它展示了实现Writable接口需要注意的点.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Writable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Writable;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyWritable</span> <span class="keyword">extends</span> <span class="title">Writable</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(options) &#123;</div><div class="line">    <span class="keyword">super</span>(options);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  _write(chunk, encoding, callback) &#123;</div><div class="line">    <span class="keyword">if</span> (chunk.toString().indexOf(<span class="string">'a'</span>) &gt;= <span class="number">0</span>) &#123;</div><div class="line">      callback(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'chunk is invalid'</span>));</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      callback();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="实现Readable接口"><a href="#实现Readable接口" class="headerlink" title="实现Readable接口"></a>实现Readable接口</h2><p>所有实现可读流的对象都必须实现Readable接口. 自定义的可读流对象必须调用new stream.Readable([options])构造方法，并实现readable._read()方法.</p>
+<h3 id="new-stream-Readable-options"><a href="#new-stream-Readable-options" class="headerlink" title="new stream.Readable([options])"></a>new stream.Readable([options])</h3><ul>
+<li>options: Object<ul>
+<li>highWaterMark: Number  设置可读流对象内部缓冲区的大小，默认情况下为16KB, 或者为16个对象</li>
+<li>encoding: <string> 如果设置了该参数，那么读取的数据将使用该编码格式进行解码，默认情况下为null</string></li>
+<li>objectMode: Boolean  标识该可读流是否处于“对象模式”. 处于“对象模式”的可读流返回的数据为单个对象，而不是buffer类型. 默认情况下为false.</li>
+<li>read： Function   实现stream._read()的方法</li>
+</ul>
+</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Readable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Readable;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyReadable</span> <span class="keyword">extends</span> <span class="title">Readable</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(options) &#123;</div><div class="line">    <span class="comment">// Calls the stream.Readable(options) constructor</span></div><div class="line">    <span class="keyword">super</span>(options);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//或者使用ES6格式的构造器</span></div><div class="line"><span class="keyword">const</span> Readable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Readable;</div><div class="line"><span class="keyword">const</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyReadable</span>(<span class="params">options</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> MyReadable))</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MyReadable(options);</div><div class="line">  Readable.call(<span class="keyword">this</span>, options);</div><div class="line">&#125;</div><div class="line">util.inherits(MyReadable, Readable);</div><div class="line"></div><div class="line"><span class="comment">//或者使用简化的构造器</span></div><div class="line"><span class="keyword">const</span> Readable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Readable;</div><div class="line"></div><div class="line"><span class="keyword">const</span> myReadable = <span class="keyword">new</span> Readable(&#123;</div><div class="line">  read(size) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="readable-read-size"><a href="#readable-read-size" class="headerlink" title="readable._read(size)"></a>readable._read(size)</h3><ul>
+<li>size: Number  异步读取的数据块大小</li>
+</ul>
+<p><strong>备注：</strong> 这个方法仅供实现类内部使用，API的使用者不应该直接调用该方法.</p>
+<p>所有实现了Readable接口的可读流都应该实现这个方法，以获取来自底层资源的数据.</p>
+<p>当调用了readable._read()方法后，如果底层资源中有可读取的数据，那么实现应该不断调用 readable.push(dataChunk)方法将这些数据推到数据队列中以供应用程序读取，直到readable.push()方法返回false为止. 当_read()方法停止后，只有当它再次被调用的时候，才能继续将数据推到数据队列中. </p>
+<p><strong>备注：</strong> 一旦readable._read()方法被调用后，直到readable.push()方法被调用，_read()方法才能被再次调用. </p>
+<p>size参数是建议性的. 对于那些将“读取”操作当成是单独操作的实现来讲，可以按照size参数指定的大小来获取相应的数据，而对于另一些实现来讲，只要一有数据到达，它们就可以将数据读取出来，然后调用readable.push(chunk)方法将数据推入队列，而不用等到有size大小的数据时再去读取.</p>
+<p>readable._read()方法名前加了下划线作为前缀，这是用来标识该方法仅供实现类内部使用，API的使用者不应该直接调用该方法.</p>
+<h3 id="readable-push-chunk-encoding"><a href="#readable-push-chunk-encoding" class="headerlink" title="readable.push(chunk[, encoding])"></a>readable.push(chunk[, encoding])</h3><ul>
+<li>chunk: String | Buffer  需要推入读取队列的数据块</li>
+<li>encoding: String 数据块的编码格式，必须是有效的编码格式，如utf-i, hex, ascii等. </li>
+<li>返回： Boolean 当读取队列还可以推入数据时，返回true, 否则false</li>
+</ul>
+<p>当chunk参数为String或者Buffer类型时，chunk数据将被加入到可读流的内部队列中以供应用程序读取. 如果chunk为null, 表示当前流已经到达尾部，那么无法再往内部队列中写入更多数据.</p>
+<p>当Readable对象处于paused模式时，调用readable.push()方法推入到内部队列中的数据会一直存在队列中，直到应用程序在readable事件中调用了readable.read()方法才会被读取. 而当Readable对象处于flowing模式时，调用该方法推入的数据将会通过data事件被提供给应用程序读取. </p>
+<p>readable.push()方法被设计得尽可能灵活. 比如说，当某些底层资源提供了暂停/恢复机制以及相应的回调机制时，就可以通过自定义readable实现对这些资源的包装, 如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// source is an object with readStop() and readStart() methods,</span></div><div class="line"><span class="comment">// and an `ondata` member that gets called when it has data, and</span></div><div class="line"><span class="comment">// an `onend` member that gets called when the data is over.</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SourceWrapper</span> <span class="keyword">extends</span> <span class="title">Readable</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(options) &#123;</div><div class="line">    <span class="keyword">super</span>(options);</div><div class="line"></div><div class="line">    <span class="keyword">this</span>._source = getLowlevelSourceObject();</div><div class="line"></div><div class="line">    <span class="comment">// Every time there's data, push it into the internal buffer.</span></div><div class="line">    <span class="keyword">this</span>._source.ondata = <span class="function">(<span class="params">chunk</span>) =&gt;</span> &#123;</div><div class="line">      <span class="comment">// if push() returns false, then stop reading from source</span></div><div class="line">      <span class="keyword">if</span> (!<span class="keyword">this</span>.push(chunk))</div><div class="line">        <span class="keyword">this</span>._source.readStop();</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="comment">// When the source ends, push the EOF-signaling `null` chunk</span></div><div class="line">    <span class="keyword">this</span>._source.onend = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="keyword">this</span>.push(<span class="literal">null</span>);</div><div class="line">    &#125;;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// _read will be called when the stream wants to pull more data in</span></div><div class="line">  <span class="comment">// the advisory size argument is ignored in this case.</span></div><div class="line">  _read(size) &#123;</div><div class="line">    <span class="keyword">this</span>._source.readStart();</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>备注：</strong> readable.push()方法仅限于在readable接口的实现内部使用，并且只限于在readable._read()方法中使用. </p>
+<h3 id="读取时发生错误"><a href="#读取时发生错误" class="headerlink" title="读取时发生错误"></a>读取时发生错误</h3><p>当readable._read()方法处理中发生错误时，建议触发error事件来发布错误，而不是直接在方法中抛出error异常. 直接抛弃error异常的后续处理取决于可读流被使用的方式，这有可能会导致程序的行为不一致，而通过触发error事件的方式来发布错误，则可以使错误有统一的处理方式. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Readable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Readable;</div><div class="line"></div><div class="line"><span class="keyword">const</span> myReadable = <span class="keyword">new</span> Readable(&#123;</div><div class="line">  read(size) &#123;</div><div class="line">    <span class="keyword">if</span> (checkSomeErrorCondition()) &#123;</div><div class="line">      process.nextTick(<span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">this</span>.emit(<span class="string">'error'</span>, err));</div><div class="line">      <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// do some work</span></div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="Readable接口的实现示例"><a href="#Readable接口的实现示例" class="headerlink" title="Readable接口的实现示例"></a>Readable接口的实现示例</h3><p>以下的例子是Readable接口示例实现，它会以逆序的方式推入1~1000000数字，然后结束.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Readable = <span class="built_in">require</span>(<span class="string">'stream'</span>).Readable;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword">extends</span> <span class="title">Readable</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(opt) &#123;</div><div class="line">    <span class="keyword">super</span>(opt);</div><div class="line">    <span class="keyword">this</span>._max = <span class="number">1000000</span>;</div><div class="line">    <span class="keyword">this</span>._index = <span class="number">1</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  _read() &#123;</div><div class="line">    <span class="keyword">var</span> i = <span class="keyword">this</span>._index++;</div><div class="line">    <span class="keyword">if</span> (i &gt; <span class="keyword">this</span>._max)</div><div class="line">      <span class="keyword">this</span>.push(<span class="literal">null</span>);</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">var</span> str = <span class="string">''</span> + i;</div><div class="line">      <span class="keyword">var</span> buf = Buffer.from(str, <span class="string">'ascii'</span>);</div><div class="line">      <span class="keyword">this</span>.push(buf);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Duplex接口的实现"><a href="#Duplex接口的实现" class="headerlink" title="Duplex接口的实现"></a>Duplex接口的实现</h2><p>Duplex接口是同时实现了Readable接口和Writable接口的对象，它代表了可读写流，如TCP Socket对象等. 由于JS中不支持多重继承，所有实现可读写流的类都需要实现stream.Duplex接口，而不是同时继承stream.Readable接口和stream.Writable接口. </p>
+<p><strong>备注：</strong>stream.Duplex接口从原型上继承了stream.Readable接口，但是依赖于stream.Writable接口. 但是instanceof方法可以正确地处理两个基类，因为它重置了Writable接口的Symbol.hasInstance方法.</p>
+<p>自定义Duplex接口，必须先调用new stream.Duplex([options])方法，然后重写readable._read()方法和writable._write()方法.</p>
+<h3 id="new-stream-Duplex-options"><a href="#new-stream-Duplex-options" class="headerlink" title="new stream.Duplex([options])"></a>new stream.Duplex([options])</h3><ul>
+<li>options: Object  该对象将被同时传递给Reabable接口和Writable接口的构造函数<ul>
+<li>allowHalfOpen: Boolean  标识当前的流对象是否可以处于”半开”状态， 默认为true. 如果被设置为false, 意味着当读取数据侧被关闭时，写入数据侧也将被关闭，反之亦然. </li>
+<li>readableObjectMode: Boolean 用于设置读取数据侧的objectMode, 默认为false. 当objectMode被设置为true时，该参数不起作用.</li>
+<li>writableObjectMode: Boolean  用于设置写入数据侧的objectMode, 默认为false. 当objectMode被设置为true时，该参数不起作用. </li>
+</ul>
+</li>
+</ul>
+<p>例如： </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Duplex = <span class="built_in">require</span>(<span class="string">'stream'</span>).Duplex;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyDuplex</span> <span class="keyword">extends</span> <span class="title">Duplex</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(options) &#123;</div><div class="line">    <span class="keyword">super</span>(options);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//或者使用ES6风格的构造器</span></div><div class="line"><span class="keyword">const</span> Duplex = <span class="built_in">require</span>(<span class="string">'stream'</span>).Duplex;</div><div class="line"><span class="keyword">const</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyDuplex</span>(<span class="params">options</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> MyDuplex))</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MyDuplex(options);</div><div class="line">  Duplex.call(<span class="keyword">this</span>, options);</div><div class="line">&#125;</div><div class="line">util.inherits(MyDuplex, Duplex);</div><div class="line"></div><div class="line"><span class="comment">//或者使用简化的风格</span></div><div class="line"><span class="keyword">const</span> Duplex = <span class="built_in">require</span>(<span class="string">'stream'</span>).Duplex;</div><div class="line"></div><div class="line"><span class="keyword">const</span> myDuplex = <span class="keyword">new</span> Duplex(&#123;</div><div class="line">  read(size) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;,</div><div class="line">  write(chunk, encoding, callback) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="Duplex接口的实现示例"><a href="#Duplex接口的实现示例" class="headerlink" title="Duplex接口的实现示例"></a>Duplex接口的实现示例</h3><p>以下的例子展示了Duplex接口的实现，它包装了虚拟的底层资源对象，尽管该资源对象使用了与node.js流不兼容的API, 但它可以用于读写数据. 以下的例子是Duplex接口的简单实现，它通过Readable接口读取数据，然后再通过Writable接口缓冲数据. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Duplex = <span class="built_in">require</span>(<span class="string">'stream'</span>).Duplex;</div><div class="line"><span class="keyword">const</span> kSource = <span class="built_in">Symbol</span>(<span class="string">'source'</span>);</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyDuplex</span> <span class="keyword">extends</span> <span class="title">Duplex</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(source, options) &#123;</div><div class="line">    <span class="keyword">super</span>(options);</div><div class="line">    <span class="keyword">this</span>[kSource] = source;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  _write(chunk, encoding, callback) &#123;</div><div class="line">    <span class="comment">// The underlying source only deals with strings</span></div><div class="line">    <span class="keyword">if</span> (Buffer.isBuffer(chunk))</div><div class="line">      chunk = chunk.toString();</div><div class="line">    <span class="keyword">this</span>[kSource].writeSomeData(chunk);</div><div class="line">    callback();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  _read(size) &#123;</div><div class="line">    <span class="keyword">this</span>[kSource].fetchSomeData(size, (data, encoding) =&gt; &#123;</div><div class="line">      <span class="keyword">this</span>.push(Buffer.from(data, encoding));</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Duplex接口最重要的一点是，虽然它同时实现了Writable接口和Readable接口，但是读取数据和写入数据是相互独立的. </p>
+<h3 id="“对象模式”的Duplex对象"><a href="#“对象模式”的Duplex对象" class="headerlink" title="“对象模式”的Duplex对象"></a>“对象模式”的Duplex对象</h3><p>对于Duplex接口而言，可以通过readableObjectMode和writableObjectMode两个参数分别设置读取侧和写入侧的objectMode参数. 在下面的例子中，创建了一个Transform对象(Duplex的实现)，它的写入侧处于“对象模式”, 它接受JS的数字类型，并在读取侧转化成16进制的字符串. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Transform = <span class="built_in">require</span>(<span class="string">'stream'</span>).Transform;</div><div class="line"></div><div class="line"><span class="comment">// All Transform streams are also Duplex Streams</span></div><div class="line"><span class="keyword">const</span> myTransform = <span class="keyword">new</span> Transform(&#123;</div><div class="line">  <span class="attr">writableObjectMode</span>: <span class="literal">true</span>,</div><div class="line"></div><div class="line">  transform(chunk, encoding, callback) &#123;</div><div class="line">    <span class="comment">// Coerce the chunk to a number if necessary</span></div><div class="line">    chunk |= <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="comment">// Transform the chunk into something else.</span></div><div class="line">    <span class="keyword">const</span> data = chunk.toString(<span class="number">16</span>);</div><div class="line"></div><div class="line">    <span class="comment">// Push the data onto the readable queue.</span></div><div class="line">    callback(<span class="literal">null</span>, <span class="string">'0'</span>.repeat(data.length % <span class="number">2</span>) + data);</div><div class="line">  &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">myTransform.setEncoding(<span class="string">'ascii'</span>);</div><div class="line">myTransform.on(<span class="string">'data'</span>, (chunk) =&gt; <span class="built_in">console</span>.log(chunk));</div><div class="line"></div><div class="line">myTransform.write(<span class="number">1</span>);</div><div class="line"><span class="comment">// Prints: 01</span></div><div class="line">myTransform.write(<span class="number">10</span>);</div><div class="line"><span class="comment">// Prints: 0a</span></div><div class="line">myTransform.write(<span class="number">100</span>);</div><div class="line"><span class="comment">// Prints: 64</span></div></pre></td></tr></table></figure>
+<h2 id="Transform接口的实现"><a href="#Transform接口的实现" class="headerlink" title="Transform接口的实现"></a>Transform接口的实现</h2><p>Transform接口是Duplex接口的特例，它的输出是根据输入的数据来决定的. Transform接口的例子包括zlib流对象和crypto流对象，它们分别用于压缩数据和加密数据时使用. </p>
+<p><strong>备注：</strong> Transform接口并不要求输出的数据大小等同于输入的数据大小，也不要求数据块的数量是一样在的，甚至连数据读入和写出的时间也可以是不一样的. 例如， 哈希转换流只会在输入数据结束时，才会输出单个数据块， 而zlib流产生的输出数据要么远小于输入数据（压缩），要么远大于输入数据（解压缩）. </p>
+<p>所有实现转换流的对象都必须实现stream.Transform接口. stream.Transform接口原型上继承自stream.Duplex接口，但它重写了writable._write()方法和readable._read()方法，自定义的Transform接口的实现必须实现tranform._tranform()方法，也可以按照需要实现transform._flush()方法. </p>
+<p><strong>备注：</strong> 如果在Transform接口的实现中，由于读取侧的数据没有被及时而导致写入侧被暂停时，那么必须十分小心. </p>
+<h3 id="new-stream-Transform-options"><a href="#new-stream-Transform-options" class="headerlink" title="new stream.Transform([options])"></a>new stream.Transform([options])</h3><ul>
+<li>options: Object 该对象将同时被传到Writable接口和Readable接口的构造函数中<ul>
+<li>transform: Function  stream._transform()方法的实现函数</li>
+<li>flush: Function stream._flush()方法的实现函数</li>
+</ul>
+</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Transform = <span class="built_in">require</span>(<span class="string">'stream'</span>).Transform;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyTransform</span> <span class="keyword">extends</span> <span class="title">Transform</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(options) &#123;</div><div class="line">    <span class="keyword">super</span>(options);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//或者使用ES6风格的构造器</span></div><div class="line"><span class="keyword">const</span> Transform = <span class="built_in">require</span>(<span class="string">'stream'</span>).Transform;</div><div class="line"><span class="keyword">const</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyTransform</span>(<span class="params">options</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> MyTransform))</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MyTransform(options);</div><div class="line">  Transform.call(<span class="keyword">this</span>, options);</div><div class="line">&#125;</div><div class="line">util.inherits(MyTransform, Transform);</div><div class="line"></div><div class="line"><span class="comment">//或者使用简化的构造器</span></div><div class="line"><span class="keyword">const</span> Transform = <span class="built_in">require</span>(<span class="string">'stream'</span>).Transform;</div><div class="line"></div><div class="line"><span class="keyword">const</span> myTransform = <span class="keyword">new</span> Transform(&#123;</div><div class="line">  transform(chunk, encoding, callback) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="finish事件和end事件"><a href="#finish事件和end事件" class="headerlink" title="finish事件和end事件"></a>finish事件和end事件</h3><p>finish事件和end事件是分别来自于stream.Writable接口和stream.Readable接口. finish事件是在stream.end()方法被调用后，所有的数据块都被stream._transform()方法处理后被触发， 而end事件是在transform._flush()方法的回调函数被调用后，所有的数据都已经输出时才被触发.</p>
+<h3 id="transform-flush-callback"><a href="#transform-flush-callback" class="headerlink" title="transform._flush(callback)"></a>transform._flush(callback)</h3><ul>
+<li>callback: Function 当剩余的数据被flush的时候，回调函数被调用，该函数被调用 时，有可能会带上Error参数.</li>
+</ul>
+<p><strong>备注：</strong> 该函数仅在实现类内部使用，不能在程序代码中直接调用该方法. 在某些场景下，转换操作必须在流的尾部增加一些数据，例如， 在zlib流进行压缩操作时，会存储一些内部状态以优化整个压缩过程. 但是在流数据到达尾部时，这些数据也需要被flush，这样整个压缩数据才能完整.</p>
+<p>自定义的Transform实现也可以按照需要实现transform._flush()方法. 这个方法会在没有数据消费时被调用 ，但会在end事件被触发前调用. 在transform._flush()方法内部，readable.push()方法可能会被调用零次或多次, 而callback函数会在所有的数据都已经被flush后被调用. </p>
+<p>transform._flush()方法名增加了下划线作为前缀，这是用来标识该方法仅限在实现类内部使用，使用Transform API的程序不应该直接使用该方法.</p>
+<h3 id="transform-transform-chunk-encoding-callback"><a href="#transform-transform-chunk-encoding-callback" class="headerlink" title="transform._transform(chunk, encoding, callback)"></a>transform._transform(chunk, encoding, callback)</h3><ul>
+<li>chunk: Buffer | String 要被转换的数据块. 除非将decodeStrings标识设置为false, 否则将永远是buffer类型. </li>
+<li>encdoing: String  如果chunk是字符串类型，那么该参数标识了chunk的编码格式； 如果chunk是buffer类型，那么该参数被设置为“buffer”， 在这种情况下，忽略该参数</li>
+<li>callback: Function  在完成chunk数据的转换操作后的回调函数，如果在转换的过程中出现错误 ，那么回调函数的第一个参数代表了Error类型</li>
+</ul>
+<p><strong>备注：</strong> transform._transform()方法仅限在实现类内部使用，使用Transform接口API的程序不能直接使用该方法. </p>
+<p>所有Transform接口的实现类都必须实现transform._transform()方法，它接受写入侧的数据，并根据写入侧的数据转换成读取侧的数据，并通过readable.push()方法将转换后的数据提交给读取侧. </p>
+<p>对于单次的输入数据块来讲，transform.push()方法可能会被调用零次或多次，这取决于具体的实现，甚至对于任何的输入数据都可以没有输出. </p>
+<p>callback回调方法只能在当前块数据被读取后才能被调用，如果在转化的过程中出现了错误，那么callback回调方法的第一个参数必须是Error对象，否则这个参数设置为null. 如果提供了callback函数的第二个参数，那么这个参数将会被传递给readable.push()方法，换句话说，下面的表达式是等价的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">transform.prototype._transform = <span class="function"><span class="keyword">function</span> (<span class="params">data, encoding, callback</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.push(data);</div><div class="line">  callback();</div><div class="line">&#125;;</div><div class="line"></div><div class="line">transform.prototype._transform = <span class="function"><span class="keyword">function</span> (<span class="params">data, encoding, callback</span>) </span>&#123;</div><div class="line">  callback(<span class="literal">null</span>, data);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>transform._transform()方法增加了下划线作为前缀，这是用来标识该方法仅限在实现类内部使用，使用Transform API的程序不能直接使用该方法. </p>
+<h2 id="stream-PassThrough接口"><a href="#stream-PassThrough接口" class="headerlink" title="stream.PassThrough接口"></a>stream.PassThrough接口</h2><p>stream.PassThrough接口是Transform接口的实现，它不对数据做任何转换，只是简单地将输入数据作为输出. 这个接口的主要目的是为了测试，但是在一些场景下，也可以使用这个接口来作为新实现的流对象的基础. </p>
+<h2 id="额外说明"><a href="#额外说明" class="headerlink" title="额外说明"></a>额外说明</h2><h3 id="与老版本node-js的兼容性"><a href="#与老版本node-js的兼容性" class="headerlink" title="与老版本node.js的兼容性"></a>与老版本node.js的兼容性</h3><p>在node.js的v0.10版本之前，Readable接口被设计得很简单，因此功能也相对简单：</p>
+<ul>
+<li>当有可读数据时，data事件会被直接触发，而不是等待stream.read()方法被调用. 这对于那些需要做些额外的工作来决定如何处理数据的应用来讲，需要将读取到的数据暂存到缓存中，否则数据将丢失.</li>
+<li>stream.pause()方法是建议性的，而非强制性的. 这意味着，即使当前流对象处于paused模式，但需要继续监听data事件，因为还是会有数据被推过来</li>
+</ul>
+<p>在node.js的V0.10版本的时候引入了Readable接口. 为了向后兼容，当增加了可读流的data事件监听器后，或者调用了resume()方法后，可读流才会被切换到flowing模式. 这样做的效果就是，即使没有使用新的stream.read()方法，或者设置readabale事件，数据块也不会丢失了. </p>
+<p>虽然大部分程序都能够正常的工作，但是在特定的场景下，这也引入了一个问题：</p>
+<ul>
+<li>没有增加data事件的监听器</li>
+<li>stream.resume()方法也从来没有被调用 </li>
+<li>可读流对象也没有被pipe到任何可写流对象上</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// WARNING!  BROKEN!</span></div><div class="line">net.createServer(<span class="function">(<span class="params">socket</span>) =&gt;</span> &#123;</div><div class="line"></div><div class="line">  <span class="comment">// we add an 'end' method, but never consume the data</span></div><div class="line">  socket.on(<span class="string">'end'</span>, () =&gt; &#123;</div><div class="line">    <span class="comment">// It will never get here.</span></div><div class="line">    socket.end(<span class="string">'The message was received but was not processed.\n'</span>);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">1337</span>);</div></pre></td></tr></table></figure>
+<p>在v0.10版本之前的node.js中,进来的数据会被忽略. 但是在v0.10以及之后的版本中，这个socket对象就会永远被暂停. 对于这种情况，解决方式就是调用stream.resume()方法. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Workaround</span></div><div class="line">net.createServer(<span class="function">(<span class="params">socket</span>) =&gt;</span> &#123;</div><div class="line"></div><div class="line">  socket.on(<span class="string">'end'</span>, () =&gt; &#123;</div><div class="line">    socket.end(<span class="string">'The message was received but was not processed.\n'</span>);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  <span class="comment">// start the flow of data, discarding it.</span></div><div class="line">  socket.resume();</div><div class="line"></div><div class="line">&#125;).listen(<span class="number">1337</span>);</div></pre></td></tr></table></figure>
+<p>除了让可读流对象切换到flowing模式之外，还可以使用readable.wrap()方法对V0.10版本前的可读流对象进行包装.</p>
+<h3 id="readable-read-0"><a href="#readable-read-0" class="headerlink" title="readable.read(0)"></a>readable.read(0)</h3><p>在某些场景，需要刷新底层的可读流资源，但又不想真实地消费数据，在这些场景中，可以调用readable.read(0)方法，它会始终返回null. 如果内部的数据缓冲区在highWaterMark值以下，并且可读流对象没有正在被读取，那么调用readable.read(0)方法将会导致底层的readable._read()方法被调用.</p>
+<p>虽然对于大部分的应用来讲并不需要使用这个方法，但是在node.js内部使用了这种机制，是在可读流对象的内部.</p>
+<h3 id="readable-push-‘’"><a href="#readable-push-‘’" class="headerlink" title="readable.push(‘’)"></a>readable.push(‘’)</h3><p>不建议使用readable.push()方法. 对于不处于“对象模式”的流来讲，将零字节的string和buffer推入其中会导致很有意思的现象. 由于调用了readable.push()方法，这个方法会中止读取操作，但是，由于传入的参数是个空字符串，没有数据被添加到缓冲区中，因此应用程序就读不到任何数据. </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/stream-Readable/" rel="tag"># stream.Readable</a>
+          
+            <a href="/tags/stream-Duplex/" rel="tag"># stream.Duplex</a>
+          
+            <a href="/tags/stream-Transform/" rel="tag"># stream.Transform</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/14/前端/nodejs/Nodejs.stream.2/" rel="next" title="Node.js — Stream(2)">
+                <i class="fa fa-chevron-left"></i> Node.js — Stream(2)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/15/前端/nodejs/Nodejs.stream.3/"
+           data-title="Node.js — Stream(3)" data-url="http://yoursite.com/2017/03/15/前端/nodejs/Nodejs.stream.3/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">160</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">39</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实现Stream接口的API"><span class="nav-text">实现Stream接口的API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简化构造"><span class="nav-text">简化构造</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现Writable接口"><span class="nav-text">实现Writable接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Writable-options-构造器"><span class="nav-text">Writable([options])构造器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writable-write-chunk-encoding-callback"><span class="nav-text">writable._write(chunk, encoding, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writable-writev-chunks-callback"><span class="nav-text">writable._writev(chunks, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写入数据时发生错误"><span class="nav-text">写入数据时发生错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可写流实现示例"><span class="nav-text">可写流实现示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现Readable接口"><span class="nav-text">实现Readable接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#new-stream-Readable-options"><span class="nav-text">new stream.Readable([options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readable-read-size"><span class="nav-text">readable._read(size)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readable-push-chunk-encoding"><span class="nav-text">readable.push(chunk[, encoding])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取时发生错误"><span class="nav-text">读取时发生错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Readable接口的实现示例"><span class="nav-text">Readable接口的实现示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Duplex接口的实现"><span class="nav-text">Duplex接口的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#new-stream-Duplex-options"><span class="nav-text">new stream.Duplex([options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Duplex接口的实现示例"><span class="nav-text">Duplex接口的实现示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“对象模式”的Duplex对象"><span class="nav-text">“对象模式”的Duplex对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transform接口的实现"><span class="nav-text">Transform接口的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#new-stream-Transform-options"><span class="nav-text">new stream.Transform([options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#finish事件和end事件"><span class="nav-text">finish事件和end事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transform-flush-callback"><span class="nav-text">transform._flush(callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transform-transform-chunk-encoding-callback"><span class="nav-text">transform._transform(chunk, encoding, callback)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stream-PassThrough接口"><span class="nav-text">stream.PassThrough接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#额外说明"><span class="nav-text">额外说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#与老版本node-js的兼容性"><span class="nav-text">与老版本node.js的兼容性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readable-read-0"><span class="nav-text">readable.read(0)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readable-push-‘’"><span class="nav-text">readable.push(‘’)</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
