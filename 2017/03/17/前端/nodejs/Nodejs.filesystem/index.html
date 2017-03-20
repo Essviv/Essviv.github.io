@@ -1,0 +1,1618 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs,filesystem," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="文件系统node.js的文件IO模块提供了对标准POSIX函数的包装. 如果要使用这个模块，可以调用require(“fs”)方法. 该模块中所有的方法都有同步和异步两个版本. 异步版本的方法都会带有回调方法作为最后一个参数，当回调方法被回调时，传回的参数数量及类型取决于具体的方法，但第一个参数都是异常对象. 如果操作正常执行，那么该参数被设置为null或者undefined.如果使用同步版本的方">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs - filesystem">
+<meta property="og:url" content="http://yoursite.com/2017/03/17/前端/nodejs/Nodejs.filesystem/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="文件系统node.js的文件IO模块提供了对标准POSIX函数的包装. 如果要使用这个模块，可以调用require(“fs”)方法. 该模块中所有的方法都有同步和异步两个版本. 异步版本的方法都会带有回调方法作为最后一个参数，当回调方法被回调时，传回的参数数量及类型取决于具体的方法，但第一个参数都是异常对象. 如果操作正常执行，那么该参数被设置为null或者undefined.如果使用同步版本的方">
+<meta property="og:updated_time" content="2017-03-20T06:21:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs - filesystem">
+<meta name="twitter:description" content="文件系统node.js的文件IO模块提供了对标准POSIX函数的包装. 如果要使用这个模块，可以调用require(“fs”)方法. 该模块中所有的方法都有同步和异步两个版本. 异步版本的方法都会带有回调方法作为最后一个参数，当回调方法被回调时，传回的参数数量及类型取决于具体的方法，但第一个参数都是异常对象. 如果操作正常执行，那么该参数被设置为null或者undefined.如果使用同步版本的方">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/17/前端/nodejs/Nodejs.filesystem/"/>
+
+
+
+
+
+  <title> nodejs - filesystem | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/17/前端/nodejs/Nodejs.filesystem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                nodejs - filesystem
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-17T15:21:00+08:00">
+                2017-03-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/17/前端/nodejs/Nodejs.filesystem/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/17/前端/nodejs/Nodejs.filesystem/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h1><p>node.js的文件IO模块提供了对标准POSIX函数的包装. 如果要使用这个模块，可以调用require(“fs”)方法. 该模块中所有的方法都有同步和异步两个版本. 异步版本的方法都会带有回调方法作为最后一个参数，当回调方法被回调时，传回的参数数量及类型取决于具体的方法，但第一个参数都是异常对象. 如果操作正常执行，那么该参数被设置为null或者undefined.如果使用同步版本的方法时发生了错误，那么将直接抛出异常，调用同步方法的应用可以通过try/catch机制来捕获异常.</p>
+<p>以下是同一个方法的同步版本和异步版本的调用示例：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//异步版本</span></div><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line">fs.unlink(<span class="string">'/tmp/hello'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'successfully deleted /tmp/hello'</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//同步版本</span></div><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"></div><div class="line">fs.unlinkSync(<span class="string">'/tmp/hello'</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'successfully deleted /tmp/hello'</span>)</div></pre></td></tr></table></figure>
+<p>另外，值得注意的是，在使用异步版本的方法时，方法的执行顺序是没有保证的，出现在后面的代码有可能会先被执行:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fs.rename(<span class="string">'/tmp/hello'</span>, <span class="string">'/tmp/world'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'renamed complete'</span>);</div><div class="line">&#125;);</div><div class="line">fs.stat(<span class="string">'/tmp/world'</span>, (err, stats) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`stats: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(stats)&#125;</span>`</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>在上面的代码中，fs.stat()方法有可能会先于fs.rename()方法执行. 正确的方法应该是在fs.rename()方法的回调函数中操作:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fs.rename(<span class="string">'/tmp/hello'</span>, <span class="string">'/tmp/world'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  fs.stat(<span class="string">'/tmp/world'</span>, (err, stats) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`stats: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(stats)&#125;</span>`</span>);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>在负载较高的应用中，<strong>强烈建议</strong>使用异步版本的方法. 同步版本的方法在执行完成之前，会导致整个进程阻塞，这意味着所有的连接都会被挂起.</p>
+<p>在方法参数中，可以使用相对路径来指定文件名称，但是需要注意的是，如果使用相对路径的话，它是相对于process.cwd()而言的.</p>
+<p>大部分异步版本的方法都允许省略回调参数，这种情况下node.js会提供默认的回调方法，这个方法只会在出现错误时重新抛出异常. 如果要追踪原始的异常堆栈，可以在环境变量中设置NODE_DEBUG = fs.</p>
+<h2 id="Buffer-API"><a href="#Buffer-API" class="headerlink" title="Buffer API"></a>Buffer API</h2><p>fs模块中的方法同时支持使用Buffer类型或String类型的参数来指定文件名. 前者主要用于那些允许文件名不是utf-8格式的系统中. 对于大部分的场景而言，不需要使用Buffer类型的文件名，因为node.js会自动将文件名转换成utf-8格式的字符串类型.</p>
+<p><strong>备注：</strong> 在某些系统中(如NTFS和HFS+)，文件名始终都是utf-8格式的. 在这些系统中以非utf-8格式的buffer类型来指定文件名，系统将无法正常工作.</p>
+<h2 id="fs-FSWatcher"><a href="#fs-FSWatcher" class="headerlink" title="fs.FSWatcher"></a>fs.FSWatcher</h2><p>调用fs.watch()方法时返回的对象类型为fs.FSWatcher. 在调用watch()方法时提供的callback参数将会在监听在目录发生变化时被调用.</p>
+<h3 id="change事件"><a href="#change事件" class="headerlink" title="change事件"></a>change事件</h3><ul>
+<li>eventType: String 目录发生变化的事件类型， rename和change</li>
+<li>filename: String | Buffer  发生变化的文件名</li>
+</ul>
+<p>当监听的目录中发生变化时触发该事件. 根据操作系统的不同，filename参数有可能不会被提供. 如果提供了filename参数，那么它的类型将和调用fs.watch()时指定的encoding参数保持一致，如果encoding参数为buffer， 那么filename参数就是buffer类型，否则就是String类型.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Example when handled through fs.watch listener</span></div><div class="line">fs.watch(<span class="string">'./tmp'</span>, &#123;<span class="attr">encoding</span>: <span class="string">'buffer'</span>&#125;, (eventType, filename) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (filename)</div><div class="line">    <span class="built_in">console</span>.log(filename);</div><div class="line">    <span class="comment">// Prints: &lt;Buffer ...&gt;</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="error事件"><a href="#error事件" class="headerlink" title="error事件"></a>error事件</h3><ul>
+<li>error: <error></error></li>
+</ul>
+<h3 id="watcher-close"><a href="#watcher-close" class="headerlink" title="watcher.close()"></a>watcher.close()</h3><p>停止目录监听操作.</p>
+<h2 id="fs-ReadStream"><a href="#fs-ReadStream" class="headerlink" title="fs.ReadStream"></a>fs.ReadStream</h2><p>ReadStream是一个可读流.</p>
+<h3 id="open事件"><a href="#open事件" class="headerlink" title="open事件"></a>open事件</h3><ul>
+<li>fd: Integer  ReadStream中使用的文件描述符，整型</li>
+</ul>
+<p>当ReadStream被打开时触发该事件.</p>
+<h3 id="close事件"><a href="#close事件" class="headerlink" title="close事件"></a>close事件</h3><p>当调用fs.close()方法关闭了ReadStream对象的底层文件描述符时触发该事件.</p>
+<h3 id="readStream-bytesRead"><a href="#readStream-bytesRead" class="headerlink" title="readStream.bytesRead"></a>readStream.bytesRead</h3><p>该属性标识当前readStream已经读取的字节数.</p>
+<h3 id="readStream-path"><a href="#readStream-path" class="headerlink" title="readStream.path"></a>readStream.path</h3><p>该属性标识了fs.createReadStream()方法的第一个参数，也就是当前readStream对象正在读取的路径名称. 如果path参数是以string类型传递的，那么该属性返回的也是个String类型，如果path是以Buffer类型传递的，那么该属性也返回Buffer类型.</p>
+<h2 id="fs-Stats"><a href="#fs-Stats" class="headerlink" title="fs.Stats"></a>fs.Stats</h2><p>调用fs.stat(), fs.lstat()以及fs.fstat()方法以及它们的同步版本的方法时返回该类型的对象. 该类型的对象包含以下方法:</p>
+<ul>
+<li>stats.isFile()</li>
+<li>stats.isDirectory()</li>
+<li>stats.isBlockDevice()</li>
+<li>stats.isCharacterDevice()</li>
+<li>stats.isSymbolicLink()(该方法只在调用fs.lstat()方法有效)</li>
+<li>stats.isFIFO()</li>
+<li>stats.isSocket()</li>
+</ul>
+<p>对于普通的文件而言，调用util.inspect(stats)将返回以下格式的字符串:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">dev</span>: <span class="number">2114</span>,</div><div class="line">  <span class="attr">ino</span>: <span class="number">48064969</span>,</div><div class="line">  <span class="attr">mode</span>: <span class="number">33188</span>,</div><div class="line">  <span class="attr">nlink</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">uid</span>: <span class="number">85</span>,</div><div class="line">  <span class="attr">gid</span>: <span class="number">100</span>,</div><div class="line">  <span class="attr">rdev</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">size</span>: <span class="number">527</span>,</div><div class="line">  <span class="attr">blksize</span>: <span class="number">4096</span>,</div><div class="line">  <span class="attr">blocks</span>: <span class="number">8</span>,</div><div class="line">  <span class="attr">atime</span>: Mon, <span class="number">10</span> Oct <span class="number">2011</span> <span class="number">23</span>:<span class="number">24</span>:<span class="number">11</span> GMT,</div><div class="line">  <span class="attr">mtime</span>: Mon, <span class="number">10</span> Oct <span class="number">2011</span> <span class="number">23</span>:<span class="number">24</span>:<span class="number">11</span> GMT,</div><div class="line">  <span class="attr">ctime</span>: Mon, <span class="number">10</span> Oct <span class="number">2011</span> <span class="number">23</span>:<span class="number">24</span>:<span class="number">11</span> GMT,</div><div class="line">  <span class="attr">birthtime</span>: Mon, <span class="number">10</span> Oct <span class="number">2011</span> <span class="number">23</span>:<span class="number">24</span>:<span class="number">11</span> GMT</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里需要注意atime, mtime, ctime以及birthTime均是Date类型的对象，如果要比较这些对象，需要调用相应的方法. 通常情况下，可以使用getTime()方法来返回毫秒数(从1970 00:00:00 UTC算起)，然后直接比较毫秒数即可. 但是，也可以使用更复杂的方法来显示更多的信息，具体可以参阅<a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date" target="_blank" rel="external">JS文档-Date</a></p>
+<h3 id="Stats中的时间值"><a href="#Stats中的时间值" class="headerlink" title="Stats中的时间值"></a>Stats中的时间值</h3><p>Stats对象中各种时间的语义如下：</p>
+<ul>
+<li>atime: “Access Time”. 该属性标识的是文件最后一次被访问的时间. 调用mknod(2), utimes(2)以及read()方法将修改这个属性值.</li>
+<li>mtime: ”Modified Time”. 该属性标识了<strong>文件内容</strong>最后一次被修改的时间，调用mknod(), utimes()以及write()方法将修改这个属性的值</li>
+<li>ctime: “Change Time”. 该属性标识了<strong>文件状态</strong>最后一次被修改的时间(inode数据修改)，调用chmod()， chown()， link(), mknod(), rename(), unlink(), utimes(), read()以及write()方法将修改这个属性的值.</li>
+<li>birthname: “Birth Time”. 该属性标识了文件被创建的时间，只在文件创建时被设置一次，后续不再修改. 在一些不支持birthname属性的系统中，这个值要么被设置ctime, 要么被设置成1970-01-01T00:00Z.</li>
+</ul>
+<p>在Node.js V0.12版本之前，windows系统中的ctime的值与birthtime一致，但在V0.12版本以及之后的版本中，ctime不再是创建时间. 在Unix系统中，ctime将始终都是文件状态被修改的时间, 而不是创建的时间.</p>
+<h2 id="fs-WriteStream"><a href="#fs-WriteStream" class="headerlink" title="fs.WriteStream"></a>fs.WriteStream</h2><p>WriteStream是一个可写流.</p>
+<h3 id="open事件-1"><a href="#open事件-1" class="headerlink" title="open事件"></a>open事件</h3><ul>
+<li>fd: Integer  在WriteStream对象中使用的文件描述符，整型</li>
+</ul>
+<p>当WriteStream对象打开时被触发.</p>
+<h3 id="close事件-1"><a href="#close事件-1" class="headerlink" title="close事件"></a>close事件</h3><p>当调用fs.close()方法来关闭WriteStream对象的底层文件描述符时触发该事件.</p>
+<h3 id="writeStream-bytesWritten"><a href="#writeStream-bytesWritten" class="headerlink" title="writeStream.bytesWritten"></a>writeStream.bytesWritten</h3><p>该属性记录了当前已经写入的字节数，注意这个属性不包括缓冲区中的数据.</p>
+<h3 id="writeStream-path"><a href="#writeStream-path" class="headerlink" title="writeStream.path"></a>writeStream.path</h3><p>该属性记录了调用fs.createWriteStream()方法时的第一个参数，也就是当前WriteStream对象正在写入的文件路径. 如果path参数是以String类型传递给fs.createWriteStream()方法，那么该属性也是String类型，如果传入时是Buffer类型，那么该属性也返回Buffer类型.</p>
+<h2 id="fs-access-path-mode-callback"><a href="#fs-access-path-mode-callback" class="headerlink" title="fs.access(path[,mode],callback)"></a>fs.access(path[,mode],callback)</h2><ul>
+<li>path: String | Buffer</li>
+<li>mode: \<integer\></integer\></li>
+<li>callback: Function</li>
+</ul>
+<p>该方法用于测试进程是否有访问path路径的权限. mode参数指定了需要验证的权限项，以下是所有可用的mode参数，可以或者按位或操作来组合多个权限项：</p>
+<ul>
+<li>fs.constants.F_OK - 该权限项用于确定path路径是否对当前进程可见. 这个权限项通常可用来判断path路径是否存在，如果省略了mode参数，默认情况下验证的就是这个权限项.</li>
+<li>fs.constants.R_OK - 该权限项用于确定path路径对于当前进行是否可读</li>
+<li>fs.constants.W_OK - 该权限项用于确定path路径对于当前进程是否可写</li>
+<li>fs.constants.X_OK - 该权限项用于确定path路径对于当前进程是否可执行，该权限项在Windows系统中与fs.constants.F_OK一样</li>
+</ul>
+<p>最后一个回调方法在调用时，如果校验的权限项不满足，则会在回调时带上错误参数. 以下的例子演示了校验当前进程是否可以对/etc/passwd文件进行读写:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fs.access(<span class="string">'/etc/passwd'</span>, fs.constants.R_OK | fs.constants.W_OK, (err) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(err ? <span class="string">'no access!'</span> : <span class="string">'can read/write'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>但是,node.js并不推荐在调用fs.open(), fs.readFile()以及fs.writeFile()方法前先调用fs.access()方法来验证文件是否存在，因为这样做可能会导致”竞争条件”，在校验的过程中可能会有其它的进程对文件进行了修改，建议直接尝试对文件进行操作，并处理文件不存在的情况进行处理.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//不推荐， 打开</span></div><div class="line">fs.access(<span class="string">'myfile'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (!err) &#123;</div><div class="line">    <span class="built_in">console</span>.error(<span class="string">'myfile already exists'</span>);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  fs.open(<span class="string">'myfile'</span>, <span class="string">'wx'</span>, (err, fd) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">    writeMyData(fd);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//推荐，打开</span></div><div class="line">fs.open(<span class="string">'myfile'</span>, <span class="string">'wx'</span>, (err, fd) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="keyword">if</span> (err.code === <span class="string">"EEXIST"</span>) &#123;</div><div class="line">      <span class="built_in">console</span>.error(<span class="string">'myfile already exists'</span>);</div><div class="line">      <span class="keyword">return</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">throw</span> err;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  writeMyData(fd);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//不推荐</span></div><div class="line">fs.access(<span class="string">'myfile'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="keyword">if</span> (err.code === <span class="string">"ENOENT"</span>) &#123;</div><div class="line">      <span class="built_in">console</span>.error(<span class="string">'myfile does not exist'</span>);</div><div class="line">      <span class="keyword">return</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">throw</span> err;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  fs.open(<span class="string">'myfile'</span>, <span class="string">'r'</span>, (err, fd) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">    readMyData(fd);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">//推荐， 读</span></div><div class="line">fs.open(<span class="string">'myfile'</span>, <span class="string">'r'</span>, (err, fd) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="keyword">if</span> (err.code === <span class="string">"ENOENT"</span>) &#123;</div><div class="line">      <span class="built_in">console</span>.error(<span class="string">'myfile does not exist'</span>);</div><div class="line">      <span class="keyword">return</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">throw</span> err;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  readMyData(fd);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>以上的例子中，标识为“不推荐”的例子，都是先使用fs.access()校验文件是否存在，然后再使用文件进行操作，但是如果在两个操作之间，有其它的进程修改了文件，那么将导致“竞争条件”. 而”推荐”的方法都是直接使用文件，并在抛出异常时进行处理.总得来讲，只在不直接使用文件时，才推荐使用fs.access()方法来校验文件是否存在.</p>
+<h2 id="fs-accessSync-path-mode"><a href="#fs-accessSync-path-mode" class="headerlink" title="fs.accessSync(path[,mode])"></a>fs.accessSync(path[,mode])</h2><ul>
+<li>path: String | Buffer</li>
+<li>mode: <integer></integer></li>
+</ul>
+<p>fs.access()方法的同步版本，该方法在权限项校验失败时抛出异常，否则不做任何事情</p>
+<h2 id="fs-appendFile-file-data-options-callback"><a href="#fs-appendFile-file-data-options-callback" class="headerlink" title="fs.appendFile(file, data[,options], callback)"></a>fs.appendFile(file, data[,options], callback)</h2><ul>
+<li>file: String | Buffer | Number  文件名称或文件描述符</li>
+<li>data: String | Buffer</li>
+<li>options: Object | String<ul>
+<li>encoding: String | Null  默认情况为utf-8</li>
+<li>mode: Integer  默认为0o666(十六进制的数字)</li>
+<li>flag: String 默认为’a’</li>
+</ul>
+</li>
+<li>callback: Function</li>
+</ul>
+<p>往文件中异步追回数据，如果文件不存在，那么会新建文件. data参数可以是String类型或者是Buffer类型. 例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fs.appendFile(<span class="string">'message.txt'</span>, <span class="string">'data to append'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'The "data to append" was appended to file!'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>如果options参数是String类型，那么它指定的是encoding参数的值. 例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fs.appendFile(<span class="string">'message.txt'</span>, <span class="string">'data to append'</span>, <span class="string">'utf8'</span>, callback);</div></pre></td></tr></table></figure>
+<p>如果file指定的是文件描述符，那么它必须是打开的. 另外，如果file参数是文件描述符，那么它不会被自动关闭. </p>
+<h2 id="fs-appendFileSync-file-data-options"><a href="#fs-appendFileSync-file-data-options" class="headerlink" title="fs.appendFileSync(file, data[, options])"></a>fs.appendFileSync(file, data[, options])</h2><ul>
+<li>file: String | Buffer | Number  文件名称或文件描述符</li>
+<li>data: String | Buffer</li>
+<li>options: Object | String<ul>
+<li>encoding: String | Null  默认情况为utf-8</li>
+<li>mode: Integer  默认为0o666(十六进制的数字)</li>
+<li>flag: String 默认为’a’</li>
+</ul>
+</li>
+</ul>
+<p>fs.appendFile()方法的同步版本，返回undefined.</p>
+<h2 id="fs-chmod-path-mode-callback"><a href="#fs-chmod-path-mode-callback" class="headerlink" title="fs.chmod(path, mode, callback)"></a>fs.chmod(path, mode, callback)</h2><ul>
+<li>path: String | Buffer</li>
+<li>mode: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>chmod(2)的异步版本实现. 除了异常错误参数之外，回调函数不会有其它的参数. </p>
+<h2 id="fs-chmodSync-path-mode"><a href="#fs-chmodSync-path-mode" class="headerlink" title="fs.chmodSync(path, mode)"></a>fs.chmodSync(path, mode)</h2><ul>
+<li>path: String | Buffer</li>
+<li>mode: Integer</li>
+</ul>
+<p>同步版本的chmod(2). 返回undefined.</p>
+<h2 id="fs-chown-path-uid-gid-callback"><a href="#fs-chown-path-uid-gid-callback" class="headerlink" title="fs.chown(path, uid, gid, callback)"></a>fs.chown(path, uid, gid, callback)</h2><ul>
+<li>path: String | Buffer</li>
+<li>uid: Integer</li>
+<li>gid: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>异步版本的chown(2). 除了异常错误参数之外，回调函数不会有其它的参数. </p>
+<h2 id="fs-chownSync-path-uid-gid"><a href="#fs-chownSync-path-uid-gid" class="headerlink" title="fs.chownSync(path, uid, gid)"></a>fs.chownSync(path, uid, gid)</h2><ul>
+<li>path: String | Buffer</li>
+<li>uid: Integer</li>
+<li>gid: Integer</li>
+</ul>
+<p>同步版本的chown(2)，返回undefined.</p>
+<h2 id="fs-close-fd-callback"><a href="#fs-close-fd-callback" class="headerlink" title="fs.close(fd, callback)"></a>fs.close(fd, callback)</h2><ul>
+<li>fd: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>close(2)方法的异步实现，除了异常错误参数之外，回调函数不会有其它的参数. </p>
+<h2 id="fs-closeSync-fd"><a href="#fs-closeSync-fd" class="headerlink" title="fs.closeSync(fd)"></a>fs.closeSync(fd)</h2><ul>
+<li>fd: Integer</li>
+</ul>
+<p>同步版本的close(2)实现，返回undefined</p>
+<h2 id="fs-constants"><a href="#fs-constants" class="headerlink" title="fs.constants"></a>fs.constants</h2><p>该对象存储了文件操作中常用的常量信息，具体定义的常量值可见“FS模块中的常量值”一节</p>
+<h2 id="fs-createReadStream-path-options"><a href="#fs-createReadStream-path-options" class="headerlink" title="fs.createReadStream(path[, options])"></a>fs.createReadStream(path[, options])</h2><ul>
+<li>path: String | Buffer</li>
+<li>options: Object | String<ul>
+<li>flags: String</li>
+<li>encoding: String</li>
+<li>fd: Integer</li>
+<li>mode: Integer</li>
+<li>autoClose: Boolean</li>
+<li>start: Integer(inclusive)</li>
+<li>end: Integer(inclusive)</li>
+</ul>
+</li>
+</ul>
+<p>该方法返回ReadStream类型的对象. 值得注意的是，在可读流对象中，highWaterMark值默认设置的是16kb， 但是这个方法中返回的highWaterMark参数是64Kb. 另外，options参数的默认值如下，</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">flags</span>: <span class="string">'r'</span>,</div><div class="line">  <span class="attr">encoding</span>: <span class="literal">null</span>,</div><div class="line">  <span class="attr">fd</span>: <span class="literal">null</span>,</div><div class="line">  <span class="attr">mode</span>: <span class="number">0o666</span>,</div><div class="line">  <span class="attr">autoClose</span>: <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中start和end参数用于读取部分的文件数据，默认情况下读取整个文件的数据内容. </p>
+<p>encoding参数可以是任意可用的Buffer编码方式. </p>
+<p>如果指定了fd参数，但没有指定start参数，fs.createReadStream()方法将从文件的当前位置开始读取数据. 另外，如果指定了fd参数，ReadStream将忽略path参数，这意味着文件的open事件不会被触发. <strong>备注：</strong>fd应该是阻塞的，非阻塞的fd参数应该传递给net.Socket</p>
+<p>如果autoClose参数设置为false, 那么即使在处理遇到错误的时候，文件描述符也不会自动关闭. 关闭文件描述符是应用程序的责任，否则将导致文件描述符泄露. 如果autoClose参数设置为true, 那么当遇到error事件和end事件时，文件描述符都会被自动关闭. </p>
+<p>mode参数指定了在新建文件时使用的权限项. </p>
+<p>以下的例子演示了从一个100字节的文件中读取最后10个字节的例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fs.createReadStream(<span class="string">'sample.txt'</span>, &#123;<span class="attr">start</span>: <span class="number">90</span>, <span class="attr">end</span>: <span class="number">99</span>&#125;);</div></pre></td></tr></table></figure>
+<p>如果options参数是字符串类型，那么它指定了encoding参数的值</p>
+<h3 id="fs-createWriteStream-options"><a href="#fs-createWriteStream-options" class="headerlink" title="fs.createWriteStream([options])"></a>fs.createWriteStream([options])</h3><ul>
+<li>path: String | Buffer</li>
+<li>options: Object | String<ul>
+<li>flags: String</li>
+<li>defaultEncoding: String</li>
+<li>fd: Integer</li>
+<li>mode: Integer</li>
+<li>autoClose: Boolean</li>
+<li>start: Integer(inclusive)</li>
+</ul>
+</li>
+</ul>
+<p>该方法返回WriteStream对象. options参数可以是对象类型，也可以是字符串类型. 它的默认值如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">flags</span>: <span class="string">'w'</span>,</div><div class="line">  <span class="attr">defaultEncoding</span>: <span class="string">'utf8'</span>,</div><div class="line">  <span class="attr">fd</span>: <span class="literal">null</span>,</div><div class="line">  <span class="attr">mode</span>: <span class="number">0o666</span>,</div><div class="line">  <span class="attr">autoClose</span>: <span class="literal">true</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>options参数中可以包含start参数，该参数指定了写入文件的开始位置. 如果要编辑某个文件的内容，而不是替换全部内容，那么flags参数的值应该设置为”r+”. defaultEncoding参数可以是任何有效的Buffer编码方式. </p>
+<p>如果autoClose参数设置为true, 那么在遇到error和end事件时，文件将被自动关闭. 如果设置为false, 那么应该程序就有责任自行关闭文件描述符，否则将导致文件描述符泄露，因为在这种情况下，即使遇到了error事件，文件描述符也不会被关闭.</p>
+<p>和ReadStream一样，如果指定了fd参数，那么WriteStream将忽略path参数，这意味着不会触发open事件. <strong>备注：</strong>fd应该是阻塞的，非阻塞的fd参数应该传递给net.Socket</p>
+<p>如果options参数是字符串类型，那么它指定的是encoding参数的值.</p>
+<h3 id="fs-existsSync-path"><a href="#fs-existsSync-path" class="headerlink" title="fs.existsSync(path)"></a>fs.existsSync(path)</h3><ul>
+<li>path: String | Buffer</li>
+</ul>
+<p>fs.exists()方法的同步版本实现. 当文件存在时返回true, 否则false.</p>
+<p><strong>备注：</strong> fs.exist()方法已经被废弃了，但是fs.existSync()方法并没有. 因为fs.exist()方法接受的回调方法参数与node.js中其它的回调方法不一样，但是fs.existSync()是个同步实现，它不需要接受回调参数. </p>
+<h3 id="fs-fchmod-fd-mode-callback"><a href="#fs-fchmod-fd-mode-callback" class="headerlink" title="fs.fchmod(fd, mode, callback)"></a>fs.fchmod(fd, mode, callback)</h3><ul>
+<li>fd: Integer</li>
+<li>mode: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>fchmod(2)方法的异步实现. 在回调函数中，除了可能存在的异常参数外，不会有其它参数. </p>
+<h3 id="fs-fchmodSync-fd-mode"><a href="#fs-fchmodSync-fd-mode" class="headerlink" title="fs.fchmodSync(fd, mode)"></a>fs.fchmodSync(fd, mode)</h3><ul>
+<li>fd: Integer</li>
+<li>mode: Integer</li>
+</ul>
+<p>fs.fchmod(2)的同步版本实现，返回undefined</p>
+<h3 id="fs-fchown-fd-uid-gid-callback"><a href="#fs-fchown-fd-uid-gid-callback" class="headerlink" title="fs.fchown(fd, uid, gid, callback)"></a>fs.fchown(fd, uid, gid, callback)</h3><ul>
+<li>fd: Integer</li>
+<li>uid: Integer</li>
+<li>gid: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>fchown(2)方法的异步实现. 在回调函数中，除了可能存在的异常参数外，不会有其它参数. </p>
+<h3 id="fs-fchownSync-fd-uid-gid"><a href="#fs-fchownSync-fd-uid-gid" class="headerlink" title="fs.fchownSync(fd, uid, gid)"></a>fs.fchownSync(fd, uid, gid)</h3><ul>
+<li>fd: Integer</li>
+<li>uid: Integer</li>
+<li>gid: Integer</li>
+</ul>
+<p>fchown(2)方法的同步实现，返回undefined</p>
+<h3 id="fs-fdatasync-fd-callback"><a href="#fs-fdatasync-fd-callback" class="headerlink" title="fs.fdatasync(fd, callback)"></a>fs.fdatasync(fd, callback)</h3><ul>
+<li>fd: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>fdatasync(2)方法的异步实现，在回调函数中，除了可能存在的异常参数外，不会有其它参数. </p>
+<h3 id="fs-fdatasyncSync-fd"><a href="#fs-fdatasyncSync-fd" class="headerlink" title="fs.fdatasyncSync(fd)"></a>fs.fdatasyncSync(fd)</h3><ul>
+<li>fd: Integer</li>
+</ul>
+<p>fdatasync(2)的同步实现, 返回undefined</p>
+<h3 id="fs-fstat-fd-callback"><a href="#fs-fstat-fd-callback" class="headerlink" title="fs.fstat(fd, callback)"></a>fs.fstat(fd, callback)</h3><ul>
+<li>fd: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>fstat(2)方法的异步实现，回调函数带有(err, stats)两个参数，其中stats参数是fs.Stats类的实例. fstat()方法等同于stat()方法，只是在指定文件的时候是通过fd文件描述符来指定的，而不是通过路径名来指定的.</p>
+<h3 id="fs-fstatSync-fd"><a href="#fs-fstatSync-fd" class="headerlink" title="fs.fstatSync(fd)"></a>fs.fstatSync(fd)</h3><ul>
+<li>fd: Integer</li>
+</ul>
+<p>fstat(2)方法的同步实现, 返回fs.Stats的实例.</p>
+<h3 id="fs-fsync-fd-callabck"><a href="#fs-fsync-fd-callabck" class="headerlink" title="fs.fsync(fd, callabck)"></a>fs.fsync(fd, callabck)</h3><ul>
+<li>fd: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>fsync(2)方法的异步实现. 在回调函数中，除了可能存在的异常参数外，不会有其它参数.</p>
+<h3 id="fs-fsyncSync-fd"><a href="#fs-fsyncSync-fd" class="headerlink" title="fs.fsyncSync(fd)"></a>fs.fsyncSync(fd)</h3><ul>
+<li>fd: Integer</li>
+</ul>
+<p>fsync(2)方法的同步实现， 返回undefined.</p>
+<h3 id="fs-ftruncate-fd-len-callback"><a href="#fs-ftruncate-fd-len-callback" class="headerlink" title="fs.ftruncate(fd, len, callback)"></a>fs.ftruncate(fd, len, callback)</h3><ul>
+<li>fd: Integer</li>
+<li>len: Integer, 默认为0</li>
+<li>callback: Function</li>
+</ul>
+<p>ftruncate(2)方法的异步实现. 在回调函数中，除了可能存在的异常参数外，不会有其它参数.</p>
+<p>如果指定的文件超过了len参数指定的字节数，那么只会保留文件中的前len字节的内容. 例如，以下的代码只会保留文件中的最开始的4个字节：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(fs.readFileSync(<span class="string">'temp.txt'</span>, <span class="string">'utf8'</span>));</div><div class="line"><span class="comment">// Prints: Node.js</span></div><div class="line"></div><div class="line"><span class="comment">// get the file descriptor of the file to be truncated</span></div><div class="line"><span class="keyword">const</span> fd = fs.openSync(<span class="string">'temp.txt'</span>, <span class="string">'r+'</span>);</div><div class="line"></div><div class="line"><span class="comment">// truncate the file to first four bytes</span></div><div class="line">fs.ftruncate(fd, <span class="number">4</span>, (err) =&gt; &#123;</div><div class="line">  assert.ifError(err);</div><div class="line">  <span class="built_in">console</span>.log(fs.readFileSync(<span class="string">'temp.txt'</span>, <span class="string">'utf8'</span>));</div><div class="line">&#125;);</div><div class="line"><span class="comment">// Prints: Node</span></div></pre></td></tr></table></figure>
+<p>如果原始的文件不足len参数指定的字节数，那么这个文件会被空字符串(‘\0’)填充到len长度，例如： 文件的最后3个字节为\0，以此来弥补truncate方法中指定的len字节数.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(fs.readFileSync(<span class="string">'temp.txt'</span>, <span class="string">'utf-8'</span>));</div><div class="line"><span class="comment">// Prints: Node.js</span></div><div class="line"></div><div class="line"><span class="comment">// get the file descriptor of the file to be truncated</span></div><div class="line"><span class="keyword">const</span> fd = fs.openSync(<span class="string">'temp.txt'</span>, <span class="string">'r+'</span>);</div><div class="line"></div><div class="line"><span class="comment">// truncate the file to 10 bytes, whereas the actual size is 7 bytes</span></div><div class="line">fs.ftruncate(fd, <span class="number">10</span>, (err) =&gt; &#123;</div><div class="line">  assert.ifError(!err);</div><div class="line">  <span class="built_in">console</span>.log(fs.readFileSync(<span class="string">'temp.txt'</span>));</div><div class="line">&#125;);</div><div class="line"><span class="comment">// Prints: &lt;Buffer 4e 6f 64 65 2e 6a 73 00 00 00&gt;</span></div><div class="line"><span class="comment">// ('Node.js\0\0\0' in UTF8)</span></div></pre></td></tr></table></figure>
+<h3 id="fs-ftruncateSync-fd-len"><a href="#fs-ftruncateSync-fd-len" class="headerlink" title="fs.ftruncateSync(fd, len)"></a>fs.ftruncateSync(fd, len)</h3><ul>
+<li>fd: Integer</li>
+<li>len: Integer, 默认为0</li>
+</ul>
+<p>ftruncate(2)方法的同步版本实现， 返回undefined</p>
+<h3 id="fs-futimes-fd-atime-mtime-callback"><a href="#fs-futimes-fd-atime-mtime-callback" class="headerlink" title="fs.futimes(fd, atime, mtime, callback)"></a>fs.futimes(fd, atime, mtime, callback)</h3><ul>
+<li>fd: Integer</li>
+<li>atime: Integer</li>
+<li>mtime: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>修改fd文件描述符指定文件的时间戳.</p>
+<h3 id="fs-futimesSync-fd-atime-mtime"><a href="#fs-futimesSync-fd-atime-mtime" class="headerlink" title="fs.futimesSync(fd, atime, mtime)"></a>fs.futimesSync(fd, atime, mtime)</h3><ul>
+<li>fd: Integer</li>
+<li>atime: Integer</li>
+<li>mtime: Integer</li>
+</ul>
+<p>fs.futimes()方法的同步版本实现，返回undefined.</p>
+<h3 id="fs-lchmod-path-mode-callback"><a href="#fs-lchmod-path-mode-callback" class="headerlink" title="fs.lchmod(path, mode, callback)"></a>fs.lchmod(path, mode, callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>mode: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>lchmod(2)方法异步版本实现，在回调函数中，除了可能存在的异常参数外，不会有其它参数. 另外，这个方法只在OSX系统中可用</p>
+<h3 id="fs-lchmodSync-path-mode"><a href="#fs-lchmodSync-path-mode" class="headerlink" title="fs.lchmodSync(path, mode)"></a>fs.lchmodSync(path, mode)</h3><ul>
+<li>path: String | Buffer</li>
+<li>mode: Integer</li>
+</ul>
+<p>fs.lchmod()方法的异步版本实现，该方法返回undefined</p>
+<h3 id="fs-lchown-path-uid-gid-callback"><a href="#fs-lchown-path-uid-gid-callback" class="headerlink" title="fs.lchown(path, uid, gid, callback)"></a>fs.lchown(path, uid, gid, callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>uid: Integer</li>
+<li>gid: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>lchown(2)的异步版本实现，在回调函数中，除了可能存在的异常参数外，不会有其它参数. </p>
+<h3 id="fs-lchownSync-path-uid-gid"><a href="#fs-lchownSync-path-uid-gid" class="headerlink" title="fs.lchownSync(path, uid, gid)"></a>fs.lchownSync(path, uid, gid)</h3><ul>
+<li>path: Integer</li>
+<li>uid: Integer</li>
+<li>gid: Integer</li>
+</ul>
+<p>lchown(2)的同步版本实现，返回undefined. 在V0.4.7中被废弃.</p>
+<h3 id="fs-link-existingPath-newPath-callback"><a href="#fs-link-existingPath-newPath-callback" class="headerlink" title="fs.link(existingPath, newPath, callback)"></a>fs.link(existingPath, newPath, callback)</h3><ul>
+<li>existingPath: String | Buffer</li>
+<li>newPath: String | Buffer</li>
+<li>callback: Function</li>
+</ul>
+<p>link(2)方法的异步实现，在回调函数中，除了可能存在的异常参数外，不会有其它参数. </p>
+<h3 id="fs-linkSync-existingPath-newPath"><a href="#fs-linkSync-existingPath-newPath" class="headerlink" title="fs.linkSync(existingPath, newPath)"></a>fs.linkSync(existingPath, newPath)</h3><ul>
+<li>existingPath: String | Buffer</li>
+<li>newPath: String | Buffer</li>
+</ul>
+<p>link(2)方法的同步版本实现， 返回undefined.</p>
+<h3 id="fs-lstat-path-callback"><a href="#fs-lstat-path-callback" class="headerlink" title="fs.lstat(path, callback)"></a>fs.lstat(path, callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>callback: Function</li>
+</ul>
+<p>lstat(2)方法的异步实现，回调方法带有两个参数(err, stats)， 其中stats参数是fs.Stats类的实例，lstat()方法与stat()方法基本等同， 只在指定的文件为符号连接时存在差别. 当Path参数指定的文件为符号连接时，lstat()会获取符号连接本身的数据信息，而stat()方法会获取符号连接所指向的真实文件的数据信息.</p>
+<h3 id="fs-lstatSync-path"><a href="#fs-lstatSync-path" class="headerlink" title="fs.lstatSync(path)"></a>fs.lstatSync(path)</h3><ul>
+<li>path: String | Buffer</li>
+</ul>
+<p>lstat(2)的同步版本实现，返回fs.Stats实例</p>
+<h3 id="fs-mkdir-path-mode-callback"><a href="#fs-mkdir-path-mode-callback" class="headerlink" title="fs.mkdir(path[, mode], callback)"></a>fs.mkdir(path[, mode], callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>mode: Integer， 默认值为0o777</li>
+<li>callback: Function</li>
+</ul>
+<p>mkdir(2)方法的异步实现，在回调函数中，除了可能存在的异常参数外，不会有其它参数. </p>
+<h3 id="fs-mkdirSync-path-mode"><a href="#fs-mkdirSync-path-mode" class="headerlink" title="fs.mkdirSync(path[, mode])"></a>fs.mkdirSync(path[, mode])</h3><ul>
+<li>path: String | Buffer</li>
+<li>mode: Integer</li>
+</ul>
+<p>mkdir(2)的同步版本实现，返回undefined.</p>
+<h3 id="fs-mkdtemp-prefix-options-callback"><a href="#fs-mkdtemp-prefix-options-callback" class="headerlink" title="fs.mkdtemp(prefix[, options], callback)"></a>fs.mkdtemp(prefix[, options], callback)</h3><ul>
+<li>prefix: String</li>
+<li>options: Object | String<ul>
+<li>encoding: String, 默认为utfi</li>
+</ul>
+</li>
+<li>callback: Function</li>
+</ul>
+<p>该方法用于创建一个临时目录, 目录的文件名为在prefix参数后随机增加6个字符. 在创建完目录后，目录的文件名会作为callback回调函数的第二个参数回调. 可选的options参数可以是字符串，用来指定prefix参数的编码格式，也可以是个对象，该对象包含encoding属性. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fs.mkdtemp(<span class="string">'/tmp/foo-'</span>, (err, folder) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  <span class="built_in">console</span>.log(folder);</div><div class="line">  <span class="comment">// Prints: /tmp/foo-itXde2</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p><strong>备注：</strong> fs.mkdtemp()方法会<strong>直接</strong>在prefix参数后面加6个随机字符. 例如 ，如果想要在/tmp目录下创建个临时目录，那么指定prefix参数时必须加上平台相关的路径分隔符， 可以使用require(“path”).sep来指定</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// The parent directory for the new temporary directory</span></div><div class="line"><span class="keyword">const</span> tmpDir = <span class="string">'/tmp'</span>;</div><div class="line"></div><div class="line"><span class="comment">// This method is *INCORRECT*:</span></div><div class="line">fs.mkdtemp(tmpDir, (err, folder) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  <span class="built_in">console</span>.log(folder);</div><div class="line">  <span class="comment">// Will print something similar to `/tmpabc123`.</span></div><div class="line">  <span class="comment">// Note that a new temporary directory is created</span></div><div class="line">  <span class="comment">// at the file system root rather than *within*</span></div><div class="line">  <span class="comment">// the /tmp directory.</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// This method is *CORRECT*:</span></div><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>);</div><div class="line">fs.mkdtemp(tmpDir + path.sep, (err, folder) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  <span class="built_in">console</span>.log(folder);</div><div class="line">  <span class="comment">// Will print something similar to `/tmp/abc123`.</span></div><div class="line">  <span class="comment">// A new temporary directory is created within</span></div><div class="line">  <span class="comment">// the /tmp directory.</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="fs-mkdtempSync-prefix-options"><a href="#fs-mkdtempSync-prefix-options" class="headerlink" title="fs.mkdtempSync(prefix[, options])"></a>fs.mkdtempSync(prefix[, options])</h3><ul>
+<li>prefix: String</li>
+<li>options: String | Object<ul>
+<li>encoding: String, 默认为utf-8</li>
+</ul>
+</li>
+</ul>
+<p>fs.mkdtemp()方法的同步版本实现，返回新创建的目录名. 可选的options参数可以是字符串，用来指定prefix参数的编码格式，也可以是个对象，该对象包含encoding属性. </p>
+<h3 id="fs-open-path-flag-mode-callback"><a href="#fs-open-path-flag-mode-callback" class="headerlink" title="fs.open(path, flag[, mode], callback)"></a>fs.open(path, flag[, mode], callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>flag: String | Number</li>
+<li>mode: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>异步打开文件的方法， 可参考open(2)方法. flags参数可以是以下的选项：</p>
+<ul>
+<li><p>‘r’ - 以只读的方式打开文件，如果文件不存在 ，则抛出异常</p>
+</li>
+<li><p>‘r+’ - 以读写的方式打开文件，如果文件不存在 ，则抛出异常</p>
+</li>
+<li><p>‘rs+’ - 以同步读写的方式打开文件，这个选项会建议操作系统禁用本地文件系统的缓存. 它在打开NFS系统中的文件时特殊有用，它避免了可能存在过期缓存的问题，但是，除非是有充足的理由，否则不建议使用这个选项，因为它会对性能产生严重的影响. </p>
+<p><strong>备注：</strong> 这个标识只是禁用了操作系统的本地缓存，但不会把fs.open()方法切换到同步方式，如果需要使用同步调用的方式，可以使用fs.openSync()方法</p>
+</li>
+<li><p>’w’ - 以只写的方式打开文件，如果文件不存在 ，它会创建新的文件，已经存在的文件内容会被清空.</p>
+</li>
+<li><p>‘wx’ - 和’w’标识的作用一样，但在文件存在的情况下会抛出异常.</p>
+</li>
+<li><p>‘w+’ - 以读写的方式打开文件，如果文件不存在 ，它会创建新的文件，已经存在的文件内容会被清空.</p>
+</li>
+<li><p>‘wx+’ - 和’w+’标识的作用一样，但在文件存在的情况下会抛出异常</p>
+</li>
+<li><p>‘a’ - 以追加的方式打开文件，如果文件不存在， 它会创建新的文件</p>
+</li>
+<li><p>‘ax’ - 和’a’标识的作用一样，但在文件存在的情况下会抛出异常</p>
+</li>
+<li><p>‘a+’ - 以读和追加的方式打开文件，如果文件不存在， 它会创建新的文件</p>
+</li>
+<li><p>‘ax+’ - 和’a+’标识的作用一样，但在文件存在的情况下会抛出异常</p>
+</li>
+</ul>
+<p>‘x’标识确保打开的文件是新建的，在POSIX系统中，path参数即使是一个指向不存在路径的符号连接，那么它也会被认为是已经存在了. ‘x’标识在网络文件系统中有可能无法正常工作. </p>
+<p>flags参数也可以是open(2)方法中定义的整型变量，这些常用的常量可以通过fs.constants来访问. 在windows系统中，flags参数被转化成对应的值, 例如： 0_WRONLY对应了FILE_GENERIC_WRITE， 0_EXCLIO_CREAT对应了CREATE_NEW. </p>
+<p>在Linux系统下，如果是以追回模式打开文件，那么基于位置的写操作就无法正常工作，linux内核会忽略位置参数，始终在文件的末尾追回数据. </p>
+<p><strong>备注：</strong>对于fs.open()方法的一些标识而言，它们的作用可以与特定的操作系统相关. 例如，以下的例子中，在OSX和Linux系统中，尝试以’a+’模式打开目录会抛出错误. 相反，在Windows和BSD系统中，则可以正常地返回文件描述符.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// OS X and Linux</span></div><div class="line">fs.open(<span class="string">'&lt;directory&gt;'</span>, <span class="string">'a+'</span>, (err, fd) =&gt; &#123;</div><div class="line">  <span class="comment">// =&gt; [Error: EISDIR: illegal operation on a directory, open &lt;directory&gt;]</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// Windows and FreeBSD</span></div><div class="line">fs.open(<span class="string">'&lt;directory&gt;'</span>, <span class="string">'a+'</span>, (err, fd) =&gt; &#123;</div><div class="line">  <span class="comment">// =&gt; null, &lt;fd&gt;</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>mode参数只在创建文件的时候起作用，它指定了新创建文件的权限项， 默认情况下为0o666, 可读写.</p>
+<p>callback回调函数有两个参数，分别是(err, fd)</p>
+<h3 id="fs-openSync-path-flags-mode"><a href="#fs-openSync-path-flags-mode" class="headerlink" title="fs.openSync(path, flags[, mode])"></a>fs.openSync(path, flags[, mode])</h3><ul>
+<li>path: String</li>
+<li>flags: String | Integer</li>
+<li>mode: Integer</li>
+</ul>
+<p>fs.open()方法的同步版本实现，返回相应的文件描述符.</p>
+<h3 id="fs-read-fd-buffer-offset-length-position-callback"><a href="#fs-read-fd-buffer-offset-length-position-callback" class="headerlink" title="fs.read(fd, buffer, offset, length, position, callback)"></a>fs.read(fd, buffer, offset, length, position, callback)</h3><ul>
+<li>fd: Integer</li>
+<li>buffer: String | Buffer</li>
+<li>offset: Integer</li>
+<li>length: Integer</li>
+<li>position: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>fs.read()方法从指定的文件描述符中读取数据.</p>
+<p>buffer参数定义了读取到的数据的写入位置. </p>
+<p>offset参数定义了在写入数据时的偏移量.</p>
+<p>length参数定义了要读取的数据长度.</p>
+<p>potision参数定义了从文件中读取数据的起始位置. 如果potions参数为null, 那么将会从fd的当前位置开始读取.</p>
+<p>callback回调参数有三个参数，分别是(err, bytesRead, buffer)</p>
+<h3 id="fs-readdir-path-options-callback"><a href="#fs-readdir-path-options-callback" class="headerlink" title="fs.readdir(path[,options], callback)"></a>fs.readdir(path[,options], callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>options: String | Object<ul>
+<li>encoding: String 默认为utf-8</li>
+</ul>
+</li>
+<li>callback: Function</li>
+</ul>
+<p>readdir(3)方法的异步实现, 该方法会读取目录的内容. </p>
+<p>callback回调函数有两个参数，分别是(err, files), 其中files参数是包含了目录中路径名的数组，但不包括”.”和”..”</p>
+<p>可选的options参数可以是字符串类型，也可以是带有encoding属性的对象类型. 该参数指定了回传给callback回调函数的文件名称的编码类型，如果encoding参数为buffer, 那么返回的将是buffer类型，否则将是指定编码的字符串类型.</p>
+<h3 id="fs-readdirSync-path-options"><a href="#fs-readdirSync-path-options" class="headerlink" title="fs.readdirSync(path[, options])"></a>fs.readdirSync(path[, options])</h3><ul>
+<li>path: String | Buffer</li>
+<li>options: String | Object<ul>
+<li>encoding: String , 默认为utf-8</li>
+</ul>
+</li>
+</ul>
+<p>readdir(3)方法的同步版本实现，返回该目录下所有的文件名，不包括”.”和”..”</p>
+<p>可选的options参数可以是字符串类型，也可以是带有encoding属性的对象类型. 该参数指定了回传给callback回调函数的文件名称的编码类型，如果encoding参数为buffer, 那么返回的将是buffer类型，否则将是指定编码的字符串类型.</p>
+<h3 id="fs-readFile-file-options-callback"><a href="#fs-readFile-file-options-callback" class="headerlink" title="fs.readFile(file[, options], callback)"></a>fs.readFile(file[, options], callback)</h3><ul>
+<li>file: String | Buffer | Integer 文件名或者文件描述符</li>
+<li>options: String | Object<ul>
+<li>encoding: String | Null 默认为null</li>
+<li>flag: String 默认为’r’</li>
+</ul>
+</li>
+<li>callback: Function</li>
+</ul>
+<p>异步地方式读取文件的全部内容. 例如： </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fs.readFile(<span class="string">'/etc/passwd'</span>, (err, data) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  <span class="built_in">console</span>.log(data);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>回调函数中有两个参数，分别是(err, data)， 其中data参数是读取的文件内容.</p>
+<p>如果没有指定encoding参数，那么data参数就是没有编码过的buffer类型.</p>
+<p>如果options参数是string类型，那么它指定了encoding参数的值. 例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fs.readFile(<span class="string">'/etc/passwd'</span>, <span class="string">'utf8'</span>, callback);</div></pre></td></tr></table></figure>
+<p>另外，值得注意的是，提供的任何文件描述符必须支持读模式. 而且，如果是以文件描述符的方式来指定file参数，那么当文件读取结束的时候，文件不会被自动关闭. </p>
+<h3 id="fs-readFileSync-file-options"><a href="#fs-readFileSync-file-options" class="headerlink" title="fs.readFileSync(file[, options])"></a>fs.readFileSync(file[, options])</h3><ul>
+<li>file: String | Buffer | Integer 文件名或者文件描述符</li>
+<li>options: String | Object<ul>
+<li>encoding: String | Null 默认为null</li>
+<li>flag: String 默认为’r’</li>
+</ul>
+</li>
+</ul>
+<p>fs.readFile()的同步版本， 返回文件的内容. </p>
+<p>如果options参数是string类型，那么它指定了encoding参数的值. </p>
+<h3 id="fs-readlink-path-options-callback"><a href="#fs-readlink-path-options-callback" class="headerlink" title="fs.readlink(path[, options], callback)"></a>fs.readlink(path[, options], callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>options: String | Object<ul>
+<li>encoding: String 默认为utf-8</li>
+</ul>
+</li>
+<li>callback: Function</li>
+</ul>
+<p>readlink(2)方法的异步实现. 回调方法带有两个参数，分别是(err, linkString).</p>
+<p>可选的options参数可以是字符串类型，也可以是带有encoding属性的对象类型. 该参数指定了回传给callback回调函数的文件名称的编码类型，如果encoding参数为buffer, 那么返回的将是buffer类型，否则将是指定编码的字符串类型.</p>
+<h3 id="fs-readlinkSync-path-options"><a href="#fs-readlinkSync-path-options" class="headerlink" title="fs.readlinkSync(path[, options])"></a>fs.readlinkSync(path[, options])</h3><ul>
+<li>path: String | Buffer</li>
+<li>options: String | Object<ul>
+<li>encoding: String 默认为utf-8</li>
+</ul>
+</li>
+</ul>
+<p>readlink(2)方法的同步版本实现, 返回符号连接字符串. </p>
+<p>可选的options参数可以是字符串类型，也可以是带有encoding属性的对象类型. 该参数指定了回传给callback回调函数的文件名称的编码类型，如果encoding参数为buffer, 那么返回的将是buffer类型，否则将是指定编码的字符串类型.</p>
+<h3 id="fs-readSync-fd-buffer-offset-length-position"><a href="#fs-readSync-fd-buffer-offset-length-position" class="headerlink" title="fs.readSync(fd, buffer, offset, length, position)"></a>fs.readSync(fd, buffer, offset, length, position)</h3><ul>
+<li>fd: Integer</li>
+<li>buffer: String | Buffer</li>
+<li>offset: Integer</li>
+<li>length: Integer</li>
+<li>position: Integer</li>
+</ul>
+<p>fs.read()方法的同步版本实现，返回的是读取的字节数. </p>
+<h3 id="fs-realpath-path-options-callback"><a href="#fs-realpath-path-options-callback" class="headerlink" title="fs.realpath(path[, options], callback)"></a>fs.realpath(path[, options], callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>options: String | Object<ul>
+<li>encoding: String 默认为utf8</li>
+</ul>
+</li>
+<li>callback: Function</li>
+</ul>
+<p>realpath(3)方法的异步实现. 回调函数带有两个参数， 分别为(err, resolvedPath), 可以使用process.cwd来解析相对路径. </p>
+<p>目前只支持utf-8格式路径名. 可选的options参数可以是字符串类型，也可以是带有encoding属性的对象类型. 该参数指定了回传给callback回调函数的文件名称的编码类型，如果encoding参数为buffer, 那么返回的将是buffer类型，否则将是指定编码的字符串类型. </p>
+<h3 id="fs-readpathSync-path-options"><a href="#fs-readpathSync-path-options" class="headerlink" title="fs.readpathSync(path[, options])"></a>fs.readpathSync(path[, options])</h3><ul>
+<li>path: String | Buffer</li>
+<li>options: String | Object<ul>
+<li>encoding: String 默认为utf8</li>
+</ul>
+</li>
+</ul>
+<p>realpath(3)方法的同步实现，返回解析的路径. </p>
+<p>目前只支持utf-8格式路径名. 可选的options参数可以是字符串类型，也可以是带有encoding属性的对象类型. 该参数指定了回传给callback回调函数的文件名称的编码类型，如果encoding参数为buffer, 那么返回的将是buffer类型，否则将是指定编码的字符串类型. </p>
+<h3 id="fs-rename-oldPath-newPath-callback"><a href="#fs-rename-oldPath-newPath-callback" class="headerlink" title="fs.rename(oldPath, newPath, callback)"></a>fs.rename(oldPath, newPath, callback)</h3><ul>
+<li>oldPath: String | Buffer</li>
+<li>newPath: String | Buffer</li>
+<li>callback: Function</li>
+</ul>
+<p>rename(2)方法的异步版本实现. 在回调函数的参数中，除了可能存在的错误异常参数外，不会有其它的参数.</p>
+<h3 id="fs-renameSync-oldPath-newPath"><a href="#fs-renameSync-oldPath-newPath" class="headerlink" title="fs.renameSync(oldPath, newPath)"></a>fs.renameSync(oldPath, newPath)</h3><ul>
+<li>oldPath: String | Buffer</li>
+<li>newPath: String | Buffer</li>
+</ul>
+<p>rename(3)的同步版本实现, 返回undefined.</p>
+<h3 id="fs-rmdir-path-callback"><a href="#fs-rmdir-path-callback" class="headerlink" title="fs.rmdir(path, callback)"></a>fs.rmdir(path, callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>callback: Function</li>
+</ul>
+<p>rmdir(2)方法的异步版本实现，在回调函数的参数中，除了可能存在的错误异常参数外，不会有其它的参数.</p>
+<h3 id="fs-rmdirSync-path"><a href="#fs-rmdirSync-path" class="headerlink" title="fs.rmdirSync(path)"></a>fs.rmdirSync(path)</h3><ul>
+<li>path: String | Buffer</li>
+</ul>
+<p>rmdir(2)方法的同步版本实现，返回undefined.</p>
+<h3 id="fs-stat-path-callback"><a href="#fs-stat-path-callback" class="headerlink" title="fs.stat(path, callback)"></a>fs.stat(path, callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>callback: Function</li>
+</ul>
+<p>stat(2)方法的异步版本实现，回调函数带有两个参数， 分别是(err, stats), 其中stats参数为fs.Stats对象的实例. 如果发生了错误，那么err.code会是”常见系统错误码”中的一个.</p>
+<p>不推荐在使用fs.open()，fs.readFile()以及fs.writeFile()方法之前使用fs.stat()方法来确定文件是否存在. 相反，推荐直接尝试 打开/读取/写入 文件，并处理文件不存在时可能存在的异常信息. 如果只是要确认文件是否存在，但后续不需要再对文件进行操作，则推荐使用fs.access()方法. </p>
+<h3 id="fs-statSync-path"><a href="#fs-statSync-path" class="headerlink" title="fs.statSync(path)"></a>fs.statSync(path)</h3><ul>
+<li>path: String | Buffer</li>
+</ul>
+<p>stat(2)方法的同步版本实现， 返回fs.Stats类的实例. </p>
+<h3 id="fs-symlink-target-path-type-callback"><a href="#fs-symlink-target-path-type-callback" class="headerlink" title="fs.symlink(target, path[, type], callback)"></a>fs.symlink(target, path[, type], callback)</h3><ul>
+<li>target: String | Buffer</li>
+<li>path: String | Buffer</li>
+<li>type: String</li>
+<li>callback: Function</li>
+</ul>
+<p>symlink(2)方法的异步版本实现. </p>
+<p>在回调函数的参数中，除了可能存在的错误异常参数外，不会有其它的参数. </p>
+<p>type参数可能是dir, file或者是junction, 默认情况下为file. </p>
+<p><strong>备注:</strong> junction参数仅在windows系统中可用， 且要求junction为绝对路径. 当使用junction选项时，target参数会自动解析成绝对路径.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fs.symlink(<span class="string">'./foo'</span>, <span class="string">'./new-port'</span>);</div></pre></td></tr></table></figure>
+<p>以上的代码创建了一个新的符号连接，将new-port连接到foo. </p>
+<h3 id="fs-symlinkSync-target-path-type"><a href="#fs-symlinkSync-target-path-type" class="headerlink" title="fs.symlinkSync(target, path[, type])"></a>fs.symlinkSync(target, path[, type])</h3><ul>
+<li>target: String | Buffer</li>
+<li>path: String | Buffer</li>
+<li>type: String</li>
+</ul>
+<p>symlink(2)方法的同步版本实现，返回undefined</p>
+<h3 id="fs-truncate-path-len-callback"><a href="#fs-truncate-path-len-callback" class="headerlink" title="fs.truncate(path, len, callback)"></a>fs.truncate(path, len, callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>len: Integer 默认为0</li>
+<li>callback: Function</li>
+</ul>
+<p>truncate(2)方法的异步版本实现. 在回调函数的参数中，除了可能存在的错误异常参数外，不会有其它的参数. 如果第一个参数是以文件描述符的方式提供，那么将会调用 fs.ftruncate()方法. </p>
+<h3 id="fs-truncateSync-path-len"><a href="#fs-truncateSync-path-len" class="headerlink" title="fs.truncateSync(path, len)"></a>fs.truncateSync(path, len)</h3><ul>
+<li>path: String | Buffer</li>
+<li>len: Integer 默认为0</li>
+</ul>
+<p>truncate(2)的同步版本实现，返回undefined. 如果第一个参数是以文件描述符的方式提供，那么将会调用 fs.ftruncate()方法. </p>
+<h3 id="fs-unlink-path-callabck"><a href="#fs-unlink-path-callabck" class="headerlink" title="fs.unlink(path, callabck)"></a>fs.unlink(path, callabck)</h3><ul>
+<li>path: String | Buffer</li>
+<li>callback: Function</li>
+</ul>
+<p>unlink(2)方法的异步版本实现.  在回调函数的参数中，除了可能存在的错误异常参数外，不会有其它的参数.</p>
+<h3 id="fs-unlinkSync-path"><a href="#fs-unlinkSync-path" class="headerlink" title="fs.unlinkSync(path)"></a>fs.unlinkSync(path)</h3><ul>
+<li>path: String | Buffer</li>
+</ul>
+<p>unlink(2)方法的同步版本实现，返回undefined.</p>
+<h3 id="fs-unwatchFile-filename-listener"><a href="#fs-unwatchFile-filename-listener" class="headerlink" title="fs.unwatchFile(filename[, listener])"></a>fs.unwatchFile(filename[, listener])</h3><ul>
+<li>filename: String | Buffer</li>
+<li>listener: Function</li>
+</ul>
+<p>停止对filename文件的监听. 如果指定了listener参数，那么只会移除该listener监听器. 否则，该文件上所有的监听器都会被移除. 如果在未监听的文件上调用fs.unwatchFile()方法，不会执行任何操作. </p>
+<p><strong>备注:</strong> fs.watch()方法的效率比fs.watchFile()和fs.unwatchFile()方法的效率高. 建议使用fs.watch()方法来代替fs.watchFile()和fs.unwatchFile()方法. </p>
+<h3 id="fs-utimes-path-atime-mtime-callback"><a href="#fs-utimes-path-atime-mtime-callback" class="headerlink" title="fs.utimes(path, atime, mtime, callback)"></a>fs.utimes(path, atime, mtime, callback)</h3><ul>
+<li>path: String | Buffer</li>
+<li>atime: Integer</li>
+<li>mtime: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>该方法用于修改文件的时间戳. </p>
+<p><strong>备注：</strong> atime和mtime参数遵循以下的规则:</p>
+<ul>
+<li>它们的值必须是unix时间戳，以秒为单位. 例如： Date.now()返回的是毫秒数，所以它必须除以1000后才能作为参数传入.</li>
+<li>如果传入的值是数值形式的字符串，那么它会被自动转化成相应的数字</li>
+<li>如果传入的是NaN和Infinity,  那么该参数会自动被设置为Date.now() / 1000</li>
+</ul>
+<h3 id="fs-utimesSync-path-atime-mtime"><a href="#fs-utimesSync-path-atime-mtime" class="headerlink" title="fs.utimesSync(path, atime, mtime)"></a>fs.utimesSync(path, atime, mtime)</h3><ul>
+<li>path: String | Buffer</li>
+<li>atime: Integer</li>
+<li>mtime: Integer</li>
+</ul>
+<p>fs.utimes()方法的同步版本实现，返回undefined.</p>
+<h3 id="fs-watch-filename-options-listener"><a href="#fs-watch-filename-options-listener" class="headerlink" title="fs.watch(filename[, options][, listener])"></a>fs.watch(filename[, options][, listener])</h3><ul>
+<li>filename: String | Buffer</li>
+<li>options: String | Object<ul>
+<li>persistent: Boolean  标识文件只要被监听，进程就应该继续运行. 默认值为true</li>
+<li>recursive: Boolean 标识是否监听该目录下的子目录，还是只监听该目录本身. 该参数只在监听目录时有用，且只在特定的系统中(OSX和Linux)被支持.（ 参看”缺点”一节），默认值为false</li>
+<li>encoding: String 指定回传给listener监听方法的文件名的编码方式，默认为utf-8</li>
+</ul>
+</li>
+<li>listener: Function</li>
+</ul>
+<p>该方法用于监听filename参数指定的目录，filename参数可以是文件也可以是目录，返回的对象为fs.FSWatcher类的实例. </p>
+<p>方法的第二个参数是可选的，如果以字符串类型提供了options参数，那么该参数指定了encoding参数的值. 否则options参数为对象类型. </p>
+<p>listener回调方法带有两个参数，分别是(eventType, filename), 其中eventType是rename，或者是change中的一种； 而filename则表示触发事件的路径名称. </p>
+<p>值得一提的是，在大部分平台中，rename事件会在新建和删除文件的时候被触发. 另外，listener回调方法也会被关联到fs.FSWatcher对象的change事件中，但是它和eventType值被设置为change的事件不是一回事. </p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>fs.watch方法并不是完全地跨平台，并且在某些情况下无法使用. 另外，recursive参数仅在OSX和Linux系统中可用. </p>
+<h4 id="1-可用性"><a href="#1-可用性" class="headerlink" title="1. 可用性"></a>1. 可用性</h4><p>该方法的实现依赖于底层操作系统提供的通知机制： </p>
+<ul>
+<li>在linux系统中，该方法使用了inotify</li>
+<li>在BSD系统中，该方法使用了kqueue</li>
+<li>在OSX系统中，该方法在监听文件时使用了kqueue,而在监听文件夹时使用了FSEvents</li>
+<li>在Windows系统中， 该方法取决于ReadDirectoryChangesW</li>
+<li>在Aix系统中， 该方法取决于AHAFS</li>
+</ul>
+<p>如果依赖的底层操作系统中的功能因为某些原因不可用，那么fs.watch()方法将不可用. 例如，在网络文件系统(NFS, SMB等)和主机文件系统中，监听文件或者目录的功能将不会很稳定，在有些情况下，甚至会不可用.  但应用程序仍可以使用fs.watchFile()，这个方法底层使用了stat polling机制， 但它运行的效率更低，稳定性也更差一些.</p>
+<h4 id="2-Inodes"><a href="#2-Inodes" class="headerlink" title="2. Inodes"></a>2. Inodes</h4><p>在Linux和OSX系统中， fs.watch()方法会解析路径到某个inode节点，并监视该节点. 但如果正在被监听的路径被删除后又重新创建了，那么它就会被分配一个新的inode节点. 此时，监听器会在delete操作后触发相应的事件，并继续监听原来的inode节点，而新创建的节点将不会触发任何事件. </p>
+<h4 id="3-文件名参数"><a href="#3-文件名参数" class="headerlink" title="3. 文件名参数"></a>3. 文件名参数</h4><p>只有在Linux和windows系统中， 才支持在回调函数中提供filename参数.  但即使是在支持的操作系统中，也不能保证每次都能提供filename参数. 因此，在使用filename参数时，不能假设回调函数中该参数的值会始终被提供，必须对该参数可能存在null的情况进行处理.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fs.watch(<span class="string">'somedir'</span>, (eventType, filename) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`event type is: <span class="subst">$&#123;eventType&#125;</span>`</span>);</div><div class="line">  <span class="keyword">if</span> (filename) &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`filename provided: <span class="subst">$&#123;filename&#125;</span>`</span>);</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'filename not provided'</span>);</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="fs-watchFile-filename-options-listener"><a href="#fs-watchFile-filename-options-listener" class="headerlink" title="fs.watchFile(filename[, options], listener)"></a>fs.watchFile(filename[, options], listener)</h3><ul>
+<li>filename: String | Buffer</li>
+<li>options: Object<ul>
+<li>persistent: Boolean 该参数用于标识是否只要文件被监听，进程就应该一直运行, 默认为true</li>
+<li>interval: Integer</li>
+</ul>
+</li>
+<li>listener: Function</li>
+</ul>
+<p>监听filename指定的文件, 每次当文件被访问时，listener回调函数都会被触发. </p>
+<p>options参数是可选参数. 如果提供了该参数，那它必须是对象类型. options参数中可以包含有persistent属性和interval属性，其中persistent属性是用来标识是否只要文件被监听，进程就应该继续运行的标志，而interval参数指定了监听目标文件的频率，默认情况下两者的值分别是{persistent: true, interval: 5007}. </p>
+<p>listener回调函数接受两个参数，分别是当前的stat对象以及之前的stat对象, 它们都是fs.Stats类的实例. 例如： </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fs.watchFile(<span class="string">'message.text'</span>, (curr, prev) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`the current mtime is: <span class="subst">$&#123;curr.mtime&#125;</span>`</span>);</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`the previous mtime was: <span class="subst">$&#123;prev.mtime&#125;</span>`</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>如果应用程序需要在文件被修改的时候得到通知，而不仅仅是访问的时候，那么只需要比较curr.mtime和prev.mtime即可.</p>
+<p><strong>备注：</strong> 当fs.watchFile()方法抛出ENOENT错误时，它会调用一次listener方法，但方法中的参数的全部属性都被0填充. 在Windows系统中，blksize以及blocks属性都会被设置为undefined. 如果文件在后续被创建，那么listener函数会再次被调用，函数的参数将会是新建的stat对象，这个是在v0.10版本中新增的功能.</p>
+<p>另外，建议使用fs.watch()来代替fs.watchFile()和fs.unwatchFile()方法，前者的效率和稳定性都比后两者好.</p>
+<h3 id="fs-write-fd-buffer-offset-length-position-callback"><a href="#fs-write-fd-buffer-offset-length-position-callback" class="headerlink" title="fs.write(fd, buffer, offset, length[, position], callback)"></a>fs.write(fd, buffer, offset, length[, position], callback)</h3><ul>
+<li>fd: Integer</li>
+<li>buffer: Buffer | String</li>
+<li>offset: Integer</li>
+<li>length: Integer</li>
+<li>position: Integer</li>
+<li>callback: Function</li>
+</ul>
+<p>该方法往指定的文件描述符中写入数据. offset和length参数指定了buffer要被写入文件的位置和长度. position参数指定了写入文件的初始位置 ，如果它不是number类型，那么数据将会被写入到文件描述符的当前位置. </p>
+<p>callback回调函数会带有三个参数，分别是(err, written, buffer)， 其中written参数指定了当前已经被写入的数据字节数. </p>
+<p><strong>备注：</strong> 在没有等待回调函数返回的情况下，多次调用fs.write()方法往同一个文件中写入数据是不安全的操作. 对于这种场景，建议使用fs.createWriteStream()来操作. </p>
+<p>在linux操作系统中，如果文件是以追加的方式打开的，那么不支持在指定的位置上执行写操作，内核将会忽略提供的位置参数，始终在文件的末尾执行写入操作. </p>
+<h3 id="fs-write-fd-data-position-encoding-callback"><a href="#fs-write-fd-data-position-encoding-callback" class="headerlink" title="fs.write(fd, data[, position][, encoding], callback)"></a>fs.write(fd, data[, position][, encoding], callback)</h3><ul>
+<li>fd: Integer</li>
+<li>data: String | Buffer</li>
+<li>position: Integer</li>
+<li>encoding: String </li>
+<li>callback: Function</li>
+</ul>
+<p>该方法将指定的数据写入到fd文件描述符中. 如果data参数的类型不是buffer类型，那么它将会被自动转化成string类型. </p>
+<p>position参数指定了写入文件的初始位置 ，如果它不是number类型，那么数据将会被写入到文件描述符的当前位置. </p>
+<p>encoding参数指定了编码格式. callback()方法将会有三个参数，分别是(err, written, string)， 其中written参数标识了被要求写入的字节数， 需要注意的是，这里的written参数返回的字节数与data参数的字符数并不相等. 具体可以查看Buffer.byteLength()方法</p>
+<p>不像写入buffer类型的数据时，可以指定写入部分的数据，当写入的数据为字符串类型时，整个字符串都会被写入，而不能指定部分字符串. 这是因为字符串中的偏移量有可能与字节数的偏移量存在差异. </p>
+<p><strong>备注：</strong> 在没有等待回调函数返回的情况下，多次调用fs.write()方法往同一个文件中写入数据是不安全的操作. 对于这种场景，建议使用fs.createWriteStream()来操作. </p>
+<p>在linux操作系统中，如果文件是以追加的方式打开的，那么不支持在指定的位置上执行写操作，内核将会忽略提供的位置参数，始终在文件的末尾执行写入操作. </p>
+<h3 id="fs-writeFile-file-data-options-callback"><a href="#fs-writeFile-file-data-options-callback" class="headerlink" title="fs.writeFile(file, data[, options], callback)"></a>fs.writeFile(file, data[, options], callback)</h3><ul>
+<li>file: String | Buffer | Integer 文件名或者是文件描述符</li>
+<li>data: String | Buffer </li>
+<li>options: Object | String<ul>
+<li>encoding: String | Null 默认为utf-8</li>
+<li>mode: Integer 默认为0o666</li>
+<li>flag: String 默认为w</li>
+</ul>
+</li>
+<li>callback: Function</li>
+</ul>
+<p>该方法将数据异步地写到文件中，如果文件已经存在了，则替换其内容. data参数可以是string类型或者是buffer类型. 如果data是Buffer类型，那么将忽略encoding参数. 例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fs.writeFile(<span class="string">'message.txt'</span>, <span class="string">'Hello Node.js'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'It\'s saved!'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>如果options参数为字符串，那么它指定的是encoding参数的值，如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fs.writeFile(<span class="string">'message.txt'</span>, <span class="string">'Hello Node.js'</span>, <span class="string">'utf8'</span>, callback);</div></pre></td></tr></table></figure>
+<p>如果通过文件描述符指定文件的第一个参数，那么文件描述符必须支持写入数据. </p>
+<p><strong>备注：</strong> 在没有等待回调函数返回的情况下，多次调用fs.write()方法往同一个文件中写入数据是不安全的操作. 对于这种场景，建议使用fs.createWriteStream()来操作. 另外，如果是通过文件描述符来指定文件，那么文件在写入结束后，不会自动关闭. </p>
+<h3 id="fs-writeFileSync-file-data-options"><a href="#fs-writeFileSync-file-data-options" class="headerlink" title="fs.writeFileSync(file, data[, options])"></a>fs.writeFileSync(file, data[, options])</h3><ul>
+<li>file: String | Buffer | Integer 文件名称或文件描述符</li>
+<li>data: String | Buffer </li>
+<li>options: String | Object<ul>
+<li>encoding: String 默认utf-8</li>
+<li>mode: Integer  默认为0o666</li>
+<li>flag: String 默认为’w’</li>
+</ul>
+</li>
+</ul>
+<p>fs.writeFile()方法的同步版本实现，返回undefined.</p>
+<h3 id="fs-writeSync-fd-buffer-offset-length-position"><a href="#fs-writeSync-fd-buffer-offset-length-position" class="headerlink" title="fs.writeSync(fd, buffer, offset, length[, position])"></a>fs.writeSync(fd, buffer, offset, length[, position])</h3><ul>
+<li>fd: Integer</li>
+<li>buffer: String | Buffer</li>
+<li>offset: Integer</li>
+<li>length: Integer</li>
+<li>position: Integer</li>
+</ul>
+<h3 id="fs-writeSync-fd-data-position-encoding"><a href="#fs-writeSync-fd-data-position-encoding" class="headerlink" title="fs.writeSync(fd, data[, position[, encoding]])"></a>fs.writeSync(fd, data[, position[, encoding]])</h3><ul>
+<li>fd: Integer</li>
+<li>data: String | Buffer</li>
+<li>position: Integer</li>
+<li>encoding: String</li>
+</ul>
+<p>fs.write()方法的同步版本实现， 返回写入的字节数</p>
+<h3 id="FS常量"><a href="#FS常量" class="headerlink" title="FS常量"></a>FS常量</h3><p>以下是通过fs.constants变量定义的常量值. </p>
+<p><strong>备注：</strong>不是所有的变量在所有的操作系统中均可用</p>
+<h4 id="1-文件访问权限常量"><a href="#1-文件访问权限常量" class="headerlink" title="1. 文件访问权限常量"></a>1. 文件访问权限常量</h4><p>以下的变量是在fs.access()中可用的权限常量：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">常量值</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">F_OK</td>
+<td style="text-align:center">标识文件对当前进程是否可见</td>
+</tr>
+<tr>
+<td style="text-align:center">R_OK</td>
+<td style="text-align:center">标识文件对当前进程是否可读</td>
+</tr>
+<tr>
+<td style="text-align:center">W_OK</td>
+<td style="text-align:center">标识文件对当前进程是否可写</td>
+</tr>
+<tr>
+<td style="text-align:center">X_OK</td>
+<td style="text-align:center">标识文件对当前进程是否可执行</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-文件打开常量"><a href="#2-文件打开常量" class="headerlink" title="2. 文件打开常量"></a>2. 文件打开常量</h4><p>以下常量是在fs.open()中可用的常量 ：</p>
+<table>
+<thead>
+<tr>
+<th>常量值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O_RDONLY</td>
+<td>以只读方式打开文件</td>
+</tr>
+<tr>
+<td>O_WRONLY</td>
+<td>以只写方式打开文件</td>
+</tr>
+<tr>
+<td>O_RDWR</td>
+<td>以读写方式打开文件</td>
+</tr>
+<tr>
+<td>O_CREAT</td>
+<td>如果文件不存在 ，则创建文件</td>
+</tr>
+<tr>
+<td>O_EXCL</td>
+<td>如果设置了O_CREAT标识，但文件已经存在，此时打开文件应该返回错误</td>
+</tr>
+<tr>
+<td>O_NOCTTY</td>
+<td>如果文件名标识的是个终端设备，那么打开这个路径不会导致该终端成为当前进程的控制终端</td>
+</tr>
+<tr>
+<td>O_TRUNC</td>
+<td>如果文件名标识的是个普通文件，并且以写模式打开，那么该文件中的内容会被清除</td>
+</tr>
+<tr>
+<td>O_APPEND</td>
+<td>标识以追加的方式打开文件</td>
+</tr>
+<tr>
+<td>O_DIRECTORY</td>
+<td>如果文件名标识的不是个目录，那么打开该文件将失败</td>
+</tr>
+<tr>
+<td>O_NOFOLLOW</td>
+<td>如果文件名标识的是个符号连接，那么打开该文件将失败</td>
+</tr>
+<tr>
+<td>O_SYNC</td>
+<td>标识该文件是由同步IO的方式打开的</td>
+</tr>
+<tr>
+<td>O_SYMLINK</td>
+<td>如果文件名标识的是个符号连接，那么打开的是符号连接本身，而非它指向的目标文件</td>
+</tr>
+<tr>
+<td>O_DIRECT</td>
+<td>如果设置了这个标识 ，那么将最小化IO缓存的作用</td>
+</tr>
+<tr>
+<td>O_NOBLOCK</td>
+<td>标识文件以非阻塞模式打开文件</td>
+</tr>
+<tr>
+<td>O_NOATIME</td>
+<td>该标识仅在linux系统中有用，如果设置了这个标识，那么当读取文件的权限信息时，不会修改atime的属性值.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="3-文件类型常量"><a href="#3-文件类型常量" class="headerlink" title="3. 文件类型常量"></a>3. 文件类型常量</h4><p>以下的常量是在fs.Stats类中的mode属性使用的，用于确定文件的类型: </p>
+<table>
+<thead>
+<tr>
+<th>常量值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S_IFMT</td>
+<td>用于解析文件类型码的掩码</td>
+</tr>
+<tr>
+<td>S_IFREG</td>
+<td>普通文件</td>
+</tr>
+<tr>
+<td>S_IFDIR</td>
+<td>目录</td>
+</tr>
+<tr>
+<td>S_IFCHR</td>
+<td>面向字符的设备文件</td>
+</tr>
+<tr>
+<td>S_IFBLK</td>
+<td>面向块的设备文件</td>
+</tr>
+<tr>
+<td>S_IFIFO</td>
+<td>FIFO的管道文件</td>
+</tr>
+<tr>
+<td>S_IFLNK</td>
+<td>符号连接</td>
+</tr>
+<tr>
+<td>S_IFSOCK</td>
+<td>socket文件</td>
+</tr>
+</tbody>
+</table>
+<h4 id="4-文件访问权限常量"><a href="#4-文件访问权限常量" class="headerlink" title="4. 文件访问权限常量"></a>4. 文件访问权限常量</h4><p>以下的常量是用于fs.Stats类中的mode属性使用的，用于确定文件的访问权限：</p>
+<table>
+<thead>
+<tr>
+<th>常量值</th>
+<th>描述值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S_IRWXU</td>
+<td>文件拥有者的读、写、执行权限</td>
+</tr>
+<tr>
+<td>S_IRUSR</td>
+<td>文件拥有者的读权限</td>
+</tr>
+<tr>
+<td>S_IWUSR</td>
+<td>文件拥有者的写权限</td>
+</tr>
+<tr>
+<td>S_IXUSR</td>
+<td>文件拥有者的执行权限</td>
+</tr>
+<tr>
+<td>S_IRWXG</td>
+<td>用户组拥有读、写、执行权限</td>
+</tr>
+<tr>
+<td>S_IRGRP</td>
+<td>用户组拥有读权限</td>
+</tr>
+<tr>
+<td>S_IWGRP</td>
+<td>用户组拥有写权限</td>
+</tr>
+<tr>
+<td>S_IXGRP</td>
+<td>用户组拥有执行权限</td>
+</tr>
+<tr>
+<td>S_IRWXO</td>
+<td>其它人拥有读、写、执行权限</td>
+</tr>
+<tr>
+<td>S_IROTH</td>
+<td>其它人拥有读权限</td>
+</tr>
+<tr>
+<td>S_IWOTH</td>
+<td>其它人拥有写权限</td>
+</tr>
+<tr>
+<td>S_IXOTH</td>
+<td>其它人拥有执行权限</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/filesystem/" rel="tag"># filesystem</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/15/前端/nodejs/Nodejs.stream.3/" rel="next" title="Node.js — Stream(3)">
+                <i class="fa fa-chevron-left"></i> Node.js — Stream(3)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/17/前端/nodejs/Nodejs.filesystem/"
+           data-title="nodejs - filesystem" data-url="http://yoursite.com/2017/03/17/前端/nodejs/Nodejs.filesystem/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">161</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">40</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文件系统"><span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Buffer-API"><span class="nav-text">Buffer API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-FSWatcher"><span class="nav-text">fs.FSWatcher</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#change事件"><span class="nav-text">change事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error事件"><span class="nav-text">error事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#watcher-close"><span class="nav-text">watcher.close()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-ReadStream"><span class="nav-text">fs.ReadStream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#open事件"><span class="nav-text">open事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#close事件"><span class="nav-text">close事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readStream-bytesRead"><span class="nav-text">readStream.bytesRead</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#readStream-path"><span class="nav-text">readStream.path</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-Stats"><span class="nav-text">fs.Stats</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stats中的时间值"><span class="nav-text">Stats中的时间值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-WriteStream"><span class="nav-text">fs.WriteStream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#open事件-1"><span class="nav-text">open事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#close事件-1"><span class="nav-text">close事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeStream-bytesWritten"><span class="nav-text">writeStream.bytesWritten</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#writeStream-path"><span class="nav-text">writeStream.path</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-access-path-mode-callback"><span class="nav-text">fs.access(path[,mode],callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-accessSync-path-mode"><span class="nav-text">fs.accessSync(path[,mode])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-appendFile-file-data-options-callback"><span class="nav-text">fs.appendFile(file, data[,options], callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-appendFileSync-file-data-options"><span class="nav-text">fs.appendFileSync(file, data[, options])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-chmod-path-mode-callback"><span class="nav-text">fs.chmod(path, mode, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-chmodSync-path-mode"><span class="nav-text">fs.chmodSync(path, mode)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-chown-path-uid-gid-callback"><span class="nav-text">fs.chown(path, uid, gid, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-chownSync-path-uid-gid"><span class="nav-text">fs.chownSync(path, uid, gid)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-close-fd-callback"><span class="nav-text">fs.close(fd, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-closeSync-fd"><span class="nav-text">fs.closeSync(fd)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-constants"><span class="nav-text">fs.constants</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fs-createReadStream-path-options"><span class="nav-text">fs.createReadStream(path[, options])</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-createWriteStream-options"><span class="nav-text">fs.createWriteStream([options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-existsSync-path"><span class="nav-text">fs.existsSync(path)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fchmod-fd-mode-callback"><span class="nav-text">fs.fchmod(fd, mode, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fchmodSync-fd-mode"><span class="nav-text">fs.fchmodSync(fd, mode)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fchown-fd-uid-gid-callback"><span class="nav-text">fs.fchown(fd, uid, gid, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fchownSync-fd-uid-gid"><span class="nav-text">fs.fchownSync(fd, uid, gid)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fdatasync-fd-callback"><span class="nav-text">fs.fdatasync(fd, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fdatasyncSync-fd"><span class="nav-text">fs.fdatasyncSync(fd)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fstat-fd-callback"><span class="nav-text">fs.fstat(fd, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fstatSync-fd"><span class="nav-text">fs.fstatSync(fd)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fsync-fd-callabck"><span class="nav-text">fs.fsync(fd, callabck)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-fsyncSync-fd"><span class="nav-text">fs.fsyncSync(fd)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-ftruncate-fd-len-callback"><span class="nav-text">fs.ftruncate(fd, len, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-ftruncateSync-fd-len"><span class="nav-text">fs.ftruncateSync(fd, len)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-futimes-fd-atime-mtime-callback"><span class="nav-text">fs.futimes(fd, atime, mtime, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-futimesSync-fd-atime-mtime"><span class="nav-text">fs.futimesSync(fd, atime, mtime)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-lchmod-path-mode-callback"><span class="nav-text">fs.lchmod(path, mode, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-lchmodSync-path-mode"><span class="nav-text">fs.lchmodSync(path, mode)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-lchown-path-uid-gid-callback"><span class="nav-text">fs.lchown(path, uid, gid, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-lchownSync-path-uid-gid"><span class="nav-text">fs.lchownSync(path, uid, gid)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-link-existingPath-newPath-callback"><span class="nav-text">fs.link(existingPath, newPath, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-linkSync-existingPath-newPath"><span class="nav-text">fs.linkSync(existingPath, newPath)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-lstat-path-callback"><span class="nav-text">fs.lstat(path, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-lstatSync-path"><span class="nav-text">fs.lstatSync(path)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-mkdir-path-mode-callback"><span class="nav-text">fs.mkdir(path[, mode], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-mkdirSync-path-mode"><span class="nav-text">fs.mkdirSync(path[, mode])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-mkdtemp-prefix-options-callback"><span class="nav-text">fs.mkdtemp(prefix[, options], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-mkdtempSync-prefix-options"><span class="nav-text">fs.mkdtempSync(prefix[, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-open-path-flag-mode-callback"><span class="nav-text">fs.open(path, flag[, mode], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-openSync-path-flags-mode"><span class="nav-text">fs.openSync(path, flags[, mode])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-read-fd-buffer-offset-length-position-callback"><span class="nav-text">fs.read(fd, buffer, offset, length, position, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-readdir-path-options-callback"><span class="nav-text">fs.readdir(path[,options], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-readdirSync-path-options"><span class="nav-text">fs.readdirSync(path[, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-readFile-file-options-callback"><span class="nav-text">fs.readFile(file[, options], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-readFileSync-file-options"><span class="nav-text">fs.readFileSync(file[, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-readlink-path-options-callback"><span class="nav-text">fs.readlink(path[, options], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-readlinkSync-path-options"><span class="nav-text">fs.readlinkSync(path[, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-readSync-fd-buffer-offset-length-position"><span class="nav-text">fs.readSync(fd, buffer, offset, length, position)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-realpath-path-options-callback"><span class="nav-text">fs.realpath(path[, options], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-readpathSync-path-options"><span class="nav-text">fs.readpathSync(path[, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-rename-oldPath-newPath-callback"><span class="nav-text">fs.rename(oldPath, newPath, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-renameSync-oldPath-newPath"><span class="nav-text">fs.renameSync(oldPath, newPath)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-rmdir-path-callback"><span class="nav-text">fs.rmdir(path, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-rmdirSync-path"><span class="nav-text">fs.rmdirSync(path)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-stat-path-callback"><span class="nav-text">fs.stat(path, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-statSync-path"><span class="nav-text">fs.statSync(path)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-symlink-target-path-type-callback"><span class="nav-text">fs.symlink(target, path[, type], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-symlinkSync-target-path-type"><span class="nav-text">fs.symlinkSync(target, path[, type])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-truncate-path-len-callback"><span class="nav-text">fs.truncate(path, len, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-truncateSync-path-len"><span class="nav-text">fs.truncateSync(path, len)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-unlink-path-callabck"><span class="nav-text">fs.unlink(path, callabck)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-unlinkSync-path"><span class="nav-text">fs.unlinkSync(path)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-unwatchFile-filename-listener"><span class="nav-text">fs.unwatchFile(filename[, listener])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-utimes-path-atime-mtime-callback"><span class="nav-text">fs.utimes(path, atime, mtime, callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-utimesSync-path-atime-mtime"><span class="nav-text">fs.utimesSync(path, atime, mtime)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-watch-filename-options-listener"><span class="nav-text">fs.watch(filename[, options][, listener])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-text">缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-可用性"><span class="nav-text">1. 可用性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Inodes"><span class="nav-text">2. Inodes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-文件名参数"><span class="nav-text">3. 文件名参数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-watchFile-filename-options-listener"><span class="nav-text">fs.watchFile(filename[, options], listener)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-write-fd-buffer-offset-length-position-callback"><span class="nav-text">fs.write(fd, buffer, offset, length[, position], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-write-fd-data-position-encoding-callback"><span class="nav-text">fs.write(fd, data[, position][, encoding], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-writeFile-file-data-options-callback"><span class="nav-text">fs.writeFile(file, data[, options], callback)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-writeFileSync-file-data-options"><span class="nav-text">fs.writeFileSync(file, data[, options])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-writeSync-fd-buffer-offset-length-position"><span class="nav-text">fs.writeSync(fd, buffer, offset, length[, position])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fs-writeSync-fd-data-position-encoding"><span class="nav-text">fs.writeSync(fd, data[, position[, encoding]])</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FS常量"><span class="nav-text">FS常量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-文件访问权限常量"><span class="nav-text">1. 文件访问权限常量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-文件打开常量"><span class="nav-text">2. 文件打开常量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-文件类型常量"><span class="nav-text">3. 文件类型常量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-文件访问权限常量"><span class="nav-text">4. 文件访问权限常量</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
