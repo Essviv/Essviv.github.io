@@ -87,25 +87,25 @@
 
 
 
-<meta name="description" content="StringDecoderstring_decoder模块提供了将Buffer对象包装成String对象的方法，它可以保留编码后的多字节字符. 可以通过以下的方法来调用该模块:
+<meta name="description" content="StringDecoderstring_decoder模块提供了将Buffer对象包装成String对象的方法，它可以保留编码后不完整的字节字符. 可以通过以下的方法来调用该模块:
 1const stringDecoder = require(&quot;string_decoder&quot;);
 以下的例子中，演示了使用string_decoder模块的方法:
-12345678const StringDecoder">
+12345678const StringDecode">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nodejs - StringDecoder">
 <meta property="og:url" content="http://yoursite.com/2017/03/21/前端/nodejs/Nodejs.stringDecoder/index.html">
 <meta property="og:site_name" content="Essviv">
-<meta property="og:description" content="StringDecoderstring_decoder模块提供了将Buffer对象包装成String对象的方法，它可以保留编码后的多字节字符. 可以通过以下的方法来调用该模块:
+<meta property="og:description" content="StringDecoderstring_decoder模块提供了将Buffer对象包装成String对象的方法，它可以保留编码后不完整的字节字符. 可以通过以下的方法来调用该模块:
 1const stringDecoder = require(&quot;string_decoder&quot;);
 以下的例子中，演示了使用string_decoder模块的方法:
-12345678const StringDecoder">
-<meta property="og:updated_time" content="2017-03-21T09:58:06.000Z">
+12345678const StringDecode">
+<meta property="og:updated_time" content="2017-03-21T10:42:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="nodejs - StringDecoder">
-<meta name="twitter:description" content="StringDecoderstring_decoder模块提供了将Buffer对象包装成String对象的方法，它可以保留编码后的多字节字符. 可以通过以下的方法来调用该模块:
+<meta name="twitter:description" content="StringDecoderstring_decoder模块提供了将Buffer对象包装成String对象的方法，它可以保留编码后不完整的字节字符. 可以通过以下的方法来调用该模块:
 1const stringDecoder = require(&quot;string_decoder&quot;);
 以下的例子中，演示了使用string_decoder模块的方法:
-12345678const StringDecoder">
+12345678const StringDecode">
 
 
 
@@ -349,7 +349,7 @@
       
 
       
-        <h1 id="StringDecoder"><a href="#StringDecoder" class="headerlink" title="StringDecoder"></a>StringDecoder</h1><p>string_decoder模块提供了将Buffer对象包装成String对象的方法，它可以保留编码后的多字节字符. 可以通过以下的方法来调用该模块:</p>
+        <h1 id="StringDecoder"><a href="#StringDecoder" class="headerlink" title="StringDecoder"></a>StringDecoder</h1><p>string_decoder模块提供了将Buffer对象包装成String对象的方法，它可以保留编码后不完整的字节字符. 可以通过以下的方法来调用该模块:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> stringDecoder = <span class="built_in">require</span>(<span class="string">"string_decoder"</span>);</div></pre></td></tr></table></figure>
 <p>以下的例子中，演示了使用string_decoder模块的方法:</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> StringDecoder = <span class="built_in">require</span>(<span class="string">'string_decoder'</span>).StringDecoder;</div><div class="line"><span class="keyword">const</span> decoder = <span class="keyword">new</span> StringDecoder(<span class="string">'utf8'</span>);</div><div class="line"></div><div class="line"><span class="keyword">const</span> cent = Buffer.from([<span class="number">0xC2</span>, <span class="number">0xA2</span>]);</div><div class="line"><span class="built_in">console</span>.log(decoder.write(cent));</div><div class="line"></div><div class="line"><span class="keyword">const</span> euro = Buffer.from([<span class="number">0xE2</span>, <span class="number">0x82</span>, <span class="number">0xAC</span>]);</div><div class="line"><span class="built_in">console</span>.log(decoder.write(euro));</div></pre></td></tr></table></figure>
