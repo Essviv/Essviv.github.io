@@ -1,0 +1,778 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs,timers," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Timerstimer模块对外暴露了全局API, 这些API可用于在未来的某个时间规划操作. 由于timers模块导出的函数都是全局的，就不需要再使用require(“timer”)方法来引入该模块. 
+nodejs中实现的timer方法与web浏览器中实现的方法类似，但使用了不一样的底层实现，nodejs中的timer方法是基于Node.js的EventLoop机制实现的. 
+Immediate">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs - timers">
+<meta property="og:url" content="http://yoursite.com/2017/03/21/前端/nodejs/Nodejs.timers/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="Timerstimer模块对外暴露了全局API, 这些API可用于在未来的某个时间规划操作. 由于timers模块导出的函数都是全局的，就不需要再使用require(“timer”)方法来引入该模块. 
+nodejs中实现的timer方法与web浏览器中实现的方法类似，但使用了不一样的底层实现，nodejs中的timer方法是基于Node.js的EventLoop机制实现的. 
+Immediate">
+<meta property="og:updated_time" content="2017-03-21T04:02:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs - timers">
+<meta name="twitter:description" content="Timerstimer模块对外暴露了全局API, 这些API可用于在未来的某个时间规划操作. 由于timers模块导出的函数都是全局的，就不需要再使用require(“timer”)方法来引入该模块. 
+nodejs中实现的timer方法与web浏览器中实现的方法类似，但使用了不一样的底层实现，nodejs中的timer方法是基于Node.js的EventLoop机制实现的. 
+Immediate">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/21/前端/nodejs/Nodejs.timers/"/>
+
+
+
+
+
+  <title> nodejs - timers | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/21/前端/nodejs/Nodejs.timers/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                nodejs - timers
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-21T11:29:00+08:00">
+                2017-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/21/前端/nodejs/Nodejs.timers/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/21/前端/nodejs/Nodejs.timers/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Timers"><a href="#Timers" class="headerlink" title="Timers"></a>Timers</h1><p>timer模块对外暴露了全局API, 这些API可用于在未来的某个时间规划操作. 由于timers模块导出的函数都是全局的，就不需要再使用require(“timer”)方法来引入该模块. </p>
+<p>nodejs中实现的timer方法与web浏览器中实现的方法类似，但使用了不一样的底层实现，nodejs中的timer方法是基于Node.js的EventLoop机制实现的. </p>
+<h2 id="Immediate类"><a href="#Immediate类" class="headerlink" title="Immediate类"></a>Immediate类</h2><p>该类对象的实例是通过调用setImmediate()方法时内部创建的，它也可以传给clearImmediate()方法，以取消之前计划的操作. </p>
+<h2 id="Timeout类"><a href="#Timeout类" class="headerlink" title="Timeout类"></a>Timeout类</h2><p>该类对象的实例是通过调用setTimeout()方法和setInterval()方法时内部创建的，它也可以被传给clearTimeout()和clearInterval()方法作为参数，以取消之前计划的操作. </p>
+<p>默认情况下，当调用了setTimeout()和setInterval()方法在未来的某个时间计划了操作之后，只要timer对象仍然存活，那么nodejs的eventLoop会一直运行. Timeout对象还提供了timerout.ref()和timeout.unref()方法来更改这种默认的行为.</p>
+<h2 id="timeout-ref"><a href="#timeout-ref" class="headerlink" title="timeout.ref()"></a>timeout.ref()</h2><p>当调用了这个方法后，只要timeout对象还存活，那么node.js的eventLoop就会一直运行， 多次调用该方法不会有其它效果. 默认情况下，所有的timeout对象都是”ref’d”，也就是说，通常情况下并不需要直接调用该方法，除非在之前调用了timeout.unref()方法.</p>
+<p>该方法返回Timeout对象的引用，以方便链式调用.</p>
+<h2 id="timeout-unref"><a href="#timeout-unref" class="headerlink" title="timeout.unref()"></a>timeout.unref()</h2><p>当调用了这个方法后，timeout对象存活将不会要求nodejs的eventLoop对象也一直运行，如果没有其它的活动让eventLoop保持运行，那么进程将会在timeout对象的回调函数被调用前退出. 多次调用timeout.unref()不会有其它的效果. </p>
+<p><strong>备注：</strong> 调用timeout.unref()方法在nodejs内部创建了一个定时器，这个定时器会唤醒node.js的event loop. 创建太多这样的定时器会严重影响node.js程序的性能.</p>
+<p>该方法返回Timeout对象的引用，以方便链式调用.</p>
+<h2 id="创建定时器"><a href="#创建定时器" class="headerlink" title="创建定时器"></a>创建定时器</h2><p>node.js中的定时器是个在未来某个时间会被调用的方法， 定时器会在何时被调用取决于创建该定时器的方法，以及node.js中event loop做的其它事情. </p>
+<h2 id="setImmediate-callback-…args"><a href="#setImmediate-callback-…args" class="headerlink" title="setImmediate(callback[, …args])"></a>setImmediate(callback[, …args])</h2><ul>
+<li>callback: Function 在node.js的本次event loop结束后被调用的方法</li>
+<li>…args: <any> 当callback方法被调用时，传递给方法的参数</any></li>
+</ul>
+<p>在node.js执行完I/O事件的回调函数后，调用setTimeout()和setInterval()计划的定时器之前，调用该方法, 该方法返回Immediate类的对象，该对象可用于clearImmediate()方法中. </p>
+<p>当多次调用setImmediate()方法时，callback方法会按照创建的顺序进行排队，整个callback队列会在每个event loop循环中被全部处理. 如果某个immediate定时器是在方法的回调函数中被加上的，那么该定时器方法会在下个event loop循环时被调用. </p>
+<p>如果callback参数不是函数类型，那么会抛出TypeError异常. </p>
+<h2 id="setInterval-callback-delay-…args"><a href="#setInterval-callback-delay-…args" class="headerlink" title="setInterval(callback, delay[, …args])"></a>setInterval(callback, delay[, …args])</h2><ul>
+<li>callback: Function 每经过delay参数指定的时间后，调用该方法</li>
+<li>delay: number  执行callback方法的延迟时间 ，以毫秒为单位</li>
+<li>…args: <any>  当调用callback方法时，传入的参数列表</any></li>
+</ul>
+<p>计划重复执行的定时器，每经过delay时间，就会调用callback()方法，并传入…args作为方法参数. 该方法返回Timeout对象，该对象可用于传递给clearInterval()方法，以取消该定时器.</p>
+<p>当delay参数大于2147483647或小于1时， delay参数默认为1. </p>
+<p>如果callback参数不是函数类型，那么会抛出TypeError异常.</p>
+<h2 id="setTimeout-callback-delay-…args"><a href="#setTimeout-callback-delay-…args" class="headerlink" title="setTimeout(callback, delay[, …args])"></a>setTimeout(callback, delay[, …args])</h2><ul>
+<li>callback: Function 经过delay时间后，调用该方法</li>
+<li>delay: 执行callback方法的延迟时间， 以毫秒为单位</li>
+<li>…args: <any> 调用callback方法时，传入的参数</any></li>
+</ul>
+<p>计划只执行一次的定时器，该定时器在经过delay时间后，调用callback方法，并传入…args作为方法参数. 该方法返回Timeout对象，该对象可用于clearTimeout()方法，以取消该定时器.</p>
+<p>callback()方法可能并不会准确地在delay时间后被调用. node.js系统不会对调用的时间精确度以及调用的顺序做任何保证，它只会尽量保证延迟与delay时间大体相等. </p>
+<p><strong>备注:</strong> 当delay参数的值大于2147483647或小于1时，delay参数默认为1.</p>
+<p>如果callback参数不是函数类型，那么会抛出TypeError异常.</p>
+<h2 id="取消定时器"><a href="#取消定时器" class="headerlink" title="取消定时器"></a>取消定时器</h2><p>setImmediate()，setTimeout()以及setInterval()方法返回了相应的定时器对象，这些对象可用于取消定时器时使用. </p>
+<h2 id="clearImmediate-immediateObj"><a href="#clearImmediate-immediateObj" class="headerlink" title="clearImmediate(immediateObj)"></a>clearImmediate(immediateObj)</h2><ul>
+<li>immediateObj: Immediate 调用setImmediate()方法返回的对象</li>
+</ul>
+<p>该方法可用于取消之前调用setImmediate()方法创建的定时器对象. </p>
+<h2 id="clearTimeout-timeoutObj"><a href="#clearTimeout-timeoutObj" class="headerlink" title="clearTimeout(timeoutObj)"></a>clearTimeout(timeoutObj)</h2><ul>
+<li>timeout: Timeout  调用setTimeout()方法时返回的对象</li>
+</ul>
+<p>该方法可用于取消之前调用setTimeout()方法所创建的定时器对象</p>
+<h2 id="clearInterval-timeoutObj"><a href="#clearInterval-timeoutObj" class="headerlink" title="clearInterval(timeoutObj)"></a>clearInterval(timeoutObj)</h2><ul>
+<li>timeoutObj: Timeout 调用setInterval()方法时返回的对象</li>
+</ul>
+<p>该方法可用于取消之前调用setInterval()方法所创建的定时器对象</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
+<li><a href="https://nodejs.org/dist/latest-v6.x/docs/api/timers.html" target="_blank" rel="external">官方文献</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/timers/" rel="tag"># timers</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/21/前端/nodejs/Nodejs.globals/" rel="next" title="Nodejs - globals">
+                <i class="fa fa-chevron-left"></i> Nodejs - globals
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/21/前端/nodejs/Nodejs.timers/"
+           data-title="nodejs - timers" data-url="http://yoursite.com/2017/03/21/前端/nodejs/Nodejs.timers/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">164</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Timers"><span class="nav-text">Timers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Immediate类"><span class="nav-text">Immediate类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Timeout类"><span class="nav-text">Timeout类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#timeout-ref"><span class="nav-text">timeout.ref()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#timeout-unref"><span class="nav-text">timeout.unref()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建定时器"><span class="nav-text">创建定时器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setImmediate-callback-…args"><span class="nav-text">setImmediate(callback[, …args])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setInterval-callback-delay-…args"><span class="nav-text">setInterval(callback, delay[, …args])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setTimeout-callback-delay-…args"><span class="nav-text">setTimeout(callback, delay[, …args])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取消定时器"><span class="nav-text">取消定时器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clearImmediate-immediateObj"><span class="nav-text">clearImmediate(immediateObj)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clearTimeout-timeoutObj"><span class="nav-text">clearTimeout(timeoutObj)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clearInterval-timeoutObj"><span class="nav-text">clearInterval(timeoutObj)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
