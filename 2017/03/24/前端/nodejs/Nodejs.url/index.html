@@ -1,0 +1,812 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs,url," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="URLurl模块提供了解析和格式url的工具函数. 它可以通过以下的方法来调用:
+1const url = require(&quot;url&quot;);
+URL字符串和URL对象URL字符串是结构化的字符串，它的每个部分都有特定的含义. 对URL字符串进行解析时，可以返回包含URL字符串中各部分信息的URL对象. 以下详述了URL对象中各个属性与URL字符串中各部分的对应关系：
+1234567891011121">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs - url">
+<meta property="og:url" content="http://yoursite.com/2017/03/24/前端/nodejs/Nodejs.url/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="URLurl模块提供了解析和格式url的工具函数. 它可以通过以下的方法来调用:
+1const url = require(&quot;url&quot;);
+URL字符串和URL对象URL字符串是结构化的字符串，它的每个部分都有特定的含义. 对URL字符串进行解析时，可以返回包含URL字符串中各部分信息的URL对象. 以下详述了URL对象中各个属性与URL字符串中各部分的对应关系：
+1234567891011121">
+<meta property="og:updated_time" content="2017-03-25T12:51:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nodejs - url">
+<meta name="twitter:description" content="URLurl模块提供了解析和格式url的工具函数. 它可以通过以下的方法来调用:
+1const url = require(&quot;url&quot;);
+URL字符串和URL对象URL字符串是结构化的字符串，它的每个部分都有特定的含义. 对URL字符串进行解析时，可以返回包含URL字符串中各部分信息的URL对象. 以下详述了URL对象中各个属性与URL字符串中各部分的对应关系：
+1234567891011121">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/24/前端/nodejs/Nodejs.url/"/>
+
+
+
+
+
+  <title> nodejs - url | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/24/前端/nodejs/Nodejs.url/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                nodejs - url
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-24T16:07:00+08:00">
+                2017-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/24/前端/nodejs/Nodejs.url/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/24/前端/nodejs/Nodejs.url/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h1><p>url模块提供了解析和格式url的工具函数. 它可以通过以下的方法来调用:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">"url"</span>);</div></pre></td></tr></table></figure>
+<h2 id="URL字符串和URL对象"><a href="#URL字符串和URL对象" class="headerlink" title="URL字符串和URL对象"></a>URL字符串和URL对象</h2><p>URL字符串是结构化的字符串，它的每个部分都有特定的含义. 对URL字符串进行解析时，可以返回包含URL字符串中各部分信息的URL对象. 以下详述了URL对象中各个属性与URL字符串中各部分的对应关系：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//例如： http://user:pass@host.com:8080/p/a/t/h?query=string#hash 会被解析成：</span></div><div class="line">┌─────────────────────────────────────────────────────────────────────────────┐</div><div class="line">│                                    href                                     │</div><div class="line">├──────────┬┬───────────┬─────────────────┬───────────────────────────┬───────┤</div><div class="line">│ protocol ││   auth    │      host       │           path            │ hash  │</div><div class="line">│          ││           ├──────────┬──────┼──────────┬────────────────┤       │</div><div class="line">│          ││           │ hostname │ port │ pathname │     search     │       │</div><div class="line">│          ││           │          │      │          ├─┬──────────────┤       │</div><div class="line">│          ││           │          │      │          │ │    query     │       │</div><div class="line"><span class="string">"  http:   // user:pass @ host.com : 8080   /p/a/t/h  ?  query=string   #hash "</span></div><div class="line">│          ││           │          │      │          │ │              │       │</div><div class="line">└──────────┴┴───────────┴──────────┴──────┴──────────┴─┴──────────────┴───────┘</div><div class="line">(all spaces <span class="keyword">in</span> the <span class="string">""</span> line should be ignored -- they are purely <span class="keyword">for</span> formatting)</div></pre></td></tr></table></figure>
+<h2 id="urlObject-href"><a href="#urlObject-href" class="headerlink" title="urlObject.href"></a>urlObject.href</h2><p>该属性记录了解析后的url字符串，它的protocol和host部分都被转化成小写. 例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http:<span class="comment">//user:pass@host.com:8080/p/a/t/h?query=string#hash</span></div></pre></td></tr></table></figure>
+<h2 id="urlObject-protocol"><a href="#urlObject-protocol" class="headerlink" title="urlObject.protocol"></a>urlObject.protocol</h2><p>该属性标识了url字符串中的协议部分：例如： ‘http:’</p>
+<h2 id="urlObject-slashes"><a href="#urlObject-slashes" class="headerlink" title="urlObject.slashes"></a>urlObject.slashes</h2><p>该属性是boolean类型，它标识了是否应该在协议的冒号后面加上两个斜杠(‘/‘)</p>
+<h2 id="urlObject-host"><a href="#urlObject-host" class="headerlink" title="urlObject.host"></a>urlObject.host</h2><p>该属性标识了url字符串中的主机部分，包括端口信息： 例如： host.com:8080</p>
+<h2 id="urlObject-auth"><a href="#urlObject-auth" class="headerlink" title="urlObject.auth"></a>urlObject.auth</h2><p>该属性记录了url中的用户名和密码部分，有时候也被称作为用户信息. 这个部分出现在协议和双斜杠(如果有的话)后面，在host的前面，通过”@”符号和host分开. urlObject.auth的格式为<strong>{username}[:{password}]</strong>, 其中，[:{password}]部分是可选的. 例如： ‘user:pass’ </p>
+<h2 id="urlObject-hostname"><a href="#urlObject-hostname" class="headerlink" title="urlObject.hostname"></a>urlObject.hostname</h2><p>该属性记录了url字符串中的主机名称，它是urlObject.host属性除掉端口部分的信息. 例如: host.com</p>
+<h2 id="urlObject-port"><a href="#urlObject-port" class="headerlink" title="urlObject.port"></a>urlObject.port</h2><p>该属性记录了url字符串的端口信息， 例如： 8080</p>
+<h2 id="urlObject-pathname"><a href="#urlObject-pathname" class="headerlink" title="urlObject.pathname"></a>urlObject.pathname</h2><p>该属性记录了url字符串中全部的路径信息, 它是紧跟在urlObject.host属性之后的值. 它出现在urlObject.query或者urlObject.hash属性之前，通过”?”或者”#”符号与后面的值分隔开来. 例如: “/p/a/t/h”</p>
+<p>该属性返回的字符串并不会经过解码处理. </p>
+<h2 id="urlObject-search"><a href="#urlObject-search" class="headerlink" title="urlObject.search"></a>urlObject.search</h2><p>该属性是字符串类型，它包含了url字符串中的查询部分，包括前置的”?”符号，例如： ‘?query=string’.</p>
+<p>该属性返回的字符串不会经过解码处理. </p>
+<h2 id="urlObject-path"><a href="#urlObject-path" class="headerlink" title="urlObject.path"></a>urlObject.path</h2><p>该属性包括了url字符串中urlObject.pathname和urlObject.search属性. 例如： ‘/p/a/t/h?query=string’.</p>
+<p>同样，该属性返回的字符串不会经过解码处理. </p>
+<h2 id="urlObject-query"><a href="#urlObject-query" class="headerlink" title="urlObject.query"></a>urlObject.query</h2><p>该属性是url字符串中的查询部分的信息，它可以是字符串类型，也可以是对象类型. 当它是字符串类型时，它不包含前置的”?”符号，当它是对象类型时，它的值是将这部分字符串传递给querystring.parse()后得到的对象. 这个属性的类型是字符串还是对象类型，取决于在调用url.parse()方法的时候，是否传递了parseQueryString参数. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="string">'query=string'</span></div><div class="line">或者 &#123;<span class="string">"query"</span>: <span class="string">"string"</span>&#125;</div></pre></td></tr></table></figure>
+<p>如果这个属性是字符串类型，那么它是没有经过解码的. 如果它是对象类型，那么它的key/value都会被解码.</p>
+<h2 id="urlObject-hash"><a href="#urlObject-hash" class="headerlink" title="urlObject.hash"></a>urlObject.hash</h2><p>该属性表示了url字符串中的”片断”部分的信息, 它包含前置的”#”符号. 例如: ‘#hash’.</p>
+<h2 id="url-format-urlObject"><a href="#url-format-urlObject" class="headerlink" title="url.format(urlObject)"></a>url.format(urlObject)</h2><ul>
+<li>urlObject: Object | String URL对象，它可以是通过url.parse()方法返回的对象，也可以是自行构造的对象. 当它是字符串类型时，字符串会首先被传递给url.parse()，然后再将解析得到的对象传递给此方法. </li>
+</ul>
+<p>该方法根据传入的urlObject对象，返回格式化后的url字符串. 如果urlObject的类型既不是字符串，也不是对象类型，那么该方法会抛出TypeError错误. </p>
+<p>该方法工作的机制如下：</p>
+<ul>
+<li>首先创建新的空字符串result</li>
+<li>如果urlObject.protocol是字符串类型，那么直接在result末尾添加该字符串，如果该属性不是以”:”结尾 ，那么会在末尾自动加上”:”</li>
+<li>如果urlObject.protocol不是undefined, 但不是字符串类型，那么会抛出TypeError错误</li>
+<li>如果满足以下任意一个条件，那么会在result后面加上双斜杠(“/“)：<ul>
+<li>url.slashes属性为true</li>
+<li>urlObject.protocol属性以http, https, ftp, gopher或者file开始</li>
+</ul>
+</li>
+<li>如果定义了urlObject.auth, 并且urlObject.host属性或者urlObject.hostname不是undefined, 那么urlObject.auth属性将会被加到result后面， 并在末尾加上”@”符号. </li>
+<li>如果没有定义urlObject.auth属性， 或者定义了该属性，但没有定义urlObject.host和urlObject.hostname属性, 那么urlObject.auth属性不会被加到result中. </li>
+<li>如果定义了urlObject.host属性，那么会忽略urlObject.hostname和urlObject.port属性，直接将urlObject.host加到result后面.</li>
+<li>如果没有定义urlObject.host属性，但是定义了urlObject.hostname属性<ul>
+<li>如果urlObject.hostname为字符串类型，直接加到result末尾. 此时如果定义了urlObject.port属性，那么会在result中先加上”:”符号，然后再加上urlObject.port属性</li>
+<li>如果urlObject.hostname不是字符串类型，则抛出TypeError错误</li>
+</ul>
+</li>
+<li>如果定义了urlObject.pathname属性，并且该属性是字符串，且不是空字符串<ul>
+<li>如果urlObject.pathname不以”/“开始，那么在result末尾加上”/“</li>
+<li>在result末尾加上urlObject.pathname属性</li>
+</ul>
+</li>
+<li>如果定义的urlObject.pathname不是字符串，则抛出TypeError异常</li>
+<li>如果定义了urlObject.search属性，且它是字符串类型<ul>
+<li>如果urlObject.search不是以”?”开始，那么在result末尾加上”/“</li>
+<li>在result末尾加上urlObject.search属性</li>
+</ul>
+</li>
+<li>如果定义了urlObject.search属性，但它不是字符串类型，那么抛出TypeError错误</li>
+<li>如果没有定义urlObject.search属性，但是定义了urlObject.query属性, 且它是对象类型， 那么先在result末尾加上”?”符号，然后再在result末尾加querystring.stringify(urlObject.query)的返回值, 注意，如果定义的urlObject.query属性为字符串类型，那么该属性将被忽略. </li>
+<li>如果定义了urlObject.hash属性，且它是字符串类型，那么<ul>
+<li>如果urlObject.hash属性不是以”#”开始，那么在result末尾加上”#”符号</li>
+<li>在result末尾加上urlObject.hash属性</li>
+</ul>
+</li>
+<li>如果定义了urlObject.hash属性，但它不是字符串类型，那么抛出TypeError错误</li>
+<li>返回result</li>
+</ul>
+<h2 id="url-parse-urlString-parseQueryString-slashesDenoteHost"><a href="#url-parse-urlString-parseQueryString-slashesDenoteHost" class="headerlink" title="url.parse(urlString[, parseQueryString[, slashesDenoteHost]])"></a>url.parse(urlString[, parseQueryString[, slashesDenoteHost]])</h2><ul>
+<li>urlString: String 要被解析的url字符串</li>
+<li>parseQueryString: boolean  是否要对queryString部分进行解析，设置为true意味着query属性为对象类型，否则为字符串类型, 默认值是false</li>
+<li>slashesDenoteHost: Boolean 如果设置该属性值为true, 那么从双斜杠(‘//‘)到第一个斜杠(‘/‘)之间的字符串将被当成是host. 例如： 解析//foo/bar的结果将为{host: “foo”, pathname: “/bar”}, 而不是{pathname: “//foo/bar”}. 默认值为false. </li>
+</ul>
+<p>该方法接受url字符串，解析完后返回urlObject</p>
+<h2 id="url-resolve-from-to"><a href="#url-resolve-from-to" class="headerlink" title="url.resolve(from , to)"></a>url.resolve(from , to)</h2><ul>
+<li>from: String 基于该参数指定的路径进行解析</li>
+<li>to: String 要解析的路径地址</li>
+</ul>
+<p>该方法使用和web页面中a标签的href属性一样的机制来解析路径. 例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">url.resolve(<span class="string">'/one/two/three'</span>, <span class="string">'four'</span>)         <span class="comment">// '/one/two/four'</span></div><div class="line">url.resolve(<span class="string">'http://example.com/'</span>, <span class="string">'/one'</span>) <span class="comment">//'http://example.com/one'</span></div><div class="line">url.resolve(<span class="string">'http://example.com/one'</span>, <span class="string">'/two'</span>)</div><div class="line"><span class="comment">//'http://example.com/two'</span></div></pre></td></tr></table></figure>
+<h2 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h2><p>URL字符串中只能包含特定的字符串. 空格以及以下的这些字符都会被自动转义：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt; &gt; <span class="string">" ` \r \n \t &#123; &#125; | \ ^ '</span></div></pre></td></tr></table></figure>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
+<li><a href="https://nodejs.org/dist/latest-v6.x/docs/api/url.html" target="_blank" rel="external">官方文档</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/url/" rel="tag"># url</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/22/前端/nodejs/Nodejs.queryString/" rel="next" title="nodejs - queryString">
+                <i class="fa fa-chevron-left"></i> nodejs - queryString
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/24/前端/nodejs/Nodejs.url/"
+           data-title="nodejs - url" data-url="http://yoursite.com/2017/03/24/前端/nodejs/Nodejs.url/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">168</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#URL"><span class="nav-text">URL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#URL字符串和URL对象"><span class="nav-text">URL字符串和URL对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-href"><span class="nav-text">urlObject.href</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-protocol"><span class="nav-text">urlObject.protocol</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-slashes"><span class="nav-text">urlObject.slashes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-host"><span class="nav-text">urlObject.host</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-auth"><span class="nav-text">urlObject.auth</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-hostname"><span class="nav-text">urlObject.hostname</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-port"><span class="nav-text">urlObject.port</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-pathname"><span class="nav-text">urlObject.pathname</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-search"><span class="nav-text">urlObject.search</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-path"><span class="nav-text">urlObject.path</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-query"><span class="nav-text">urlObject.query</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#urlObject-hash"><span class="nav-text">urlObject.hash</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#url-format-urlObject"><span class="nav-text">url.format(urlObject)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#url-parse-urlString-parseQueryString-slashesDenoteHost"><span class="nav-text">url.parse(urlString[, parseQueryString[, slashesDenoteHost]])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#url-resolve-from-to"><span class="nav-text">url.resolve(from , to)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊字符"><span class="nav-text">特殊字符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
