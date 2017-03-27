@@ -1214,7 +1214,7 @@ ReflectionTestUtils:  反射相关的系列工具方法类, 可以用于改变�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/IO/netty/netty总览图-核心组件/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1236,8 +1236,8 @@ ReflectionTestUtils:  反射相关的系列工具方法类, 可以用于改变�
             
               
                 
-                <a class="post-title-link" href="/2016/11/22/IO/netty/netty总览图-核心组件/" itemprop="url">
-                  netty总览图-核心组件
+                <a class="post-title-link" href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/" itemprop="url">
+                  Runnable, Callable, Future, FutureTask的区别
                 </a>
               
             
@@ -1272,8 +1272,8 @@ ReflectionTestUtils:  反射相关的系列工具方法类, 可以用于改变�
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/11/22/IO/netty/netty总览图-核心组件/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/IO/netty/netty总览图-核心组件/" itemprop="commentCount"></span>
+                <a href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1301,16 +1301,14 @@ ReflectionTestUtils:  反射相关的系列工具方法类, 可以用于改变�
       
         
           
-          netty总览图-核心组件netty核心概念关系图
-Bytebuf: 对java nio中ByteBuffer的抽象
+          Runnable, Callable, Future, FutureTask的区别
+Runnable是thread用来执行时指定的对象，它只包含有一个方法，run方法，这个方法没有返回值，且不会抛出异常信息.
 
-每个Channel代表了一种能够用于IO操作的实体，例如socket， 文件等等
-
-每个channel都有一个pipeline, pipeline的作用是处于和这个channel相
+Callable和runnable一样，都是executor用来执行时指定的对象，它也包
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/11/22/IO/netty/netty总览图-核心组件/#more" rel="contents">
+            <a class="btn" href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1492,7 +1490,7 @@ Bytebuf: 对java nio中ByteBuffer的抽象
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/IO/netty/netty总览图-核心组件/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1514,8 +1512,8 @@ Bytebuf: 对java nio中ByteBuffer的抽象
             
               
                 
-                <a class="post-title-link" href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/" itemprop="url">
-                  Runnable, Callable, Future, FutureTask的区别
+                <a class="post-title-link" href="/2016/11/22/IO/netty/netty总览图-核心组件/" itemprop="url">
+                  netty总览图-核心组件
                 </a>
               
             
@@ -1550,8 +1548,8 @@ Bytebuf: 对java nio中ByteBuffer的抽象
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/" itemprop="commentCount"></span>
+                <a href="/2016/11/22/IO/netty/netty总览图-核心组件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/IO/netty/netty总览图-核心组件/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1579,14 +1577,16 @@ Bytebuf: 对java nio中ByteBuffer的抽象
       
         
           
-          Runnable, Callable, Future, FutureTask的区别
-Runnable是thread用来执行时指定的对象，它只包含有一个方法，run方法，这个方法没有返回值，且不会抛出异常信息.
+          netty总览图-核心组件netty核心概念关系图
+Bytebuf: 对java nio中ByteBuffer的抽象
 
-Callable和runnable一样，都是executor用来执行时指定的对象，它也包
+每个Channel代表了一种能够用于IO操作的实体，例如socket， 文件等等
+
+每个channel都有一个pipeline, pipeline的作用是处于和这个channel相
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/#more" rel="contents">
+            <a class="btn" href="/2016/11/22/IO/netty/netty总览图-核心组件/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
