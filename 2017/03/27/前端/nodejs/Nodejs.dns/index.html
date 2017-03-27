@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="nodejs,dns," />
 
 
 
@@ -87,22 +87,28 @@
 
 
 
-<meta name="description" content="https://zh.wikipedia.org/wiki/%E5%9F%9F%E5%90%8D%E4%BC%BA%E6%9C%8D%E5%99%A8%E8%A8%98%E9%8C%84%E9%A1%9E%E5%9E%8B%E5%88%97%E8%A1%A8
-http://www.cnblogs.com/sddai/p/5703394.html
-http://dns-learning.twnic.">
+<meta name="description" content="dnsdns模块中包含有两类方法：
+
+利用操作系统的底层方法进行域名解析，不会进行任何网络操作. 此类方法只包含有一个方法: dns.lookup(). 使用该方法会使用和系统中其它应用程序一样的方式 ，通过调用操作系统底层的方法来解析域名. 例如： 
+
+123456const dns = require(&apos;dns&apos;);dns.lookup(&apos;nodejs.org&apos;, (err, addresse">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Essviv">
+<meta property="og:title" content="nodejs - dns">
 <meta property="og:url" content="http://yoursite.com/2017/03/27/前端/nodejs/Nodejs.dns/index.html">
 <meta property="og:site_name" content="Essviv">
-<meta property="og:description" content="https://zh.wikipedia.org/wiki/%E5%9F%9F%E5%90%8D%E4%BC%BA%E6%9C%8D%E5%99%A8%E8%A8%98%E9%8C%84%E9%A1%9E%E5%9E%8B%E5%88%97%E8%A1%A8
-http://www.cnblogs.com/sddai/p/5703394.html
-http://dns-learning.twnic.">
-<meta property="og:updated_time" content="2017-03-27T02:30:30.000Z">
+<meta property="og:description" content="dnsdns模块中包含有两类方法：
+
+利用操作系统的底层方法进行域名解析，不会进行任何网络操作. 此类方法只包含有一个方法: dns.lookup(). 使用该方法会使用和系统中其它应用程序一样的方式 ，通过调用操作系统底层的方法来解析域名. 例如： 
+
+123456const dns = require(&apos;dns&apos;);dns.lookup(&apos;nodejs.org&apos;, (err, addresse">
+<meta property="og:updated_time" content="2017-03-27T07:43:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Essviv">
-<meta name="twitter:description" content="https://zh.wikipedia.org/wiki/%E5%9F%9F%E5%90%8D%E4%BC%BA%E6%9C%8D%E5%99%A8%E8%A8%98%E9%8C%84%E9%A1%9E%E5%9E%8B%E5%88%97%E8%A1%A8
-http://www.cnblogs.com/sddai/p/5703394.html
-http://dns-learning.twnic.">
+<meta name="twitter:title" content="nodejs - dns">
+<meta name="twitter:description" content="dnsdns模块中包含有两类方法：
+
+利用操作系统的底层方法进行域名解析，不会进行任何网络操作. 此类方法只包含有一个方法: dns.lookup(). 使用该方法会使用和系统中其它应用程序一样的方式 ，通过调用操作系统底层的方法来解析域名. 例如： 
+
+123456const dns = require(&apos;dns&apos;);dns.lookup(&apos;nodejs.org&apos;, (err, addresse">
 
 
 
@@ -136,7 +142,7 @@ http://dns-learning.twnic.">
 
 
 
-  <title>  | Essviv </title>
+  <title> nodejs - dns | Essviv </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -285,7 +291,7 @@ http://dns-learning.twnic.">
             
             
               
-                
+                nodejs - dns
               
             
           </h1>
@@ -300,7 +306,7 @@ http://dns-learning.twnic.">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-27T10:29:14+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-27T14:13:00+08:00">
                 2017-03-27
               </time>
             
@@ -346,9 +352,106 @@ http://dns-learning.twnic.">
       
 
       
-        <p><a href="https://zh.wikipedia.org/wiki/%E5%9F%9F%E5%90%8D%E4%BC%BA%E6%9C%8D%E5%99%A8%E8%A8%98%E9%8C%84%E9%A1%9E%E5%9E%8B%E5%88%97%E8%A1%A8" target="_blank" rel="external">https://zh.wikipedia.org/wiki/%E5%9F%9F%E5%90%8D%E4%BC%BA%E6%9C%8D%E5%99%A8%E8%A8%98%E9%8C%84%E9%A1%9E%E5%9E%8B%E5%88%97%E8%A1%A8</a></p>
-<p><a href="http://www.cnblogs.com/sddai/p/5703394.html" target="_blank" rel="external">http://www.cnblogs.com/sddai/p/5703394.html</a></p>
-<p><a href="http://dns-learning.twnic.net.tw/bind/intro6.html" target="_blank" rel="external">http://dns-learning.twnic.net.tw/bind/intro6.html</a></p>
+        <h1 id="dns"><a href="#dns" class="headerlink" title="dns"></a>dns</h1><p>dns模块中包含有两类方法：</p>
+<ol>
+<li>利用操作系统的底层方法进行域名解析，不会进行任何网络操作. 此类方法只包含有一个方法: <strong>dns.lookup()</strong>. 使用该方法会使用和系统中其它应用程序一样的方式 ，通过调用操作系统底层的方法来解析域名. 例如： </li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> dns = <span class="built_in">require</span>(<span class="string">'dns'</span>);</div><div class="line"></div><div class="line">dns.lookup(<span class="string">'nodejs.org'</span>, (err, addresses, family) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'addresses:'</span>, addresses);</div><div class="line">&#125;);</div><div class="line"><span class="comment">// address: "192.0.43.8" family: IPv4</span></div></pre></td></tr></table></figure>
+<ol>
+<li>连接到实际的DNS服务以进行域名解析操作, 始终向DNS服务发送请求. 此类方法包含有dns模块中的所有方法，除了dns.lookup().  这些方法不会使用和dns.lookup()方法一样的机制，通过访问本地系统的文件来解析域名(例如： /etc/hosts)， 相反，这类方法总是通过向DNS服务器进行请求，以实现域名的解析. 以下是使用此类方法的例子:</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> dns = <span class="built_in">require</span>(<span class="string">'dns'</span>);</div><div class="line"></div><div class="line">dns.resolve4(<span class="string">'archive.org'</span>, (err, addresses) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</div><div class="line"></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`addresses: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(addresses)&#125;</span>`</span>);</div><div class="line"></div><div class="line">  addresses.forEach(<span class="function">(<span class="params">a</span>) =&gt;</span> &#123;</div><div class="line">    dns.reverse(a, (err, hostnames) =&gt; &#123;</div><div class="line">      <span class="keyword">if</span> (err) &#123;</div><div class="line">        <span class="keyword">throw</span> err;</div><div class="line">      &#125;</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">`reverse for <span class="subst">$&#123;a&#125;</span>: <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(hostnames)&#125;</span>`</span>);</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>选择不同的实现方法有一些细微的差别，具体可以参见“不同实现的考虑”一节.</p>
+<h2 id="dns-getServers"><a href="#dns-getServers" class="headerlink" title="dns.getServers()"></a>dns.getServers()</h2><p>该方法返回用于进行域名解析的一系列IP地址. </p>
+<h2 id="dns-lookup-hostname-options-callback"><a href="#dns-lookup-hostname-options-callback" class="headerlink" title="dns.lookup(hostname, [, options], callback)"></a>dns.lookup(hostname, [, options], callback)</h2><p>该方法将域名解析成第一个发现的A(IPv4)或者AAAA(IPv6)记录. options参数可以是个对象或者是个整型值. 如果没有提供options参数， 那么意味着返回IPv4和IPv6地址都是有效的. 如果options参数是整型类型，那么它必须是4或者6.</p>
+<p>另外，options参数也可以是个对象类型，它可以包含以下属性:</p>
+<ul>
+<li>family: String 记录的类型. 如果提供了此属性，那它必须是4或者6. 如果没有提供此参数，意味着IPv4和IPv6地址都是可授受的.</li>
+<li>hints: Number 如果提供了此参数，那么它必须是getaddrinfo支持的标识中的一个或者多个. 如果没有提供此参数，那么将不会传递任何标识给getaddrinfo. 可以通过按位或(bitwise OR)操作传递多个标识. getaddrinfo支持的标识可以通过<a href="https://nodejs.org/dist/latest-v6.x/docs/api/dns.html#dns_supported_getaddrinfo_flags" target="_blank" rel="external">这里</a>查阅.</li>
+<li>all: Boolean 当这个属性值被设置为true时，回调函数中将会返回所有解析到的地址，并以数组的形式返回，而不是只返回第一个解析到的地址. 默认为false.</li>
+</ul>
+<p>以上所有的属性都是可选的. </p>
+<p>callback回调方法会带有三个参数，分别是(err, addr, family)， 其中addr代表解析得到的地址，family是数值类型，要么是4， 要么是6，它代表了地址的类型(IPv4或者IPv6)，但这个值并不一定要等于传递给lookup方法的值. </p>
+<p>当all属性设置为true时，回调方法会带有两个参数， 分别为(err, addrs)，其中addrs是个对象数组，对象中的每个元素都含有address属性和family属性. </p>
+<p>当出现错误的时候，err参数代表了Error类型的对象，其中err.code代表了错误代码. 另外需要注意的是，当hostname不存在时，以及解析出错的时候都会抛出err.ENOENT事件. </p>
+<p>dns.lookup()方法并不一定要和DNS协议有任何关系. 该方法使用了操作系统底层的机制来实现域名和IP之间的对应关系，反之亦然.  这种实现会给node.js程序带来一些微妙而重要的影响，在使用这个方法前，请务必完整地阅读”不同实现的考虑”一节. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> dns = <span class="built_in">require</span>(<span class="string">'dns'</span>);</div><div class="line"><span class="keyword">const</span> options = &#123;</div><div class="line">  <span class="attr">family</span>: <span class="number">6</span>,</div><div class="line">  <span class="attr">hints</span>: dns.ADDRCONFIG | dns.V4MAPPED,</div><div class="line">&#125;;</div><div class="line">dns.lookup(<span class="string">'example.com'</span>, options, (err, address, family) =&gt;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'address: %j family: IPv%s'</span>, address, family));</div><div class="line"><span class="comment">// address: "2606:2800:220:1:248:1893:25c8:1946" family: IPv6</span></div><div class="line"></div><div class="line"><span class="comment">// When options.all is true, the result will be an Array.</span></div><div class="line">options.all = <span class="literal">true</span>;</div><div class="line">dns.lookup(<span class="string">'example.com'</span>, options, (err, addresses) =&gt;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'addresses: %j'</span>, addresses));</div><div class="line"><span class="comment">// addresses: [&#123;"address":"2606:2800:220:1:248:1893:25c8:1946","family":6&#125;]</span></div></pre></td></tr></table></figure>
+<h2 id="支持的getaddrinfo标识"><a href="#支持的getaddrinfo标识" class="headerlink" title="支持的getaddrinfo标识"></a>支持的getaddrinfo标识</h2><p>以下的标识可以用于传递给dns.lookup()方法的hints属性：</p>
+<ul>
+<li>dns.ADDRCONFIG: 该标识表示返回的地址类型取决于当前操作系统支持的地址类型. 例如： 只有在当前操作系统至少配置了一个IPv4地址的情况下，IPv4类型的地址才会被返回; 回环地址不在考虑范围内.</li>
+</ul>
+<ul>
+<li>dns.V4MAPPED: 如果配置了IPv6地址，但是没有找到IPv6类型的地址，此时返回IPv6地址所对应的IPv4地址. 注意这个标识在一些系统中不被支持，如FreeBSD</li>
+</ul>
+<h2 id="dns-lookupService-addr-pot-callback"><a href="#dns-lookupService-addr-pot-callback" class="headerlink" title="dns.lookupService(addr, pot, callback)"></a>dns.lookupService(addr, pot, callback)</h2><p>调用底层操作系统的getnameinfo方法，解析指定的addr地址和port端口指定的服务名称. 如果address参数不是有效的IP地址参数，那么抛出TypeError错误； 如果port参数不是有效的端口地址，那么也会抛出TypeError错误. </p>
+<p>回调方法中含有三个参数，分别是(err, hostname, service)， 其中hostname为解析的域名地址， 而service参数为对应的服务名称，例如： localhost和ssh.</p>
+<p>当出现错误的时候，err参数代表了Error类型的对象， 其中err.code代表了错误码. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> dns = <span class="built_in">require</span>(<span class="string">'dns'</span>);</div><div class="line">dns.lookupService(<span class="string">'127.0.0.1'</span>, <span class="number">22</span>, (err, hostname, service) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(hostname, service);</div><div class="line">  <span class="comment">// Prints: localhost ssh</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="dns-resolve-hostname-rrtype-callback"><a href="#dns-resolve-hostname-rrtype-callback" class="headerlink" title="dns.resolve(hostname[, rrtype], callback)"></a>dns.resolve(hostname[, rrtype], callback)</h2><p>通过dns协议将指定的域名解析成相应的地址，域名地址由hostname参数指定，返回的地址类型由rrtype指定. </p>
+<p>其中rrtype的取值范围为:</p>
+<ul>
+<li>A - IPv4地址, 默认值</li>
+<li>AAAA - IPv6地址</li>
+<li>MX - 邮件互换记录</li>
+<li>TXT - txt记录</li>
+<li>SRV - srv记录</li>
+<li>PTR - ptr记录</li>
+<li>NS - 名称服务记录</li>
+<li>CNAME - cname记录</li>
+<li>SOA - start of authority记录</li>
+<li>NAPTR - name authority pointer记录</li>
+</ul>
+<p>callback回调函数带有两个参数，分别是(err, addrs). 当解析成功的时候， 除非解析的是SOA记录类型时返回的是与dns.resolveSOA()方法相同的参数外，解析其它类型的记录时，返回的addrs参数是个对象数组，数组中对象的类型及属性取决于rrtype的值， 具体可以参见后续的说明.</p>
+<p>当解析出错时，err参数是Error对象的实例，它的err.code中带有相应的错误码信息，具体的列表可以参见<a href="https://nodejs.org/dist/latest-v6.x/docs/api/dns.html#dns_error_codes" target="_blank" rel="external">这里</a></p>
+<h2 id="dns-resolve4-hostname-callback"><a href="#dns-resolve4-hostname-callback" class="headerlink" title="dns.resolve4(hostname, callback)"></a>dns.resolve4(hostname, callback)</h2><p>使用DNS协议来解析hostname域名对应的IPv4地址(A记录). 传递给回调函数callback的addrs参数是个对象数组，每个对象都含有一个IPv4地址， 例如[‘74.125.79.104’, ‘74.125.79.105’]</p>
+<h2 id="dns-resolve6-hostname-callback"><a href="#dns-resolve6-hostname-callback" class="headerlink" title="dns.resolve6(hostname, callback)"></a>dns.resolve6(hostname, callback)</h2><p>使用DNS协议来解析hostname域名对应的IPv6地址(AAAA记录). 传递给回调函数callback的addrs参数是个对象数组，每个对象都含有一个IPv6地址</p>
+<h2 id="dns-resolveCname-hostname-callback"><a href="#dns-resolveCname-hostname-callback" class="headerlink" title="dns.resolveCname(hostname, callback)"></a>dns.resolveCname(hostname, callback)</h2><p>使用DNS协议来解析hostname域名对应的cname地址(CNAME记录). 传递给回调函数callback的addrs参数是个对象数组，每个对象都含有一个cname(canonical name)</p>
+<h2 id="dns-resolveMx-hostname-callback"><a href="#dns-resolveMx-hostname-callback" class="headerlink" title="dns.resolveMx(hostname, callback)"></a>dns.resolveMx(hostname, callback)</h2><p>使用DNS协议来解析hostname域名对应的邮件互换记录(MX记录). 传递给回调函数callback的addrs参数是个对象数组，每个对象都含有一个priority属性和exchange属性， 例如: ‘[{priority: 10, exchange: ‘mx.example.com’}]’</p>
+<h2 id="dns-resolve-Naptr-hostname-callback"><a href="#dns-resolve-Naptr-hostname-callback" class="headerlink" title="dns.resolve.Naptr(hostname, callback)"></a>dns.resolve.Naptr(hostname, callback)</h2><p>使用DNS协议来解析hostname域名对应的基于正则表达式的记录(NAPTR记录). 传递给回调函数callback的addrs参数是个对象数组，每个对象都含有都含有以下属性:</p>
+<ul>
+<li>flags</li>
+<li>service</li>
+<li>regexp</li>
+<li>replacement</li>
+<li>order</li>
+<li>preference</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">flags</span>: <span class="string">'s'</span>,</div><div class="line">  <span class="attr">service</span>: <span class="string">'SIP+D2U'</span>,</div><div class="line">  <span class="attr">regexp</span>: <span class="string">''</span>,</div><div class="line">  <span class="attr">replacement</span>: <span class="string">'_sip._udp.example.com'</span>,</div><div class="line">  <span class="attr">order</span>: <span class="number">30</span>,</div><div class="line">  <span class="attr">preference</span>: <span class="number">100</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="dns-resolveSoa-hostname-callback"><a href="#dns-resolveSoa-hostname-callback" class="headerlink" title="dns.resolveSoa(hostname, callback)"></a>dns.resolveSoa(hostname, callback)</h2><p>使用DNS协议来解析hostname域名对应的SOA的记录(SOA记录). 传递给回调函数callback的addrs参数是个对象数组，每个对象都含有都含有以下属性:</p>
+<ul>
+<li>nsname</li>
+<li>hostmaster</li>
+<li>serial</li>
+<li>refresh</li>
+<li>retry</li>
+<li>expire</li>
+<li>minttl</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">nsname</span>: <span class="string">'ns.example.com'</span>,</div><div class="line">  <span class="attr">hostmaster</span>: <span class="string">'root.example.com'</span>,</div><div class="line">  <span class="attr">serial</span>: <span class="number">2013101809</span>,</div><div class="line">  <span class="attr">refresh</span>: <span class="number">10000</span>,</div><div class="line">  <span class="attr">retry</span>: <span class="number">2400</span>,</div><div class="line">  <span class="attr">expire</span>: <span class="number">604800</span>,</div><div class="line">  <span class="attr">minttl</span>: <span class="number">3600</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="dns-resolveSrv-hostname-callback"><a href="#dns-resolveSrv-hostname-callback" class="headerlink" title="dns.resolveSrv(hostname, callback)"></a>dns.resolveSrv(hostname, callback)</h2><p>使用DNS协议来解析hostname域名对应的服务记录(SRV记录). 传递给回调函数callback的addrs参数是个对象数组，每个对象都含有都含有以下属性:</p>
+<ul>
+<li>priority</li>
+<li>weight</li>
+<li>port</li>
+<li>name</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">priority</span>: <span class="number">10</span>,</div><div class="line">  <span class="attr">weight</span>: <span class="number">5</span>,</div><div class="line">  <span class="attr">port</span>: <span class="number">21223</span>,</div><div class="line">  <span class="attr">name</span>: <span class="string">'service.example.com'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="dns-resolvePtr-hostname-callback"><a href="#dns-resolvePtr-hostname-callback" class="headerlink" title="dns.resolvePtr(hostname, callback)"></a>dns.resolvePtr(hostname, callback)</h2><p>使用DNS协议来解析hostname域名对应的指针务记录(PTR记录). 传递给回调函数callback的addrs参数是个对象数组，每个对象含有相应的响应记录. </p>
+<h2 id="dns-resolveTxt-hostname-callback"><a href="#dns-resolveTxt-hostname-callback" class="headerlink" title="dns.resolveTxt(hostname, callback)"></a>dns.resolveTxt(hostname, callback)</h2><p>使用DNS协议来解析hostname域名对应的txt请求记录(TXT记录). 传递给回调函数callback的addrs参数是个二维数组，例如: [[‘v=spf1 ip4: 0.0.0.0’, ‘~all’]]. 每个子数组代表了记录的TXT子块信息. </p>
+<h2 id="dns-reverse-ip-callback"><a href="#dns-reverse-ip-callback" class="headerlink" title="dns.reverse(ip, callback)"></a>dns.reverse(ip, callback)</h2><p>该方法将ip地址反解析成相应的域名地址. callback回调函数带有两个参数， 分别是(err, hostnames)， 其中hostnames参数是根据指定的ip地址解析得到到的域名数组. 当遇到错误时，err对象是Error类的实例，其中err.code代表了相应的错误码.</p>
+<h2 id="dns-setServers-servers"><a href="#dns-setServers-servers" class="headerlink" title="dns.setServers(servers)"></a>dns.setServers(servers)</h2><p>该方法可用于设置域名解析所使用的服务器地址. servers参数是IPv4或者IPv6地址数组.</p>
+<p>如果在地址中指定了相应的端口，那么该地址将会被移除. </p>
+<p>在使用该方法时，需要确保没有其它请求正在执行域名解析操作. </p>
+<h2 id="错误码"><a href="#错误码" class="headerlink" title="错误码"></a>错误码</h2><p>DNS域名解析发生错误时，会返回以下的错误码： <a href="https://nodejs.org/dist/latest-v6.x/docs/api/dns.html#dns_error_codes" target="_blank" rel="external">这里</a></p>
+<h2 id="不同实现的考虑"><a href="#不同实现的考虑" class="headerlink" title="不同实现的考虑"></a>不同实现的考虑</h2><p>虽然dns.lookup()方法与其它的dns.resolve*()/dns.reverse()方法都可以用于将域名解析成相应的IP地址，但它们的实现机制却完全不一样. 这些实现上的不同会对node.js程序产生一些细微但很重要的影响. </p>
+<h3 id="dns-lookup"><a href="#dns-lookup" class="headerlink" title="dns.lookup()"></a>dns.lookup()</h3><p>dns.lookup()方法使用了与操作系统中其它的应用程序一样的机制来解析域名. 例如： dns.lookup()通常会使用与ping()命令一样的机制来解析域名. 在大部分类POSIX操作系统中，dns.lookup()方法的行为可以通过nsswitch.conf()方法或者resolv.conf()方法进行设置，但是值得注意的是，如果这么做的话，那么系统中其它应用的行为也会发生相应的变化.</p>
+<p>虽然从js的角度来看，dns.lookup()方法是异步实现的，但它是通过同步的调用getaddrinfo()方法来实现的，而getaddrinfo()方法使用了libuv线程池机制. 由于libuv线程池有固定的大小，这意味着如果因为某些原因导致getaddrinfo()方法运行了很长时间才返回，那么其它运行在libuv线程池上的操作(例如文件系统操作)的性能将会显著下降. 为了避免这个问题，一种可能的解决方案就是通过UV_THREADPOOL_SIZE属性来增大libuv线程池的大小. 关于libuv线程池的问题，可以参见<a href="http://docs.libuv.org/en/latest/threadpool.html" target="_blank" rel="external">libuv官方文档</a></p>
+<h2 id="dns-resolve-dns-resolve-dns-reverse"><a href="#dns-resolve-dns-resolve-dns-reverse" class="headerlink" title="dns.resolve(), dns.resolve*(), dns.reverse()"></a>dns.resolve(), dns.resolve*(), dns.reverse()</h2><p>以上这些方法的实现机制与dns.lookup()方法完全不同. 它们不是通过调用getaddrinfo()方法来解析域名，相反，它们总是向网络中的DNS服务器进行请求，从DNS服务器上获取相应的解析结果. 这种网络请求总是异步完成的，而且不需要用到libuv的线程池. 因此，这些方法不会面临上述的与dns.lookup()方法一样的问题. 它们并不会使用和dns.lookup()方法一样的配置文件，例如，这些方法并不会使用/etc/hosts配置文件. </p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ol>
+<li>rrtype的含义: <a href="https://en.wikipedia.org/wiki/List_of_DNS_record_types" target="_blank" rel="external">wiki</a></li>
+<li>rrtype的含义2: <a href="http://www.cnblogs.com/sddai/p/5703394.html" target="_blank" rel="external">cnblog</a></li>
+<li>dns学习: <a href="http://dns-learning.twnic.net.tw/bind/intro6.html" target="_blank" rel="external">dns-learning</a></li>
+</ol>
 
       
     </div>
@@ -391,6 +494,14 @@ http://dns-learning.twnic.">
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/dns/" rel="tag"># dns</a>
+          
+        </div>
+      
 
       
         
@@ -400,8 +511,8 @@ http://dns-learning.twnic.">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/03/24/前端/nodejs/Nodejs.url/" rel="next" title="nodejs - url">
-                <i class="fa fa-chevron-left"></i> nodejs - url
+              <a href="/2017/03/27/前端/nodejs/Nodejs.os/" rel="next" title="Nodejs - OS">
+                <i class="fa fa-chevron-left"></i> Nodejs - OS
               </a>
             
           </div>
@@ -409,10 +520,6 @@ http://dns-learning.twnic.">
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/27/前端/nodejs/Nodejs.os/" rel="prev" title="Nodejs - OS">
-                Nodejs - OS <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -439,7 +546,7 @@ http://dns-learning.twnic.">
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2017/03/27/前端/nodejs/Nodejs.dns/"
-           data-title="" data-url="http://yoursite.com/2017/03/27/前端/nodejs/Nodejs.dns/">
+           data-title="nodejs - dns" data-url="http://yoursite.com/2017/03/27/前端/nodejs/Nodejs.dns/">
       </div>
     
   </div>
@@ -463,8 +570,17 @@ http://dns-learning.twnic.">
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
@@ -492,7 +608,7 @@ http://dns-learning.twnic.">
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">48</span>
+                <span class="site-state-item-count">49</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
@@ -528,6 +644,22 @@ http://dns-learning.twnic.">
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#dns"><span class="nav-text">dns</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-getServers"><span class="nav-text">dns.getServers()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-lookup-hostname-options-callback"><span class="nav-text">dns.lookup(hostname, [, options], callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#支持的getaddrinfo标识"><span class="nav-text">支持的getaddrinfo标识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-lookupService-addr-pot-callback"><span class="nav-text">dns.lookupService(addr, pot, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolve-hostname-rrtype-callback"><span class="nav-text">dns.resolve(hostname[, rrtype], callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolve4-hostname-callback"><span class="nav-text">dns.resolve4(hostname, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolve6-hostname-callback"><span class="nav-text">dns.resolve6(hostname, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolveCname-hostname-callback"><span class="nav-text">dns.resolveCname(hostname, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolveMx-hostname-callback"><span class="nav-text">dns.resolveMx(hostname, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolve-Naptr-hostname-callback"><span class="nav-text">dns.resolve.Naptr(hostname, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolveSoa-hostname-callback"><span class="nav-text">dns.resolveSoa(hostname, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolveSrv-hostname-callback"><span class="nav-text">dns.resolveSrv(hostname, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolvePtr-hostname-callback"><span class="nav-text">dns.resolvePtr(hostname, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolveTxt-hostname-callback"><span class="nav-text">dns.resolveTxt(hostname, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-reverse-ip-callback"><span class="nav-text">dns.reverse(ip, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-setServers-servers"><span class="nav-text">dns.setServers(servers)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误码"><span class="nav-text">错误码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同实现的考虑"><span class="nav-text">不同实现的考虑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dns-lookup"><span class="nav-text">dns.lookup()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dns-resolve-dns-resolve-dns-reverse"><span class="nav-text">dns.resolve(), dns.resolve*(), dns.reverse()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
