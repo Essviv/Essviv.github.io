@@ -1,0 +1,876 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs,net," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Netnet模块提供了异步网络编程的封装，它同时包含了服务端和客户端的方法，可以通过以下方法进行引用:
+1const net = require(&quot;net&quot;);
+net.Server类该类用于创建TCP或者是本地服务端. net.Server类是一个EventEmitter对象，它含有以下事件：
+close事件当服务端被关闭时触发该事件. 但值得注意的是，如果还有连接没有中止的话，这个事件不会被触">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(译) nodejs - net">
+<meta property="og:url" content="http://yoursite.com/2017/03/28/前端/nodejs/Nodejs.net/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="Netnet模块提供了异步网络编程的封装，它同时包含了服务端和客户端的方法，可以通过以下方法进行引用:
+1const net = require(&quot;net&quot;);
+net.Server类该类用于创建TCP或者是本地服务端. net.Server类是一个EventEmitter对象，它含有以下事件：
+close事件当服务端被关闭时触发该事件. 但值得注意的是，如果还有连接没有中止的话，这个事件不会被触">
+<meta property="og:updated_time" content="2017-03-28T14:16:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(译) nodejs - net">
+<meta name="twitter:description" content="Netnet模块提供了异步网络编程的封装，它同时包含了服务端和客户端的方法，可以通过以下方法进行引用:
+1const net = require(&quot;net&quot;);
+net.Server类该类用于创建TCP或者是本地服务端. net.Server类是一个EventEmitter对象，它含有以下事件：
+close事件当服务端被关闭时触发该事件. 但值得注意的是，如果还有连接没有中止的话，这个事件不会被触">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/28/前端/nodejs/Nodejs.net/"/>
+
+
+
+
+
+  <title> (译) nodejs - net | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/28/前端/nodejs/Nodejs.net/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                (译) nodejs - net
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-28T13:53:00+08:00">
+                2017-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/28/前端/nodejs/Nodejs.net/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/28/前端/nodejs/Nodejs.net/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Net"><a href="#Net" class="headerlink" title="Net"></a>Net</h1><p>net模块提供了异步网络编程的封装，它同时包含了服务端和客户端的方法，可以通过以下方法进行引用:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> net = <span class="built_in">require</span>(<span class="string">"net"</span>);</div></pre></td></tr></table></figure>
+<h2 id="net-Server类"><a href="#net-Server类" class="headerlink" title="net.Server类"></a>net.Server类</h2><p>该类用于创建TCP或者是本地服务端. net.Server类是一个EventEmitter对象，它含有以下事件：</p>
+<h3 id="close事件"><a href="#close事件" class="headerlink" title="close事件"></a>close事件</h3><p>当服务端被关闭时触发该事件. 但值得注意的是，如果还有连接没有中止的话，这个事件不会被触发，直到所有的连接都已经被关闭后才会被触发.</p>
+<h3 id="connection事件"><a href="#connection事件" class="headerlink" title="connection事件"></a>connection事件</h3><ul>
+<li>net.Socket:  连接的socket对象</li>
+</ul>
+<p>当建立了新的连接时，会触发该事件， 其中socket对象为net.Socket类的实例.</p>
+<h3 id="error事件"><a href="#error事件" class="headerlink" title="error事件"></a>error事件</h3><ul>
+<li>Error</li>
+</ul>
+<p>当服务端发生错误时触发该事件. 和net.Socket类不一样的是，当触发了error事件后，服务端的close事件不会被自动触发，只有当服务端手动调用了server.close()方法后才会触发close事件. 具体可以参见server.listen()方法的讨论. </p>
+<h3 id="listening事件"><a href="#listening事件" class="headerlink" title="listening事件"></a>listening事件</h3><p>当服务端调用了server.listen()方法完成绑定后触发该事件.</p>
+<h2 id="server-address"><a href="#server-address" class="headerlink" title="server.address()"></a>server.address()</h2><p>该方法返回绑定的地址，地址类别名称以及绑定的端口号. 这个方法通常用于在操作系统自动分配端口号后来获取相应的绑定信息. 返回的对象中包含port, family, address属性. 例如： {address: ‘127.0.0.1’, family: ‘IPv6’, port: 12345}, 代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> server = net.createServer(<span class="function">(<span class="params">socket</span>) =&gt;</span> &#123;</div><div class="line">  socket.end(<span class="string">'goodbye\n'</span>);</div><div class="line">&#125;).on(<span class="string">'error'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="comment">// handle errors here</span></div><div class="line">  <span class="keyword">throw</span> err;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// grab a random port.</span></div><div class="line">server.listen(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'opened server on'</span>, server.address());</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>另外，在listening事件被触发之前，不要调用该方法. </p>
+<h2 id="server-close-callback"><a href="#server-close-callback" class="headerlink" title="server.close([callback])"></a>server.close([callback])</h2><p>该方法用于服务端停止接受新的连接请求，但已经建立的请求会继续保持. 该方法是异步的，服务端会等到当前所有的连接都关闭后才会最终关闭，并触发close事件. callback参数是可选的，当触发了close事件后，就会调用callback参数. 和close事件不一样的是，如果服务端已经关闭了，那么callback回调方法会带有一个Error参数. </p>
+<h2 id="server-getConnections-callback"><a href="#server-getConnections-callback" class="headerlink" title="server.getConnections(callback)"></a>server.getConnections(callback)</h2><p>该方法用于异步地获取当前服务端已经建立的连接数. callback回调方法带有两个参数，分别是error和count</p>
+<h2 id="server-listen-handle-backlog-callback"><a href="#server-listen-handle-backlog-callback" class="headerlink" title="server.listen(handle[, backlog][, callback])"></a>server.listen(handle[, backlog][, callback])</h2><ul>
+<li>handle: Object</li>
+<li>backlog: Number</li>
+<li>callback: Function</li>
+</ul>
+<p>handle参数可以是server对象，也可以是socket对象(只要含有_handle属性即可), 也可以是{fd: <n>}对象.</n></p>
+<p>调用该方法后，服务端将会在指定的句柄上接受连接，但前提是指定的文件描述符或者句柄已经绑定了相应的端口.</p>
+<p>该方法是异步的，当服务端完成绑定后，会触发listening事件，callback回调函数会被添加为listening事件的监听器.</p>
+<p>backlog参数的含义与server.listen([port][, hostname][, backlog][, callback])中backlog参数的含义一样.</p>
+<p>另外，在windows平台中不支持监听文件描述符. </p>
+<h2 id="server-listen-options-callback"><a href="#server-listen-options-callback" class="headerlink" title="server.listen(options[, callback])"></a>server.listen(options[, callback])</h2><ul>
+<li>options: Object 必填参数，支持以下属性：<ul>
+<li>port: number  可选</li>
+<li>host: String  可选</li>
+<li>backlog: number  可选</li>
+<li>path: String  可选</li>
+<li>exclusive: Boolean 可选</li>
+</ul>
+</li>
+<li>callback: Function  可选</li>
+</ul>
+<p>options参数中的port, host, backlog属性与server.listen([port][, hostname][, backlog][, callback])方法中相应参数的含义一样. 另外，path参数可以用于指定unix socket.</p>
+<p>如果exclusive参数设置为false(默认值)，那么集群中的工作对象将共享底层句柄. 当exclusive参数被设置为true时，底层句柄不能共享，否则会抛出错误. 以下是独占句柄的示例代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">server.listen(&#123;</div><div class="line">  <span class="attr">host</span>: <span class="string">'localhost'</span>,</div><div class="line">  <span class="attr">port</span>: <span class="number">80</span>,</div><div class="line">  <span class="attr">exclusive</span>: <span class="literal">true</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p><strong>备注: </strong> 可以多次调用server.listen()方法，每次调用该方法后，都会根据options参数的设置重新打开相应的句柄. </p>
+<h2 id="server-listen-path-backlog-callback"><a href="#server-listen-path-backlog-callback" class="headerlink" title="server.listen(path[,backlog][, callback])"></a>server.listen(path[,backlog][, callback])</h2><ul>
+<li>path: String</li>
+<li>backlog: number</li>
+<li>callback: Function</li>
+</ul>
+<p>在指定的path参数上开启<strong>本地监听</strong>. 该方法是异步方法，当服务端完成绑定后，会触发listening事件, callback回调方法会设置成listening事件的监听器. backlog参数的含义与server.listen([port][, hostname][, backlog][, callback])中backlog参数的含义一样.</p>
+<p><strong>备注: </strong> 可以多次调用server.listen()方法，每次调用该方法后，都会根据options参数的设置重新打开相应的句柄. </p>
+<h2 id="server-listen-port-hostname-backlog-callback"><a href="#server-listen-port-hostname-backlog-callback" class="headerlink" title="server.listen([port][, hostname][, backlog][, callback])"></a>server.listen([port][, hostname][, backlog][, callback])</h2><p>调用该方法后，服务端会监听指定的hostname的指定端口port. 如果省略了hostname, 那么服务端会在任意可用的IPv6地址和IPv4地址上监听连接. 如果省略了port参数，或者指定port参数为0, 那么操作系统会随机分配一个端口, 后续可以在listening事件之后，通过server.address().port属性来获取随机分配的端口号. </p>
+<p>backlog参数是用来指定等待的最大连接数. 实际的长度可以通过操作系统的sysctl配置，如tcp_max_syn_backlog或者somaxconn参数来设置，该参数的默认值为511.</p>
+<p>该方法是异步执行，当服务端完成绑定后，会触发listening事件. callback回调方法会作为listening事件的监听器. </p>
+<p>调用该方法时，有些用户可能会遇到EADDRINUSE错误，这个错误意味着另一个服务已经占用了请求绑定的端口号，处理这个错误的方式有很多种，比如更换新的端口号，或者等待某段时间后重试等等，示例代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">server.on(<span class="string">'error'</span>, (e) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (e.code == <span class="string">'EADDRINUSE'</span>) &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Address in use, retrying...'</span>);</div><div class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      server.close();</div><div class="line">      server.listen(PORT, HOST);</div><div class="line">    &#125;, <span class="number">1000</span>);</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p><strong>备注: </strong> 可以多次调用server.listen()方法，每次调用该方法后，都会根据options参数的设置重新打开相应的句柄. </p>
+<h2 id="server-listening"><a href="#server-listening" class="headerlink" title="server.listening"></a>server.listening</h2><p>该属性标识当前服务端是否处于监听状态</p>
+<h2 id="server-maxConnections"><a href="#server-maxConnections" class="headerlink" title="server.maxConnections"></a>server.maxConnections</h2><p>可以通过设置这个属性来限制服务端的连接数， 但是不建议在socket传给子进程后设置这个选项.</p>
+<h2 id="server-ref"><a href="#server-ref" class="headerlink" title="server.ref()"></a>server.ref()</h2><p>server.unref()方法的逆操作，调用该方法的结果是，如果当前的服务端是唯一的服务端时，程序不会退出，这也是默认的行为. 如果当前的服务端已经是ref’d, 那么再次调用这个方法不会执行任何操作.</p>
+<p>该方法返回server</p>
+<h2 id="server-unref"><a href="#server-unref" class="headerlink" title="server.unref()"></a>server.unref()</h2><p>调用server.unref()方法的结果是，如果当前的服务端是事件系统中唯一活动的服务端，那么程序将会退出. 如果当前的服务端已经是unref’d, 那么再次调用该方法不会执行任何操作.</p>
+<p>该方法返回server.</p>
+<h2 id="net-Socket类"><a href="#net-Socket类" class="headerlink" title="net.Socket类"></a>net.Socket类</h2><p>该类型的实例是对TCP及本地socket的抽象. 它实现了双工流接口(duplex Stream). 它可以由用户创建并在客户端中使用(通过connect()方法)，也可以由node.js创建，然后通过服务端的connection事件传递给用户. </p>
+<h2 id="new-net-Socket-options"><a href="#new-net-Socket-options" class="headerlink" title="new net.Socket([options])"></a>new net.Socket([options])</h2><p>该方法用于构造一个新的socket对象. options对象有以下属性：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">fd</span>: <span class="literal">null</span>,</div><div class="line">  <span class="attr">allowHalfOpen</span>: <span class="literal">false</span>,</div><div class="line">  <span class="attr">readable</span>: <span class="literal">false</span>,</div><div class="line">  <span class="attr">writable</span>: <span class="literal">false</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中，fd参数允许用户使用已经打开的文件描述符和socket对象， readable/writable参数用于设置socket对象的读/写权限(仅在传递了fd参数时有用)，关于allowHalfOpen参数，可以参见net.createServer()方法和end事件. </p>
+<p>net.Socket类的实例是EventEmitter类的实现，它包含以下的事件:</p>
+<h3 id="close事件-1"><a href="#close事件-1" class="headerlink" title="close事件"></a>close事件</h3><ul>
+<li>had_error Boolean 该属性标识当前socket对象是否有传输错误</li>
+</ul>
+<p>在当前socket完全关闭后触发该事件. had_error参数是布尔类型，它标识了当前的close事件是否是由于传输错误导致的. </p>
+<h3 id="connect事件"><a href="#connect事件" class="headerlink" title="connect事件"></a>connect事件</h3><p>当完成socket连接后触发该事件，具体参见connect()方法. </p>
+<h3 id="data事件"><a href="#data事件" class="headerlink" title="data事件"></a>data事件</h3><ul>
+<li>Buffer</li>
+</ul>
+<p>在当前socket对象收到数据时触发该事件， 回调函数中的参数要么是Buffer类型，要么是String类型，当它是string类型时，它的编码格式取决于socket.setEncoding()方法设置的值. （更多的信息可以参阅stream模块中的”可读流”一节)</p>
+<h3 id="drain事件"><a href="#drain事件" class="headerlink" title="drain事件"></a>drain事件</h3><p>当写缓冲区重新为空时，触发该事件, 该事件可用于“限速上传”(throttle upload)， 具体还可以参阅socket.write()方法.</p>
+<h3 id="end事件"><a href="#end事件" class="headerlink" title="end事件"></a>end事件</h3><p>当socket的对端发送了FIN包时触发该事件. 默认情况下(allowHalfOpen==false), 在触发该事件时，socket对象会在写完数据后销毁文件描述符； 但是，如果设置了allowHalfOpen属性值为true, 那么socket对象不会自动调用自己这侧的end()方法，这样用户可以继续往socket中写入数据，直到手动调用了end()方法为止. </p>
+<h3 id="error事件-1"><a href="#error事件-1" class="headerlink" title="error事件"></a>error事件</h3><ul>
+<li>Error</li>
+</ul>
+<p>当有错误发生时触发该事件. 在触发该事件后，会自动触发close事件. </p>
+<h3 id="lookup事件"><a href="#lookup事件" class="headerlink" title="lookup事件"></a>lookup事件</h3><p>在解析完域名后，发起连接前触发该事件. 对于UNIX socket无效. </p>
+<ul>
+<li>err: Error | Null  错误对象，具体可以参见dns.lookup()方法</li>
+<li>address: String  解析得到的IP地址</li>
+<li>family: String | Null  地址类型，参见dns.lookup()方法</li>
+<li>host: String 解析的域名地址</li>
+</ul>
+<h3 id="timeout事件"><a href="#timeout事件" class="headerlink" title="timeout事件"></a>timeout事件</h3><p>当socket处于不活跃的时间超过一定值时触发该事件， 该事件仅用于通知用户该socket对象处于空闲状态， 用户可以根据需要选择是否关闭该socket， timeout值可以通过socket.setTimeout()方法来设定.</p>
+<h2 id="socket-address"><a href="#socket-address" class="headerlink" title="socket.address()"></a>socket.address()</h2><p>调用该方法可以返回当前socket对象绑定的地址， 地址类型以及端口号， 返回的对象如{address: “127.0.0.1”, port: 12345, family: “IPv4”}</p>
+<h2 id="socket-bufferSize"><a href="#socket-bufferSize" class="headerlink" title="socket.bufferSize"></a>socket.bufferSize</h2><p>net.Socket类的实例有个特性，它的socket.write()方法永远都能正常工作， 这个特性可以帮助用户快速地启动程序, 但是由于网络连接存在延时等原因，系统不可能随时都能将数据写入到socket中. 因此，在node.js中使用了缓冲区来暂存这些要写入到socket中的数据，并在socket处于可写状态时将缓冲区中的数据写入到socket中(内部是通过不断轮询文件操作符是否处于可写状态来实现的). </p>
+<p>但是这样做的后果就是内部缓冲区占用的内存大小有可能会一直增长. socket.bufferSize属性就记录了当前缓冲区中的数据大小，但是要注意的是，该属性仅是缓冲区中数据的大概大小，由于缓冲区中存在编码后的字符串等因素，该属性值并不是准确值. </p>
+<p>如果用户程序观察到socket.bufferSize的增长过快或者过大，可以通过调用pause()方法和resume()方法来实现“限流”的目的.</p>
+<h2 id="socket-bytesRead"><a href="#socket-bytesRead" class="headerlink" title="socket.bytesRead"></a>socket.bytesRead</h2><p>该属性记录了当前socket对象已经读的字节数</p>
+<h2 id="socket-bytesWritten"><a href="#socket-bytesWritten" class="headerlink" title="socket.bytesWritten"></a>socket.bytesWritten</h2><p>该属性记录了当前socket对象已经写的字节数</p>
+<h2 id="socket-connect-options-connectListener"><a href="#socket-connect-options-connectListener" class="headerlink" title="socket.connect(options[, connectListener])"></a>socket.connect(options[, connectListener])</h2><p>打开到指定socket的连接， options参数的属性如下：</p>
+<ul>
+<li>port: 必填项， socket要连接的远端端口号</li>
+<li>host： socket要连接的远端地址，默认为localhost</li>
+<li>localAddress: socket对象绑定的本地接口地址</li>
+<li>localPort: socket对象绑定的本地端口与</li>
+<li>family: IP栈的版本号， 默认为4</li>
+<li>hints: dns.lookup().hints， 默认为0</li>
+<li>lookup: 自定义的lookup方法，默认为dns.lookup()</li>
+</ul>
+<p>对于本地socket来讲，options对象应该指定以下的属性:</p>
+<ul>
+<li>path： socket要连接的地址，必填项</li>
+</ul>
+<p>通常情况下，应用程序不需要直接调用该方法， 因为net.createConnection()方法内部会调用该方法，并返回socket对象， 只有在应用程序实现了自定义的socket对象时，才需要直接调用该方法.</p>
+<p>该方法是异步方法， 当socket连接建立完成后会触发connect事件. 如果在连接的过程中发生错误，那么不会触发connect事件，而是触发error事件. 最后一个connectListener参数会被注册成connect事件的监听器. </p>
+<h2 id="socket-connect-path-connectListener"><a href="#socket-connect-path-connectListener" class="headerlink" title="socket.connect(path[, connectListener])"></a>socket.connect(path[, connectListener])</h2><h2 id="socket-connect-port-host-connectListener"><a href="#socket-connect-port-host-connectListener" class="headerlink" title="socket.connect(port[, host][, connectListener])"></a>socket.connect(port[, host][, connectListener])</h2><p>这两个方法和socket.connect(options[, connectListener])方法一样，调用这两个方法相当于设置options参数为{path: path}或者{port: port, host: host}</p>
+<h2 id="socket-connecting"><a href="#socket-connecting" class="headerlink" title="socket.connecting"></a>socket.connecting</h2><p>该属性标识socket对象是否还处于连接中的状态, 该属性为true意味着socket对象已经调用了connect()方法，但连接还没有完成. 该属性会在connect事件触发前以及调用connect()方法的回调函数前被设置为false.</p>
+<h2 id="socket-destroy-exception"><a href="#socket-destroy-exception" class="headerlink" title="socket.destroy([exception])"></a>socket.destroy([exception])</h2><p>调用该方法后，socket对象不会再发生新的IO操作， 仅在发生错误时调用该方法. </p>
+<p>如果设置了exception参数，那么会触发error事件，且error事件的监听器会带有exception参数. </p>
+<h2 id="socket-destroyed"><a href="#socket-destroyed" class="headerlink" title="socket.destroyed"></a>socket.destroyed</h2><p>该属性标识了socket对象的连接是否已经被销毁. 一旦socket对象被销毁，那么后续无法再通过socket对象传输数据. </p>
+<h2 id="socket-end-data-encoding"><a href="#socket-end-data-encoding" class="headerlink" title="socket.end([data][, encoding])"></a>socket.end([data][, encoding])</h2><p>关闭自己这端的socket, 也就是说，调用该方法会发送FIN包. 值得注意的是，在调用了该方法后，服务端可能还是可以通过这个socket传输数据(allowHalfOpen设置为true)</p>
+<p>当设置了data参数后，调用该方法等同于先调用了socket.write(data, encoding), 然后再调用socket.end()方法.</p>
+<h2 id="socket-localAddress"><a href="#socket-localAddress" class="headerlink" title="socket.localAddress"></a>socket.localAddress</h2><p>该属性标识了对端连接到本地时的地址. 例如： 如果在本地监听’0.0.0.0’地址，而对端连接的是’192.168.1.1’，那么该属性值将会是’192.168.1.1’</p>
+<h2 id="socket-localPort"><a href="#socket-localPort" class="headerlink" title="socket.localPort"></a>socket.localPort</h2><p>该属性标识了socket的本地端口号，为整型类型，如80或者21</p>
+<h2 id="socket-pause"><a href="#socket-pause" class="headerlink" title="socket.pause()"></a>socket.pause()</h2><p>停止socket继续读取数据. 也就是说，调用了该方法后，data事件不会被触发，该方法在需要进行”限流”操作时非常有用.</p>
+<h2 id="socket-ref"><a href="#socket-ref" class="headerlink" title="socket.ref()"></a>socket.ref()</h2><p>该方法是socket.unref()方法的逆操作，调用该方法意味着如果当前socket是唯一活跃的socket,应用程序不会退出(这也是默认的行为). 如果当前socket已经是ref’d， 那么再次调用该方法不会有任何操作. 该方法返回socket.</p>
+<h2 id="socket-remoteAddress"><a href="#socket-remoteAddress" class="headerlink" title="socket.remoteAddress"></a>socket.remoteAddress</h2><p>该属性标识的是对端的IP地址. 例如: ‘74.125.127.100’或者”2001:4860:a005::68”. 该属性在socket对象被销毁后（如disconnect)被设置为undefined.</p>
+<h2 id="socket-remoteFamily"><a href="#socket-remoteFamily" class="headerlink" title="socket.remoteFamily"></a>socket.remoteFamily</h2><p>该属性用于标识对端的地址类型，如”IPv4”或者”IPv6”.</p>
+<h2 id="socket-remotePort"><a href="#socket-remotePort" class="headerlink" title="socket.remotePort"></a>socket.remotePort</h2><p>该属性为整型类型，标识了对端的端口号，如80或者21</p>
+<h2 id="socket-resume"><a href="#socket-resume" class="headerlink" title="socket.resume()"></a>socket.resume()</h2><p>调用该方法会恢复socket的读事件. </p>
+<h2 id="socket-setEncoding-encoding"><a href="#socket-setEncoding-encoding" class="headerlink" title="socket.setEncoding([encoding])"></a>socket.setEncoding([encoding])</h2><p>设置socket对象的编码方式，具体可以参阅stream.setEncoding()方法</p>
+<h2 id="socket-keepAlive-enable-initialDelay"><a href="#socket-keepAlive-enable-initialDelay" class="headerlink" title="socket.keepAlive([enable][, initialDelay])"></a>socket.keepAlive([enable][, initialDelay])</h2><p>启用/禁用socket的keepAlive特性，并设置首次探活的时间延迟(单位为毫秒). enable参数默认为false.</p>
+<p>设置的initialDelay参数的值是指在最后一次收到数据后，经过多少时间后开始首次探活. 如果这个值被设置为0，那么initialDelay的值将保留默认（或者上次设置过的值），默认为0. 该方法返回socket.</p>
+<h2 id="socket-setNoDelay-noDelay"><a href="#socket-setNoDelay-noDelay" class="headerlink" title="socket.setNoDelay([noDelay])"></a>socket.setNoDelay([noDelay])</h2><p>该方法禁用Nagle算法. 默认情况下，TCP连接会使用nagle算法来缓存数据. 设置noDelay的值为true意味着禁用该机制，每次调用socket.write()方法都会直接往socket中写入数据，noDelay参数默认为true. 该方法返回socket.</p>
+<h2 id="socket-setTimeout-timeout-callback"><a href="#socket-setTimeout-timeout-callback" class="headerlink" title="socket.setTimeout(timeout[, callback])"></a>socket.setTimeout(timeout[, callback])</h2><p>调用该方法可以设置socket对象的timeout参数，在socket处于空闲状态超过timeout设置的值时，就会触发timeout事件. 默认情况下, net.Socket没有timeout值. </p>
+<p>当timeout事件被触发时，socket对象本身并不会被销毁，应用程序可以根据需要监听timeout事件，并决定是否要调用end()或者destroy()方法来销毁socket对象. </p>
+<p>如果timeout参数的值的被设置为0, 那么已有的timeout参数将会被禁用. </p>
+<p>可选的callback回调函数将会被当作timeout事件的监听器. </p>
+<p>该方法返回socket对象. </p>
+<h2 id="socket-unref"><a href="#socket-unref" class="headerlink" title="socket.unref()"></a>socket.unref()</h2><p>调用socket.unref()方法意味着当socket对象为事件系统中唯一活跃的对象时，应用程序将退出. 如果socket对象已经是unref’d, 那么再次调用该方法不会执行任何操作. 该方法返回socket</p>
+<h2 id="socket-write-data-encoding-callback"><a href="#socket-write-data-encoding-callback" class="headerlink" title="socket.write(data[, encoding][, callback])"></a>socket.write(data[, encoding][, callback])</h2><p>调用该方法往socket对象中写入数据. 当data参数为字符串类型时，encoding参数指定了它的编码格式， 默认为utf-8编码. </p>
+<p>如果全部的数据都被写入到内核缓冲区时该方法返回true， 否则返回false. 当写缓冲区再次可写入时会触发drain事件. 可选的callback回调函数会在数据完全写入后被调用. </p>
+<h2 id="net-connect-options-connectListener"><a href="#net-connect-options-connectListener" class="headerlink" title="net.connect(options[, connectListener])"></a>net.connect(options[, connectListener])</h2><p>工厂方法，用于返回net.Socket对象，并按options参数指定的属性进行连接. </p>
+<p>options参数同时被传递给net.Socket构造函数和socket.connect()方法. </p>
+<p>connectListener回调方法会在connect事件被触发时回调. </p>
+<p>以下是echo服务端的实现示例:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</div><div class="line"><span class="keyword">const</span> client = net.connect(&#123;<span class="attr">port</span>: <span class="number">8124</span>&#125;, () =&gt; &#123;</div><div class="line">  <span class="comment">// 'connect' listener</span></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'connected to server!'</span>);</div><div class="line">  client.write(<span class="string">'world!\r\n'</span>);</div><div class="line">&#125;);</div><div class="line">client.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(data.toString());</div><div class="line">  client.end();</div><div class="line">&#125;);</div><div class="line">client.on(<span class="string">'end'</span>, () =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'disconnected from server'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>如果要连接到/tmp/echo.sock，只要修改第二行代码即可:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> client = net.connect(&#123;<span class="attr">path</span>: <span class="string">'/tmp/echo.sock'</span>&#125;);</div></pre></td></tr></table></figure>
+<h2 id="net-connect-path-connectListener"><a href="#net-connect-path-connectListener" class="headerlink" title="net.connect(path[, connectListener])"></a>net.connect(path[, connectListener])</h2>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/net/" rel="tag"># net</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/27/前端/nodejs/Nodejs.dns/" rel="next" title="nodejs - dns">
+                <i class="fa fa-chevron-left"></i> nodejs - dns
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/28/前端/nodejs/Nodejs.net/"
+           data-title="(译) nodejs - net" data-url="http://yoursite.com/2017/03/28/前端/nodejs/Nodejs.net/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">171</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Net"><span class="nav-text">Net</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#net-Server类"><span class="nav-text">net.Server类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#close事件"><span class="nav-text">close事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#connection事件"><span class="nav-text">connection事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error事件"><span class="nav-text">error事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listening事件"><span class="nav-text">listening事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-address"><span class="nav-text">server.address()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-close-callback"><span class="nav-text">server.close([callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-getConnections-callback"><span class="nav-text">server.getConnections(callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-listen-handle-backlog-callback"><span class="nav-text">server.listen(handle[, backlog][, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-listen-options-callback"><span class="nav-text">server.listen(options[, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-listen-path-backlog-callback"><span class="nav-text">server.listen(path[,backlog][, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-listen-port-hostname-backlog-callback"><span class="nav-text">server.listen([port][, hostname][, backlog][, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-listening"><span class="nav-text">server.listening</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-maxConnections"><span class="nav-text">server.maxConnections</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-ref"><span class="nav-text">server.ref()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-unref"><span class="nav-text">server.unref()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#net-Socket类"><span class="nav-text">net.Socket类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-net-Socket-options"><span class="nav-text">new net.Socket([options])</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#close事件-1"><span class="nav-text">close事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#connect事件"><span class="nav-text">connect事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data事件"><span class="nav-text">data事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#drain事件"><span class="nav-text">drain事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#end事件"><span class="nav-text">end事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error事件-1"><span class="nav-text">error事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lookup事件"><span class="nav-text">lookup事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#timeout事件"><span class="nav-text">timeout事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-address"><span class="nav-text">socket.address()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-bufferSize"><span class="nav-text">socket.bufferSize</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-bytesRead"><span class="nav-text">socket.bytesRead</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-bytesWritten"><span class="nav-text">socket.bytesWritten</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-connect-options-connectListener"><span class="nav-text">socket.connect(options[, connectListener])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-connect-path-connectListener"><span class="nav-text">socket.connect(path[, connectListener])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-connect-port-host-connectListener"><span class="nav-text">socket.connect(port[, host][, connectListener])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-connecting"><span class="nav-text">socket.connecting</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-destroy-exception"><span class="nav-text">socket.destroy([exception])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-destroyed"><span class="nav-text">socket.destroyed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-end-data-encoding"><span class="nav-text">socket.end([data][, encoding])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-localAddress"><span class="nav-text">socket.localAddress</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-localPort"><span class="nav-text">socket.localPort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-pause"><span class="nav-text">socket.pause()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-ref"><span class="nav-text">socket.ref()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-remoteAddress"><span class="nav-text">socket.remoteAddress</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-remoteFamily"><span class="nav-text">socket.remoteFamily</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-remotePort"><span class="nav-text">socket.remotePort</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-resume"><span class="nav-text">socket.resume()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-setEncoding-encoding"><span class="nav-text">socket.setEncoding([encoding])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-keepAlive-enable-initialDelay"><span class="nav-text">socket.keepAlive([enable][, initialDelay])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-setNoDelay-noDelay"><span class="nav-text">socket.setNoDelay([noDelay])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-setTimeout-timeout-callback"><span class="nav-text">socket.setTimeout(timeout[, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-unref"><span class="nav-text">socket.unref()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#socket-write-data-encoding-callback"><span class="nav-text">socket.write(data[, encoding][, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#net-connect-options-connectListener"><span class="nav-text">net.connect(options[, connectListener])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#net-connect-path-connectListener"><span class="nav-text">net.connect(path[, connectListener])</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
