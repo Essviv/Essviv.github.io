@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-类信息/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-方法信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +278,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-类信息/" itemprop="url">
-                  反射-类信息
+                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-方法信息/" itemprop="url">
+                  反射-方法信息
                 </a>
               
             
@@ -314,8 +314,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/30/JVM/反射/反射-类信息/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-类信息/" itemprop="commentCount"></span>
+                <a href="/2016/10/30/JVM/反射/反射-方法信息/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-方法信息/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,13 +343,19 @@
       
         
           
-          反射-类信息反射可以在运行时获取类、方法以及属性的信息
-通过反射，可以在运行时获取类各方面的信息，包括类名信息、包信息、修饰符、超类信息、接口信息、方法信息、属性信息、构造函数以及注解等信息.
-类名信息getName, getSimpleName(不包含包名信息), getCanonicalName
-          ...
+          反射-方法信息方法与构造函数一样，都是继承自Executable类，关于Executable类提供的方法信息可以参见构造函数
+方法特有的方法信息： 
+
+invoke: 传入相应的参数，并在实例上调用该方法
+
+getReturnType: 返回返回参数的类型信息
+
+
+
+          
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/30/JVM/反射/反射-类信息/#more" rel="contents">
+            <a class="btn" href="/2016/10/30/JVM/反射/反射-方法信息/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -673,7 +679,7 @@ g
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-方法信息/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-类信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -695,8 +701,8 @@ g
             
               
                 
-                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-方法信息/" itemprop="url">
-                  反射-方法信息
+                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-类信息/" itemprop="url">
+                  反射-类信息
                 </a>
               
             
@@ -731,8 +737,8 @@ g
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/30/JVM/反射/反射-方法信息/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-方法信息/" itemprop="commentCount"></span>
+                <a href="/2016/10/30/JVM/反射/反射-类信息/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-类信息/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -760,19 +766,13 @@ g
       
         
           
-          反射-方法信息方法与构造函数一样，都是继承自Executable类，关于Executable类提供的方法信息可以参见构造函数
-方法特有的方法信息： 
-
-invoke: 传入相应的参数，并在实例上调用该方法
-
-getReturnType: 返回返回参数的类型信息
-
-
-
-          
+          反射-类信息反射可以在运行时获取类、方法以及属性的信息
+通过反射，可以在运行时获取类各方面的信息，包括类名信息、包信息、修饰符、超类信息、接口信息、方法信息、属性信息、构造函数以及注解等信息.
+类名信息getName, getSimpleName(不包含包名信息), getCanonicalName
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/30/JVM/反射/反射-方法信息/#more" rel="contents">
+            <a class="btn" href="/2016/10/30/JVM/反射/反射-类信息/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

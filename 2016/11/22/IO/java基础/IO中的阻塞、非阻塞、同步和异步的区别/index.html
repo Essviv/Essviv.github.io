@@ -109,7 +109,7 @@
 <meta property="og:image" content="http://hi.csdn.net/attachment/201007/31/0_1280551287S777.gif">
 <meta property="og:image" content="http://hi.csdn.net/attachment/201007/31/0_1280551552NVgW.gif">
 <meta property="og:image" content="https://raw.githubusercontent.com/Essviv/images/master/io-model-matrix.gif">
-<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta property="og:updated_time" content="2017-03-28T00:45:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IO中的阻塞、非阻塞、同步和异步的区别">
 <meta name="twitter:description" content="IO中的阻塞、非阻塞、同步和异步的区别IO相关概念
@@ -385,7 +385,14 @@
 <p>一个IO操作其实分成了两个步骤：发起IO请求和实际的IO操作。同步IO和异步IO的区别就在于第二个步骤是否阻塞，如果实际的IO读写阻塞请求进程，那么就是同步IO。阻塞IO和非阻塞IO的区别在于第一步，发起IO请求是否会被阻塞，如果阻塞直到完成那么就是传统的阻塞IO，如果不阻塞，那么就是非阻塞IO</p>
 <p>select，poll，epoll都是IO多路复用的机制。I/O多路复用就是通过一种机制，一个进程可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。但select，poll，epoll本质上都是同步I/O，因为他们都需要在读写事件就绪后自己负责进行读写，也就是说这个读写过程是阻塞的，而异步I/O则无需自己负责进行读写，异步I/O的实现会负责把数据从内核拷贝到用户空间。 </p>
 </blockquote>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>概念比较1： <a href="http://blog.csdn.net/historyasamirror/article/details/5778378" target="_blank" rel="external">IO - 同步，异步，阻塞，非阻塞 （亡羊补牢篇）</a><br>概念比较2： <a href="https://ring0.me/2014/11/sync-async-blocked/" target="_blank" rel="external">大话同步/异步、阻塞/非阻塞</a><br>AIO简介： <a href="http://www.ibm.com/developerworks/cn/linux/l-async/" target="_blank" rel="external">AIO简介</a><br>BIO, NIO和AIO的理解： <a href="http://qindongliang.iteye.com/blog/2018539" target="_blank" rel="external">BIO, NIO和AIO的理解</a><br>这篇文章很详细地阐述了同步与异步、阻塞与非阻塞的区别: <a href="http://www.jianshu.com/p/55eb83d60ab1" target="_blank" rel="external">http://www.jianshu.com/p/55eb83d60ab1</a></p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li>概念比较1： <a href="http://blog.csdn.net/historyasamirror/article/details/5778378" target="_blank" rel="external">IO - 同步，异步，阻塞，非阻塞 （亡羊补牢篇）</a></li>
+<li>概念比较2： <a href="https://ring0.me/2014/11/sync-async-blocked/" target="_blank" rel="external">大话同步/异步、阻塞/非阻塞</a></li>
+<li>AIO简介： <a href="http://www.ibm.com/developerworks/cn/linux/l-async/" target="_blank" rel="external">AIO简介</a></li>
+<li>BIO, NIO和AIO的理解： <a href="http://qindongliang.iteye.com/blog/2018539" target="_blank" rel="external">BIO, NIO和AIO的理解</a></li>
+<li>这篇文章很详细地阐述了同步与异步、阻塞与非阻塞的区别: <a href="http://www.jianshu.com/p/55eb83d60ab1" target="_blank" rel="external">http://www.jianshu.com/p/55eb83d60ab1</a></li>
+<li>比较reactor和proactor: <a href="http://blog.jobbole.com/59676/" target="_blank" rel="external">比较reactor和proactor</a></li>
+</ol>
 
       
     </div>
@@ -447,8 +454,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/" rel="prev" title="Runnable, Callable, Future, FutureTask的区别">
-                Runnable, Callable, Future, FutureTask的区别 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/11/25/测试/spring-test/" rel="prev" title="spring-test">
+                spring-test <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
