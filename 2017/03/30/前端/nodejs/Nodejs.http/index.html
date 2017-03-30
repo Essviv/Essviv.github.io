@@ -1,0 +1,1016 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="nodejs,http," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="http在node.js中使用http模块必须调用require(“http”)方法.
+node.js中提供的http接口可以用来支持过去较难实现的http协议特性，如大消息的分块传输. 这些接口不会缓存整个请求或者响应，用户可以使用这些接口很方便地操作数据.
+http的头信息以对象的方式传入，key值会被转化成小写字母，而value保持不变. 例如：
+12345&amp;#123; &apos;content-l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(译)nodejs - http">
+<meta property="og:url" content="http://yoursite.com/2017/03/30/前端/nodejs/Nodejs.http/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="http在node.js中使用http模块必须调用require(“http”)方法.
+node.js中提供的http接口可以用来支持过去较难实现的http协议特性，如大消息的分块传输. 这些接口不会缓存整个请求或者响应，用户可以使用这些接口很方便地操作数据.
+http的头信息以对象的方式传入，key值会被转化成小写字母，而value保持不变. 例如：
+12345&amp;#123; &apos;content-l">
+<meta property="og:updated_time" content="2017-03-30T08:44:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(译)nodejs - http">
+<meta name="twitter:description" content="http在node.js中使用http模块必须调用require(“http”)方法.
+node.js中提供的http接口可以用来支持过去较难实现的http协议特性，如大消息的分块传输. 这些接口不会缓存整个请求或者响应，用户可以使用这些接口很方便地操作数据.
+http的头信息以对象的方式传入，key值会被转化成小写字母，而value保持不变. 例如：
+12345&amp;#123; &apos;content-l">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/03/30/前端/nodejs/Nodejs.http/"/>
+
+
+
+
+
+  <title> (译)nodejs - http | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/30/前端/nodejs/Nodejs.http/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                (译)nodejs - http
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-30T10:52:00+08:00">
+                2017-03-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/30/前端/nodejs/Nodejs.http/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/30/前端/nodejs/Nodejs.http/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="http"><a href="#http" class="headerlink" title="http"></a>http</h1><p>在node.js中使用http模块必须调用require(“http”)方法.</p>
+<p>node.js中提供的http接口可以用来支持过去较难实现的http协议特性，如大消息的分块传输. 这些接口不会缓存整个请求或者响应，用户可以使用这些接口很方便地操作数据.</p>
+<p>http的头信息以对象的方式传入，key值会被转化成小写字母，而value保持不变. 例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123; <span class="string">'content-length'</span>: <span class="string">'123'</span>,</div><div class="line">  <span class="string">'content-type'</span>: <span class="string">'text/plain'</span>,</div><div class="line">  <span class="string">'connection'</span>: <span class="string">'keep-alive'</span>,</div><div class="line">  <span class="string">'host'</span>: <span class="string">'mysite.com'</span>,</div><div class="line">  <span class="string">'accept'</span>: <span class="string">'*/*'</span> &#125;</div></pre></td></tr></table></figure>
+<p>为了能够满足所有http应用的需要，node.js中的http模块被设计的非常底层. 它只会负责将流数据解析成相应的消息帧，但不会对消息中任何部分（消息头，消息体等）做任何处理.  消息头部分有重复头信息时的处理方式可以参见”message.headers”属性的说明. </p>
+<p>未经处理的头信息会被保留在rawHeaders属性中，它的格式是[key, value, key2, value2…]的数组形式，例如，上述的消息头在rawHeaders属性中可能会是:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[ <span class="string">'ConTent-Length'</span>, <span class="string">'123456'</span>,</div><div class="line">  <span class="string">'content-LENGTH'</span>, <span class="string">'123'</span>,</div><div class="line">  <span class="string">'content-type'</span>, <span class="string">'text/plain'</span>,</div><div class="line">  <span class="string">'CONNECTION'</span>, <span class="string">'keep-alive'</span>,</div><div class="line">  <span class="string">'Host'</span>, <span class="string">'mysite.com'</span>,</div><div class="line">  <span class="string">'accepT'</span>, <span class="string">'*/*'</span> ]</div></pre></td></tr></table></figure>
+<h2 id="http-Agent类"><a href="#http-Agent类" class="headerlink" title="http.Agent类"></a>http.Agent类</h2><p>Agent类是http客户端用来管理连接持久性和复用连接的对象. 它对每个连接维护了相应的请求队列，对于每个队列都使用同一个socket连接来处理，当队列中的请求处理完之后，socket连接对象会被销毁或放入到socket池中, 以便下次再有请求的时候能够利用，至于socket对象是被销毁还是被放到socket连接池中，取决于keepAlive选项的配置.</p>
+<p>socket连接池中的对象的keepAlive属性被设置成true, 这样多个请求之间就可以利用同一个socket对象，但是服务端仍然可以关闭空闲的连接，这种情况下，socket对象会从连接池中被移除，当下次再有新的请求时会重新建立连接. 另外，服务端也可以拒绝在同一个连接中发送多个请求，此时对于每个请求来讲都必须重新建立TCP连接，并且这些连接不会被放入连接池中. Agent对象仍然会向服务端发送请求，但每次请求都会重新建立连接.</p>
+<p>当服务端或者客户端关闭了连接时，该连接对象就会从连接池中被移除. 连接池中用不到的socket对象会被设置成unref’d, 这样当没有请求时，node.js应用就不会一直运行. （具体可以参见socket.unref()方法的说明).通常情况下，在不需要使用agent对象时，建议将它直接销毁，这样会间接销毁不需要使用的socket对象， 以免它们占用系统资源.</p>
+<p>当socket对象触发了close事件或agentRemove事件时，该socket对象会被从连接池中被移除. 这意味着当应用程序希望保持某个连接，但又不希望将这个socket对象放到对象池中时，可以通过触发这两个事件来移除. 例如:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">http.get(options, (res) =&gt; &#123;</div><div class="line">  <span class="comment">// Do stuff</span></div><div class="line">&#125;).on(<span class="string">'socket'</span>, (socket) =&gt; &#123;</div><div class="line">  socket.emit(<span class="string">'agentRemove'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>另外，还可以为每个请求指定agent对象，如果在http.get()和http.request()方法中指定agent参数为false，那么系统会为这次连接指定默认的agent，它的所有值都被设置成默认值. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">http.get(&#123;</div><div class="line">  <span class="attr">hostname</span>: <span class="string">'localhost'</span>,</div><div class="line">  <span class="attr">port</span>: <span class="number">80</span>,</div><div class="line">  <span class="attr">path</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">agent</span>: <span class="literal">false</span>  <span class="comment">// create a new agent just for this one request</span></div><div class="line">&#125;, (res) =&gt; &#123;</div><div class="line">  <span class="comment">// Do stuff with response</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="new-Agent-options"><a href="#new-Agent-options" class="headerlink" title="new Agent([options])"></a>new Agent([options])</h2><ul>
+<li>options: Object 为agent对象指定相应的参数，它可以包含以下属性：<ul>
+<li>keepAlive: Boolean 该参数标识当某个连接没有请求时，是否保持该连接，以便后续再有请求时利用该连接. 默认为false</li>
+<li>keepAliveMsecs: Integer 当启用keepAlive选项后，该参数指定了”保活”包发送的初始时间，毫秒为单位. 当keepAlive选项关闭时，此参数没有意义. 默认为1000</li>
+<li>maxSockets: Number  socket连接数的最大值. 默认为Infinity</li>
+<li>maxFreeSockets: Number  空闲socket连接的最大值, 此参数仅在keepAlive参数启用时有效，默认为256</li>
+</ul>
+</li>
+</ul>
+<p>http.request()中默认使用的http.globalAgent对象，这些属性的值都被设置为它的默认值. 如果要修改这些属性的值，需要创建新的agent对象:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">var</span> keepAliveAgent = <span class="keyword">new</span> http.Agent(&#123; <span class="attr">keepAlive</span>: <span class="literal">true</span> &#125;);</div><div class="line">options.agent = keepAliveAgent;</div><div class="line">http.request(options, onResponseCallback);</div></pre></td></tr></table></figure>
+<h2 id="agent-createConnection-options-callback"><a href="#agent-createConnection-options-callback" class="headerlink" title="agent.createConnection(options[, callback])"></a>agent.createConnection(options[, callback])</h2><ul>
+<li>options: Object 连接的具体参数, 该参数对象与net.createConnection()方法一样，具体可参见net.createConnection()方法.</li>
+<li>callback: Function  建立连接后的回调函数</li>
+<li>返回: net.Socket</li>
+</ul>
+<p>调用该方法会创建新的socket对象. 默认情况下，该方法与net.createConnection()的作用一样，但通过这个方法可以使用自定义的agent对象. socket对象可以通过两种方式返回，一种是直接通过该方法返回，另一种是通过callback回调方法返回. callback回调函数带有两个参数，分别是(err, stream)</p>
+<h2 id="agent-destroy"><a href="#agent-destroy" class="headerlink" title="agent.destroy()"></a>agent.destroy()</h2><p>调用该方法来销毁使用当前agent对象的所有socket对象. 通常情况下不需要直接调用该方法，但是如果开户了keepAlive选项，那么最好显式地销毁agent对象，否则，socket对象会一直处于打开状态，直到服务端被关闭为止，在被关闭之前，这些socket对象都会占用系统资源. </p>
+<h2 id="agent-freeSockets"><a href="#agent-freeSockets" class="headerlink" title="agent.freeSockets"></a>agent.freeSockets</h2><ul>
+<li>Object</li>
+</ul>
+<p>该属性返回对象，对象含有所有当前空闲的socket连接，该属性仅在keepAlive属性启用时有效，且不能修改. </p>
+<h2 id="agent-getName-options"><a href="#agent-getName-options" class="headerlink" title="agent.getName(options)"></a>agent.getName(options)</h2><ul>
+<li>options: Object  用于生成名称的信息<ul>
+<li>host: String 服务端的域名或IP地址</li>
+<li>port: number  服务端的端口</li>
+<li>localAddress: String  本地的绑定地址</li>
+</ul>
+</li>
+<li>返回: String</li>
+</ul>
+<p>该方法根据一系列的请求属性来生成唯一的名称，该名称可用于确定连接是否可被复用. 对于http的agent来讲，该方法返回的是host:port:localAddress格式的名称，而对于https的agent来讲，返回的名称中还会包含有CA信息，密码，证书等https协议特有的属性，以决定该socket能够被利用. </p>
+<h2 id="agent-maxFreeSockets"><a href="#agent-maxFreeSockets" class="headerlink" title="agent.maxFreeSockets"></a>agent.maxFreeSockets</h2><ul>
+<li>Number</li>
+</ul>
+<p>默认情况下，该属性为256. 当启用了keepAlive属性后，该属性决定了agent中空闲socket的最大数量.</p>
+<h2 id="agent-maxSocket"><a href="#agent-maxSocket" class="headerlink" title="agent.maxSocket"></a>agent.maxSocket</h2><ul>
+<li>Number</li>
+</ul>
+<p>默认情况下，该属性为Infinity. 该属性决定了对于同一个源来讲，最多可以建立的连接数. 源可以是host:post，也可以是host:post:localAddress的组合.</p>
+<h2 id="agent-requests"><a href="#agent-requests" class="headerlink" title="agent.requests"></a>agent.requests</h2><ul>
+<li>Object</li>
+</ul>
+<p>该属性返回对象类型，对象里包含有当前还没有被分配socket的请求队列信息，该属性值不能修改.</p>
+<h2 id="agent-sockets"><a href="#agent-sockets" class="headerlink" title="agent.sockets"></a>agent.sockets</h2><ul>
+<li>Object</li>
+</ul>
+<p>该属性返回对象类型，对象中包含有当前正在被使用的socket对象的数组， 该属性值不能被修改. </p>
+<h2 id="http-ClientRequest类"><a href="#http-ClientRequest类" class="headerlink" title="http.ClientRequest类"></a>http.ClientRequest类</h2><p>该类的实例对象在调用http.request()方法后被自动创建，它代表了正在被构建的请求对象，它们的消息头已经被入队，但仍然可以通过setHeader(name, value)，getHeader(name), removeHeader(name)等方法来进行修改，实际上，消息头是在第一次发送数据块或关闭连接时才会被发送. </p>
+<p>如果要获取请求的响应信息，可以监听这个类的response事件，response事件会在接收到响应头信息时被触发， 它带有一个参数，类型为http.IncomingMessage. 在response事件中，可以通过监听data事件来获取响应数据. </p>
+<p>如果没有监听response事件，那么整个响应消息都会被忽略. <strong>但是，如果监听了response事件，那么就必须通过response.read()方法，或者data事件监听器，或者调用resume()方法来消费数据， 否则end事件将不会被触发. </strong> 另外，如果没有消费数据，那么会导致数据堆积，直到抛出”OOM”错误. </p>
+<p><strong>备注：</strong> node.js不会校验Content-Length属性头信息与实际传输的数据长度是否匹配.</p>
+<p>http.ClientRequest类实现了stream.Writable接口，并且它是EventEmitter类的实例，它会触发以下事件:</p>
+<h3 id="abort事件"><a href="#abort事件" class="headerlink" title="abort事件"></a>abort事件</h3><p>当客户端第一次调用了abort()方法后会触发该事件. </p>
+<h3 id="aborted事件"><a href="#aborted事件" class="headerlink" title="aborted事件"></a>aborted事件</h3><p>当服务端关闭了当前请求并关闭了socket连接后，触发该事件. </p>
+<h3 id="connect事件"><a href="#connect事件" class="headerlink" title="connect事件"></a>connect事件</h3><ul>
+<li>response: http.IncomingMessage</li>
+<li>socket: net.Socket</li>
+<li>head: Buffer</li>
+</ul>
+<p>当服务端响应CONNECT方法时触发该事件. 如果没有监听该事件，那么客户端会在接收到CONNECT方法后关闭连接.</p>
+<p>以下的例子演示了如何来监听connect事件:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">const</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</div><div class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</div><div class="line"></div><div class="line"><span class="comment">// Create an HTTP tunneling proxy</span></div><div class="line"><span class="keyword">var</span> proxy = http.createServer( <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</div><div class="line">  res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span>&#125;);</div><div class="line">  res.end(<span class="string">'okay'</span>);</div><div class="line">&#125;);</div><div class="line">proxy.on(<span class="string">'connect'</span>, (req, cltSocket, head) =&gt; &#123;</div><div class="line">  <span class="comment">// connect to an origin server</span></div><div class="line">  <span class="keyword">var</span> srvUrl = url.parse(<span class="string">`http://<span class="subst">$&#123;req.url&#125;</span>`</span>);</div><div class="line">  <span class="keyword">var</span> srvSocket = net.connect(srvUrl.port, srvUrl.hostname, () =&gt; &#123;</div><div class="line">    cltSocket.write(<span class="string">'HTTP/1.1 200 Connection Established\r\n'</span> +</div><div class="line">                    <span class="string">'Proxy-agent: Node.js-Proxy\r\n'</span> +</div><div class="line">                    <span class="string">'\r\n'</span>);</div><div class="line">    srvSocket.write(head);</div><div class="line">    srvSocket.pipe(cltSocket);</div><div class="line">    cltSocket.pipe(srvSocket);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// now that proxy is running</span></div><div class="line">proxy.listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>, () =&gt; &#123;</div><div class="line"></div><div class="line">  <span class="comment">// make a request to a tunneling proxy</span></div><div class="line">  <span class="keyword">var</span> options = &#123;</div><div class="line">    <span class="attr">port</span>: <span class="number">1337</span>,</div><div class="line">    <span class="attr">hostname</span>: <span class="string">'127.0.0.1'</span>,</div><div class="line">    <span class="attr">method</span>: <span class="string">'CONNECT'</span>,</div><div class="line">    <span class="attr">path</span>: <span class="string">'www.google.com:80'</span></div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> req = http.request(options);</div><div class="line">  req.end();</div><div class="line"></div><div class="line">  req.on(<span class="string">'connect'</span>, (res, socket, head) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'got connected!'</span>);</div><div class="line"></div><div class="line">    <span class="comment">// make a request over an HTTP tunnel</span></div><div class="line">    socket.write(<span class="string">'GET / HTTP/1.1\r\n'</span> +</div><div class="line">                 <span class="string">'Host: www.google.com:80\r\n'</span> +</div><div class="line">                 <span class="string">'Connection: close\r\n'</span> +</div><div class="line">                 <span class="string">'\r\n'</span>);</div><div class="line">    socket.on(<span class="string">'data'</span>, (chunk) =&gt; &#123;</div><div class="line">      <span class="built_in">console</span>.log(chunk.toString());</div><div class="line">    &#125;);</div><div class="line">    socket.on(<span class="string">'end'</span>, () =&gt; &#123;</div><div class="line">      proxy.close();</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="continue事件"><a href="#continue事件" class="headerlink" title="continue事件"></a>continue事件</h3><p>当服务端响应’100 continue’时触发该事件，通常这是由于请求头中带上了’Expect: 100-continue’. 该事件通常意味着客户端应该继续发送请求体内容.</p>
+<h3 id="response事件"><a href="#response事件" class="headerlink" title="response事件"></a>response事件</h3><ul>
+<li>response: http.IncomingMessage</li>
+</ul>
+<p>当请求收到响应时触发该事件, 该事件只会被触发一次. </p>
+<h3 id="socket事件"><a href="#socket事件" class="headerlink" title="socket事件"></a>socket事件</h3><ul>
+<li>socket: net.Socket</li>
+</ul>
+<p>当请求建立连接并分配了socket对象后，触发该事件.</p>
+<h3 id="upgrade事件"><a href="#upgrade事件" class="headerlink" title="upgrade事件"></a>upgrade事件</h3><ul>
+<li>response: http.IncomingMessage</li>
+<li>socket: net.Socket</li>
+<li>head: Buffer</li>
+</ul>
+<p>当服务端响应upgrade消息头时触发该事件. 如果没有监听该事件，那么客户端会在收到该事件后关闭连接. </p>
+<p>以下的例子演示了客户端和服务端如何监听upgrade事件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="comment">// Create an HTTP server</span></div><div class="line"><span class="keyword">var</span> srv = http.createServer( <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</div><div class="line">  res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span>&#125;);</div><div class="line">  res.end(<span class="string">'okay'</span>);</div><div class="line">&#125;);</div><div class="line">srv.on(<span class="string">'upgrade'</span>, (req, socket, head) =&gt; &#123;</div><div class="line">  socket.write(<span class="string">'HTTP/1.1 101 Web Socket Protocol Handshake\r\n'</span> +</div><div class="line">               <span class="string">'Upgrade: WebSocket\r\n'</span> +</div><div class="line">               <span class="string">'Connection: Upgrade\r\n'</span> +</div><div class="line">               <span class="string">'\r\n'</span>);</div><div class="line"></div><div class="line">  socket.pipe(socket); <span class="comment">// echo back</span></div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="comment">// now that server is running</span></div><div class="line">srv.listen(<span class="number">1337</span>, <span class="string">'127.0.0.1'</span>, () =&gt; &#123;</div><div class="line"></div><div class="line">  <span class="comment">// make a request</span></div><div class="line">  <span class="keyword">var</span> options = &#123;</div><div class="line">    <span class="attr">port</span>: <span class="number">1337</span>,</div><div class="line">    <span class="attr">hostname</span>: <span class="string">'127.0.0.1'</span>,</div><div class="line">    <span class="attr">headers</span>: &#123;</div><div class="line">      <span class="string">'Connection'</span>: <span class="string">'Upgrade'</span>,</div><div class="line">      <span class="string">'Upgrade'</span>: <span class="string">'websocket'</span></div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> req = http.request(options);</div><div class="line">  req.end();</div><div class="line"></div><div class="line">  req.on(<span class="string">'upgrade'</span>, (res, socket, upgradeHead) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'got upgraded!'</span>);</div><div class="line">    socket.end();</div><div class="line">    process.exit(<span class="number">0</span>);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="request-abort"><a href="#request-abort" class="headerlink" title="request.abort()"></a>request.abort()</h2><p>该方法用于中止请求对象. 调用该方法会导致未读取的响应数据被丢弃，socket对象被销毁. </p>
+<h2 id="request-aborted"><a href="#request-aborted" class="headerlink" title="request.aborted"></a>request.aborted</h2><p>如果请求对象被中止了，那么该属性记录了请求对象被中止的毫秒数.</p>
+<h2 id="request-end-data-encoding-callback"><a href="#request-end-data-encoding-callback" class="headerlink" title="request.end([data][, encoding][, callback])"></a>request.end([data][, encoding][, callback])</h2><ul>
+<li>data: Buffer | String</li>
+<li>encoding: String </li>
+<li>callback: Function</li>
+</ul>
+<p>结束发送请求数据. 如果请求体数据还有未发送的数据，调用该方法会导致这些数据被发送. 如果请求体数据是分块的，那么调用该方法会发送’0\r\n\r\n’. 如果指定了data参数，那么该方法等同于先调用request.write(data, encoding), 再调用request.end(callback)方法. </p>
+<p>如果指定了callback回调函数，那么该回调方法会在请求结束后被调用. </p>
+<h2 id="request-flushHeaders"><a href="#request-flushHeaders" class="headerlink" title="request.flushHeaders()"></a>request.flushHeaders()</h2><p>调用该方法会直接flush请求头信息. 出于性能的考虑，node.js通常会缓存请求头信息，直到发送第一块请求数据或关闭连接时才会将请求头信息一并写入，并且会尽可能将请求头信息与消息体打包到同一个TCP包中. 通常情况下，这也是应用程序所希望的处理方式(它可以减少一次TCP回路)，但如果请求体数据要等很长时间才会被发送，那么调用request.flushHeaders()方法可以直接路过上述的优化，并直接flush请求头信息.</p>
+<h2 id="request-setNoDelay-noDelay"><a href="#request-setNoDelay-noDelay" class="headerlink" title="request.setNoDelay([noDelay])"></a>request.setNoDelay([noDelay])</h2><ul>
+<li>noDelay: Boolean</li>
+</ul>
+<p>一旦建立了连接，并分配了socket对象后，就会调用socket.setNoDelay()方法. </p>
+<h2 id="request-setSocketKeepAlive-enable-initialDelay"><a href="#request-setSocketKeepAlive-enable-initialDelay" class="headerlink" title="request.setSocketKeepAlive([enable][, initialDelay])"></a>request.setSocketKeepAlive([enable][, initialDelay])</h2><ul>
+<li>enable: Boolean</li>
+<li>initialDelay: Number</li>
+</ul>
+<p>一旦建立了连接，并分配了socket对象后，就会调用socket.setKeepAlive()方法</p>
+<h2 id="request-setTimeout-timeout-callback"><a href="#request-setTimeout-timeout-callback" class="headerlink" title="request.setTimeout(timeout[, callback])"></a>request.setTimeout(timeout[, callback])</h2><ul>
+<li>timeout: Number  timeout时间间隔</li>
+<li>callback: Function  当发生timeout事件后调用该方法. 监听timeout事件也有同样的效果</li>
+</ul>
+<p>一旦建立了连接，并分配了socket对象后，就会调用socket.setTimeout()方法, 返回request对象.</p>
+<h2 id="request-write-chunk-encoding-callback"><a href="#request-write-chunk-encoding-callback" class="headerlink" title="request.write(chunk[, encoding][, callback])"></a>request.write(chunk[, encoding][, callback])</h2><p>发送请求数据体. 多次调用该方法可以往服务端写入流数据，这种情况下，建议在创建请求对象时，设置’Transfer-Encoding’ = ‘chunked’消息头. </p>
+<p>encoding参数仅在chunk参数为字符串类型时有效，它的默认值为utf8.</p>
+<p>callback回调函数是可选参数，它在数据被flush后被调用. 该方法返回request对象.</p>
+<h2 id="http-Server类"><a href="#http-Server类" class="headerlink" title="http.Server类"></a>http.Server类</h2><p>该类继承自net.Server类，并且可以触发以下事件:</p>
+<h3 id="checkContinue事件"><a href="#checkContinue事件" class="headerlink" title="checkContinue事件"></a>checkContinue事件</h3><ul>
+<li>request: http.IncomingMessage</li>
+<li>response: http.ServerResponse</li>
+</ul>
+<p>当客户端的请求头信息中带有’Expect: 100-continue’时触发该事件. 如果服务端没有监听该事件，那么会自动响应100 Continue. 可以通过调用response.writeContinue()方法来处理该事件，以便要求客户端继续发送请求体，当然也可以通过设置其它的响应信息（如400，无效的请求）来通知客户端不能再继续发送请求体.</p>
+<p><strong>备注：</strong> 当触发了该事件后，request事件不会被触发. </p>
+<h3 id="checkExpectation事件"><a href="#checkExpectation事件" class="headerlink" title="checkExpectation事件"></a>checkExpectation事件</h3><ul>
+<li>request: http.IncomingMessage</li>
+<li>response: http.ServerResponse</li>
+</ul>
+<p>当客户端的请求头中带有Expect头，并且值不为’100-continue’时触发该事件. 如果服务端没有监听该事件，那么服务端会自动响应’417 期望值无法被满足’. </p>
+<p><strong>备注：</strong> 当触发了该事件后，request事件不会被触发. </p>
+<h3 id="clientError事件"><a href="#clientError事件" class="headerlink" title="clientError事件"></a>clientError事件</h3><ul>
+<li>expection: Error</li>
+<li>socket: net.Socket</li>
+</ul>
+<p>当客户端连接触发了error事件时，它会被转发到这里. 服务端可以通过监听这个事件来关闭/销毁socket对象. 例如, 应用程序在可以通过监听该事件来响应’400 Bad Request’消息，而不是直接关闭连接. </p>
+<p>默认的行为是在收到无效的请求时，直接销毁整个socket对象.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"></div><div class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</div><div class="line">  res.end();</div><div class="line">&#125;);</div><div class="line">server.on(<span class="string">'clientError'</span>, (err, socket) =&gt; &#123;</div><div class="line">  socket.end(<span class="string">'HTTP/1.1 400 Bad Request\r\n\r\n'</span>);</div><div class="line">&#125;);</div><div class="line">server.listen(<span class="number">8000</span>);</div></pre></td></tr></table></figure>
+<p>当触发了clientError事件时，不会有reqeust对象和response对象，因此所有的响应内容（包括响应头信息）都需要直接写入到socket对象，此时需特别注意写入的消息体的格式. </p>
+<h3 id="close事件"><a href="#close事件" class="headerlink" title="close事件"></a>close事件</h3><p>当服务端关闭时触发该事件.</p>
+<h3 id="connect事件-1"><a href="#connect事件-1" class="headerlink" title="connect事件"></a>connect事件</h3><ul>
+<li>request: http.IncomingMessage http请求对象，和request事件一致</li>
+<li>socket: net.Socket  socket对象</li>
+<li>head: Buffer  流对象中的第一个包，可能为空</li>
+</ul>
+<p>当客户端请求http CONNECT方法时被触发. 如果服务端没有监听该事件，那么客户端会关闭连接. 当触发了该事件后，socket的data事件将不再有监听器，这意味着应用程序需要重新绑定监听器，以便处理通过socket对象发送到服务端的数据. </p>
+<h3 id="connection事件"><a href="#connection事件" class="headerlink" title="connection事件"></a>connection事件</h3><ul>
+<li>socket: net.Socket</li>
+</ul>
+<p>当建立了新的socket连接时触发该事件. socket对象是net.Socket类的实例，通常情况下，应用程序不需要处理该事件. 可以通过request.connection属性来访问socket对象.</p>
+<h3 id="request事件"><a href="#request事件" class="headerlink" title="request事件"></a>request事件</h3><ul>
+<li>request: http.IncomingMessage</li>
+<li>response: http.ServerResponse</li>
+</ul>
+<p>每当有请求时触发该事件. 注意当启用了keepAlive选项时，同一个连接有可能有多个请求消息.</p>
+<h3 id="upgrade事件-1"><a href="#upgrade事件-1" class="headerlink" title="upgrade事件"></a>upgrade事件</h3><ul>
+<li>request: http.IncomingMessage http请求对象，与request事件中的参数含义一致</li>
+<li>socket: net.Socket  socket对象</li>
+<li>head: Buffer  流数据中的第一个包，可能为空</li>
+</ul>
+<p>当客户端请求头中带有upgrade消息头时触发该事件. 如果服务端没有监听该事件，那么客户端在发送upgrade请求后会关闭连接. 当触发了该事件后，socket的data事件将不再有监听器，这意味着应用程序需要重新绑定监听器，以便处理通过socket对象发送到服务端的数据. </p>
+<h2 id="server-close-callback"><a href="#server-close-callback" class="headerlink" title="server.close([callback])"></a>server.close([callback])</h2><ul>
+<li>callback: Function</li>
+</ul>
+<p>调用该方法后，服务端将停止接受新的请求. 具体可以参见net.Server.close()方法的说明</p>
+<h2 id="server-listen-handle-callback"><a href="#server-listen-handle-callback" class="headerlink" title="server.listen(handle[, callback])"></a>server.listen(handle[, callback])</h2><ul>
+<li>handle: Object</li>
+<li>callback: Function</li>
+</ul>
+<p>handle对象可以是server对象，也可以是socket对象，也可以是任何含有_handle属性的对象，或者是{fd: <n>}对象</n></p>
+<p>调用该方法会导致服务端在指定的句柄上监听连接，但前提是句柄或者文件描述符已经绑定到相应的端口或socket对象.在windows系统中，不支持监听文件描述符.</p>
+<p>该方法是异步方法，callback参数会被注册成listening事件的监听器. 具体可以参见net.Server.listen()方法. 该方法返回server.</p>
+<p><strong>备注:</strong> server.listen()方法可以被多次调用 ，每次调用都会使用指定的参数重新打开服务端.</p>
+<h2 id="server-listen-path-callback"><a href="#server-listen-path-callback" class="headerlink" title="server.listen(path[, callback])"></a>server.listen(path[, callback])</h2><ul>
+<li>path: String</li>
+<li>callback: Function</li>
+</ul>
+<p>在path参数指定的路径上开启unix socket服务端监听连接. 该方法是异步方法，callback参数会被注册成listening事件的监听器. 具体可以参见net.Server.listen(path)方法. 该方法返回server.</p>
+<p><strong>备注:</strong> server.listen()方法可以被多次调用 ，每次调用都会使用指定的参数重新打开服务端.</p>
+<h2 id="server-listen-port-hostname-backlog-callback"><a href="#server-listen-port-hostname-backlog-callback" class="headerlink" title="server.listen([port][, hostname][, backlog][, callback])"></a>server.listen([port][, hostname][, backlog][, callback])</h2><ul>
+<li>port: Number</li>
+<li>hostname: String</li>
+<li>backlog: Number</li>
+<li>callback: Function</li>
+</ul>
+<p>在hostname参数和port参数指定的地址和端口上监听连接. 如果省略了hostname参数，那么默认在任何可用的IPv6地址或者IPv4地址上监听连接. 如果省略了port参数，或者port参数被设置为0， 那么操作系统会随机分配端口号，后续可以在listening事件中，通过调用server.address().port来获取该端口号信息.  如果要监听unix socket， 可以提供文件名称而不是主机名和端口号. </p>
+<p>backlog参数决定了等待连接队列的最大长度. 实际的长度可以通过操作系统进行配置，如在linux系统中可以修改tcp_max_syn_backlog属性值以及somaxconn属性值. 该属性的默认值为511(而不是512)</p>
+<p>该方法是异步方法，callback回调函数会被注册成listening事件的监听器，具体可以参见net.Server.listen()方法的说明.</p>
+<p><strong>备注:</strong> server.listen()方法可以被多次调用 ，每次调用都会使用指定的参数重新打开服务端.</p>
+<h2 id="server-listening"><a href="#server-listening" class="headerlink" title="server.listening"></a>server.listening</h2><ul>
+<li>Boolean</li>
+</ul>
+<p>该属性标识了服务端当前是否处于监听的状态. </p>
+<h2 id="server-maxHeadersCount"><a href="#server-maxHeadersCount" class="headerlink" title="server.maxHeadersCount"></a>server.maxHeadersCount</h2><ul>
+<li>Number</li>
+</ul>
+<p>该属性决定了请求头的最大数量，默认值为1000. 如果设置属性值被设置为0，那么意味着不对长度做限制.</p>
+<h3 id="server-setTimeout-msecs-callback"><a href="#server-setTimeout-msecs-callback" class="headerlink" title="server.setTimeout(msecs, callback)"></a>server.setTimeout(msecs, callback)</h3><ul>
+<li>msecs: Number</li>
+<li>callback: Function</li>
+</ul>
+<p>该方法用于设置socket的超时时间, 并会触发server对象的timeout事件. 并将socket对象作为timeout事件的参数. </p>
+<p>如果服务端监听了timeout事件，那么会调用timeout事件的监听器，并将socket对象作为timeout事件的参数.  </p>
+<p>默认情况下，服务端的超时时间是2分钟，在触发timeout事件后，socket对象会被自动销毁. 但是，如果服务端监听了timeout事件，那么应用程序需自行决定如何处理超时事件. 该方法返回server.</p>
+<h2 id="server-timeout"><a href="#server-timeout" class="headerlink" title="server.timeout"></a>server.timeout</h2><ul>
+<li>Number 默认值为12000(2分钟)</li>
+</ul>
+<p>该属性标识了socket对象被判定为超时的时间长度. </p>
+<p><strong>备注：</strong> socket对象的超时属性只能在连接时被设置，这意味着修改了服务端该属性的值只会影响后续的连接，对于已经建立的连接没有影响. </p>
+<p>如果该属性被设置为0，那么意味着服务端禁用了超时机制.</p>
+<h2 id="http-ServerResponse类"><a href="#http-ServerResponse类" class="headerlink" title="http.ServerResponse类"></a>http.ServerResponse类</h2><p>该类的实例由node.js自动创建，而不是由用户创建. 它们会被传递给request事件的第二个参数. </p>
+<p>该类的实例实现了stream.Writable接口，但不是通过继承的方式. 该类的实例可以触发以下事件:</p>
+<h3 id="close事件-1"><a href="#close事件-1" class="headerlink" title="close事件"></a>close事件</h3><p>该事件标识了在调用response.end()方法或flush数据之前，底层的连接被中止了.</p>
+<h3 id="finish事件"><a href="#finish事件" class="headerlink" title="finish事件"></a>finish事件</h3><p>当响应的消息被发送后触发该事件. 更准确地讲，当请求体消息和请求头消息的最后一个包被移交给操作系统发送时触发该事件. 但这个事件并不意味客户端已经收到了该数据. </p>
+<p>在触发了finish事件后，响应对象不会再触发其它事件.</p>
+<h2 id="response-addTrailers-headers"><a href="#response-addTrailers-headers" class="headerlink" title="response.addTrailers(headers)"></a>response.addTrailers(headers)</h2><ul>
+<li>headers: Object</li>
+</ul>
+<p>调用该方法可以在响应体中增加Trailer尾部信息(traier尾部信息被加到消息体的末尾).</p>
+<p>Trailers尾部信息只会在响应对象使用分块传输编码时才会被使用，如果没有使用这种编码方式(例如，请求体使用了HTTP/1.0协议 )，那么trailers尾部信息会被忽略. </p>
+<p><strong>备注:</strong> 如果应用程序需要发送Trailers尾部信息，http协议要求在消息头中加上Trailer头，它的值为尾部信息的key. 例如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">response.writeHead(<span class="number">200</span>, &#123; <span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span>,</div><div class="line">                          <span class="string">'Trailer'</span>: <span class="string">'Content-MD5'</span> &#125;);</div><div class="line">response.write(fileData);</div><div class="line">response.addTrailers(&#123;<span class="string">'Content-MD5'</span>: <span class="string">'7895bf4b8828b55ceaf47747b4bca667'</span>&#125;);</div><div class="line">response.end();</div></pre></td></tr></table></figure>
+<p>如果在头部信息中含有不合法的字符串，那么会抛出TypeError错误.</p>
+<h2 id="response-end-data-encoding-callback"><a href="#response-end-data-encoding-callback" class="headerlink" title="response.end([data][, encoding][, callback])"></a>response.end([data][, encoding][, callback])</h2><ul>
+<li>data: Buffer | String</li>
+<li>encoding: String</li>
+<li>callback: Function</li>
+</ul>
+<p>调用该方法意味着响应对象的所有头信息及消息体内容都已经被发送，另外，在每个响应对象中都应该调用response.end()方法. </p>
+<p>如果指定了data参数，那么该方法等同于先调用response.write(data, encoding),再调用response.end(callback)方法.</p>
+<p>如果指定了callback回调参数，那么在响应数据被完全写入后会调用callback方法. </p>
+<h2 id="response-finished"><a href="#response-finished" class="headerlink" title="response.finished"></a>response.finished</h2><ul>
+<li>Boolean</li>
+</ul>
+<p>该属性标识了响应对象是否已经结束，该属性在执行完response.end()方法后被设置为true.</p>
+<h2 id="response-getHeader-name"><a href="#response-getHeader-name" class="headerlink" title="response.getHeader(name)"></a>response.getHeader(name)</h2><ul>
+<li>name: String</li>
+<li>返回: String</li>
+</ul>
+<p>调用该方法可以获取已经入队但还没有被发送到客户端的响应头信息. 注意，这里的name参数对大小写不敏感. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> contentType = response.getHeader(<span class="string">'content-type'</span>);</div></pre></td></tr></table></figure>
+<h2 id="response-headersSent"><a href="#response-headersSent" class="headerlink" title="response.headersSent"></a>response.headersSent</h2><ul>
+<li>Boolean</li>
+</ul>
+<p>该属性标识了当前的响应对象的头信息是否已经被发送，该属性为只读属性.</p>
+<h2 id="response-removeHeader-name"><a href="#response-removeHeader-name" class="headerlink" title="response.removeHeader(name)"></a>response.removeHeader(name)</h2><ul>
+<li>name: String</li>
+</ul>
+<p>调用该方法可以从响应头信息中移除指定的消息头.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">response.removeHeader(<span class="string">'Content-Encoding'</span>);</div></pre></td></tr></table></figure>
+<h2 id="response-sendDate"><a href="#response-sendDate" class="headerlink" title="response.sendDate"></a>response.sendDate</h2><ul>
+<li>Boolean</li>
+</ul>
+<p>当设置该属性为true时，响应对象会自动在消息头部分加上日期，默认为true</p>
+<p>只能在在测试时禁用该属性. http协议要求必须在响应头信息中带有Date头信息.</p>
+<h2 id="response-setHeader-name-value"><a href="#response-setHeader-name-value" class="headerlink" title="response.setHeader(name, value)"></a>response.setHeader(name, value)</h2><ul>
+<li>name: String</li>
+<li>value: String</li>
+</ul>
+<p>为响应对象增加头信息. 如果指定的头信息已经在响应对象的头信息中了，那么它的值会被替换. 如果需要为同一个头消息设置多个值，那么value值是字符串数组. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">response.setHeader(<span class="string">'Content-Type'</span>, <span class="string">'text/html'</span>);</div><div class="line"></div><div class="line"><span class="comment">//或者</span></div><div class="line">response.setHeader(<span class="string">'Set-Cookie'</span>, [<span class="string">'type=ninja'</span>, <span class="string">'language=javascript'</span>]);</div></pre></td></tr></table></figure>
+<p>如果设置的头信息中含有无效的字符串，那么会抛出TypeError错误.</p>
+<p>如果调用了response.setHeader()方法来设置头信息，那么这些头信息会和response.writeHead()方法设置的头信息进行合并，但是response.writeHead()方法设置的头信息优先于response.setHeader()方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// returns content-type = text/plain</span></div><div class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">req,res</span>) =&gt;</span> &#123;</div><div class="line">  res.setHeader(<span class="string">'Content-Type'</span>, <span class="string">'text/html'</span>);</div><div class="line">  res.setHeader(<span class="string">'X-Foo'</span>, <span class="string">'bar'</span>);</div><div class="line">  res.writeHead(<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span>: <span class="string">'text/plain'</span>&#125;);</div><div class="line">  res.end(<span class="string">'ok'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="response-setTimeout-msecs-callback"><a href="#response-setTimeout-msecs-callback" class="headerlink" title="response.setTimeout(msecs, callback)"></a>response.setTimeout(msecs, callback)</h2><ul>
+<li>msecs: Number</li>
+<li>callback: Function</li>
+</ul>
+<p>设置socket对象的超时时间为timeout参数指定的值. 如果提供了callback回调方法，那么该方法会注册成timeout事件的监听器. </p>
+<p>如果没有监听请求对象，响应对象或者服务端的timeout事件，那么当timeout事件发生时，socket连接会自动被销毁. 如果监听了timeout事件，那么应用程序自行决定如何处理timeout事件.</p>
+<p>该方法返回response对象</p>
+<h2 id="response-statusCode"><a href="#response-statusCode" class="headerlink" title="response.statusCode"></a>response.statusCode</h2><ul>
+<li>number</li>
+</ul>
+<p>当使用response.setHeader()方法来设置头信息时，可以通过该属性来设置响应对象的状态码. </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">response.statusCode = <span class="number">404</span>;</div></pre></td></tr></table></figure>
+<p>当响应对象的头信息已经被发送给客户端后，该属性标识了发送到客户端的状态码.</p>
+<h2 id="response-statusMessage"><a href="#response-statusMessage" class="headerlink" title="response.statusMessage"></a>response.statusMessage</h2><ul>
+<li>String</li>
+</ul>
+<p>当使用response.setHeader()方法来设置头信息时，可以通过该属性来设置响应对象的状态信息. 如果不设置该属性，那么默认会使用标识的状态消息.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">response.statusMessage = <span class="string">'Not found'</span>;</div></pre></td></tr></table></figure>
+<p>当响应对象的头信息已经被发送给客户端后，该属性标识了发送到客户端的状态信息.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+            <a href="/tags/http/" rel="tag"># http</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/28/前端/nodejs/Nodejs.net/" rel="next" title="(译) nodejs - net">
+                <i class="fa fa-chevron-left"></i> (译) nodejs - net
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/30/前端/nodejs/Nodejs.http/"
+           data-title="(译)nodejs - http" data-url="http://yoursite.com/2017/03/30/前端/nodejs/Nodejs.http/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">172</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#http"><span class="nav-text">http</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#http-Agent类"><span class="nav-text">http.Agent类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-Agent-options"><span class="nav-text">new Agent([options])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-createConnection-options-callback"><span class="nav-text">agent.createConnection(options[, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-destroy"><span class="nav-text">agent.destroy()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-freeSockets"><span class="nav-text">agent.freeSockets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-getName-options"><span class="nav-text">agent.getName(options)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-maxFreeSockets"><span class="nav-text">agent.maxFreeSockets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-maxSocket"><span class="nav-text">agent.maxSocket</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-requests"><span class="nav-text">agent.requests</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-sockets"><span class="nav-text">agent.sockets</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-ClientRequest类"><span class="nav-text">http.ClientRequest类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#abort事件"><span class="nav-text">abort事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aborted事件"><span class="nav-text">aborted事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#connect事件"><span class="nav-text">connect事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#continue事件"><span class="nav-text">continue事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#response事件"><span class="nav-text">response事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#socket事件"><span class="nav-text">socket事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade事件"><span class="nav-text">upgrade事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request-abort"><span class="nav-text">request.abort()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request-aborted"><span class="nav-text">request.aborted</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request-end-data-encoding-callback"><span class="nav-text">request.end([data][, encoding][, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request-flushHeaders"><span class="nav-text">request.flushHeaders()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request-setNoDelay-noDelay"><span class="nav-text">request.setNoDelay([noDelay])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request-setSocketKeepAlive-enable-initialDelay"><span class="nav-text">request.setSocketKeepAlive([enable][, initialDelay])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request-setTimeout-timeout-callback"><span class="nav-text">request.setTimeout(timeout[, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#request-write-chunk-encoding-callback"><span class="nav-text">request.write(chunk[, encoding][, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-Server类"><span class="nav-text">http.Server类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#checkContinue事件"><span class="nav-text">checkContinue事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#checkExpectation事件"><span class="nav-text">checkExpectation事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clientError事件"><span class="nav-text">clientError事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#close事件"><span class="nav-text">close事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#connect事件-1"><span class="nav-text">connect事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#connection事件"><span class="nav-text">connection事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#request事件"><span class="nav-text">request事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upgrade事件-1"><span class="nav-text">upgrade事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-close-callback"><span class="nav-text">server.close([callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-listen-handle-callback"><span class="nav-text">server.listen(handle[, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-listen-path-callback"><span class="nav-text">server.listen(path[, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-listen-port-hostname-backlog-callback"><span class="nav-text">server.listen([port][, hostname][, backlog][, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-listening"><span class="nav-text">server.listening</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-maxHeadersCount"><span class="nav-text">server.maxHeadersCount</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#server-setTimeout-msecs-callback"><span class="nav-text">server.setTimeout(msecs, callback)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server-timeout"><span class="nav-text">server.timeout</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#http-ServerResponse类"><span class="nav-text">http.ServerResponse类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#close事件-1"><span class="nav-text">close事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#finish事件"><span class="nav-text">finish事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-addTrailers-headers"><span class="nav-text">response.addTrailers(headers)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-end-data-encoding-callback"><span class="nav-text">response.end([data][, encoding][, callback])</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-finished"><span class="nav-text">response.finished</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-getHeader-name"><span class="nav-text">response.getHeader(name)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-headersSent"><span class="nav-text">response.headersSent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-removeHeader-name"><span class="nav-text">response.removeHeader(name)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-sendDate"><span class="nav-text">response.sendDate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-setHeader-name-value"><span class="nav-text">response.setHeader(name, value)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-setTimeout-msecs-callback"><span class="nav-text">response.setTimeout(msecs, callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-statusCode"><span class="nav-text">response.statusCode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#response-statusMessage"><span class="nav-text">response.statusMessage</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
