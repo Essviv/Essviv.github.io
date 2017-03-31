@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/SOA/WSDL/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/工具/maven/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +278,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/10/04/SOA/WSDL/" itemprop="url">
-                  WSDL
+                <a class="post-title-link" href="/2016/10/04/工具/maven/" itemprop="url">
+                  maven
                 </a>
               
             
@@ -314,8 +314,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/04/SOA/WSDL/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/SOA/WSDL/" itemprop="commentCount"></span>
+                <a href="/2016/10/04/工具/maven/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/工具/maven/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,19 +343,13 @@
       
         
           
-          WSDLWSDL中包含以下几类元素
-
-抽象元素：
-
-types: WS定义的类型，通过这种方式，WS可以最大限度的实现平台的中立性
-
-message: WS的消息， 可以理解成传统函数中的输入输出参数
-
-portType: WS执行的操作, 可以理解成传统函数库的一个模块或一个类， 也可以认为是接口
+          Maven生命周期maven中将整个项目构建抽象成一系列的生命周期，具体每个周期的实现交由插件实现，这点可以参照设计模式中“模板方法”的实现.
+maven的生命周期分为三套：clean， default以及site， 分别对应于清理、构建以及建立项目站点三个环节.
+不同的生命周期又可以进一步划分为不
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/04/SOA/WSDL/#more" rel="contents">
+            <a class="btn" href="/2016/10/04/工具/maven/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -533,7 +527,7 @@ portType: WS执行的操作, 可以理解成传统函数库的一个模块或一
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/工具/maven/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/SOA/WSDL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -555,8 +549,8 @@ portType: WS执行的操作, 可以理解成传统函数库的一个模块或一
             
               
                 
-                <a class="post-title-link" href="/2016/10/04/工具/maven/" itemprop="url">
-                  maven
+                <a class="post-title-link" href="/2016/10/04/SOA/WSDL/" itemprop="url">
+                  WSDL
                 </a>
               
             
@@ -591,8 +585,8 @@ portType: WS执行的操作, 可以理解成传统函数库的一个模块或一
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/04/工具/maven/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/工具/maven/" itemprop="commentCount"></span>
+                <a href="/2016/10/04/SOA/WSDL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/SOA/WSDL/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -620,13 +614,19 @@ portType: WS执行的操作, 可以理解成传统函数库的一个模块或一
       
         
           
-          Maven生命周期maven中将整个项目构建抽象成一系列的生命周期，具体每个周期的实现交由插件实现，这点可以参照设计模式中“模板方法”的实现.
-maven的生命周期分为三套：clean， default以及site， 分别对应于清理、构建以及建立项目站点三个环节.
-不同的生命周期又可以进一步划分为不
+          WSDLWSDL中包含以下几类元素
+
+抽象元素：
+
+types: WS定义的类型，通过这种方式，WS可以最大限度的实现平台的中立性
+
+message: WS的消息， 可以理解成传统函数中的输入输出参数
+
+portType: WS执行的操作, 可以理解成传统函数库的一个模块或一个类， 也可以认为是接口
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/04/工具/maven/#more" rel="contents">
+            <a class="btn" href="/2016/10/04/SOA/WSDL/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -951,143 +951,6 @@ wsimport自动生成客户端代码
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/24/多线程/hashMap和concurrentHashMap的区别/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Essviv">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Essviv">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/24/多线程/hashMap和concurrentHashMap的区别/" itemprop="url">
-                  hashMap和concurrentHashMap的区别
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-24T10:20:54+08:00">
-                2016-09-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/09/24/多线程/hashMap和concurrentHashMap的区别/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/24/多线程/hashMap和concurrentHashMap的区别/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          hashMap和concurrentHashMap的区别
-线程安全concurrentHashMap是线程安全的，而hashMap不是
-
-同步机制hashMap执行操作时并不会执行同步，但可以通过Collections.synchronizedMap(hashMap)来得到一个与Hashtable等
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/09/24/多线程/hashMap和concurrentHashMap的区别/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/24/SOA/WebService相关概念/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1189,6 +1052,143 @@ WebService的实现方式包括SOAP、REST和XML-RPC.  XML-RPC也是我们通常
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2016/09/24/SOA/WebService相关概念/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/24/多线程/hashMap和concurrentHashMap的区别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/24/多线程/hashMap和concurrentHashMap的区别/" itemprop="url">
+                  hashMap和concurrentHashMap的区别
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-24T10:20:54+08:00">
+                2016-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/09/24/多线程/hashMap和concurrentHashMap的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/24/多线程/hashMap和concurrentHashMap的区别/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          hashMap和concurrentHashMap的区别
+线程安全concurrentHashMap是线程安全的，而hashMap不是
+
+同步机制hashMap执行操作时并不会执行同步，但可以通过Collections.synchronizedMap(hashMap)来得到一个与Hashtable等
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/09/24/多线程/hashMap和concurrentHashMap的区别/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
