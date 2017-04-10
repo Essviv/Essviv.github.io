@@ -1,0 +1,908 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SpringMVC," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="ControllerController提供了service接口中定义的业务的访问途径，它接受用户的输入，并将用户请求委托给service层进行处理，最终将处理结果以视图的形式返回给用户。从Spring2.5以来，提供了注解的方式来实现controller，这些注解包括@Controller, @RequestMapping, @RequestParam, @ModelAttribute，使用这些">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC学习(2)">
+<meta property="og:url" content="http://yoursite.com/2016/06/21/spring/spring-mvc-controller/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="ControllerController提供了service接口中定义的业务的访问途径，它接受用户的输入，并将用户请求委托给service层进行处理，最终将处理结果以视图的形式返回给用户。从Spring2.5以来，提供了注解的方式来实现controller，这些注解包括@Controller, @RequestMapping, @RequestParam, @ModelAttribute，使用这些">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC学习(2)">
+<meta name="twitter:description" content="ControllerController提供了service接口中定义的业务的访问途径，它接受用户的输入，并将用户请求委托给service层进行处理，最终将处理结果以视图的形式返回给用户。从Spring2.5以来，提供了注解的方式来实现controller，这些注解包括@Controller, @RequestMapping, @RequestParam, @ModelAttribute，使用这些">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/06/21/spring/spring-mvc-controller/"/>
+
+
+
+
+
+  <title> SpringMVC学习(2) | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/21/spring/spring-mvc-controller/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC学习(2)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-21T21:00:00+08:00">
+                2016-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/06/21/spring/spring-mvc-controller/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/21/spring/spring-mvc-controller/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h1><p>Controller提供了service接口中定义的业务的访问途径，它接受用户的输入，并将用户请求委托给service层进行处理，最终将处理结果以视图的形式返回给用户。从Spring2.5以来，提供了注解的方式来实现controller，这些注解包括@Controller, @RequestMapping, @RequestParam, @ModelAttribute，使用这些注解，程序中并不需要实现特定的接口，极大地方便了程序的实现。</p>
+<h2 id="Controller和-RequestMapping"><a href="#Controller和-RequestMapping" class="headerlink" title="@Controller和@RequestMapping"></a>@Controller和@RequestMapping</h2><p>@Controller注解意味着被注解类的角色为<strong>controller</strong>，即MVC中的“C”角色. 配合@RequestMapping注解，SpringMVC会自动扫描这些注解并将相应的请求地址映射到这些类和方法中，举个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Controller</span></div><div class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/appointments"</span>)</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppointmentsController</span> </span>&#123;</div><div class="line">    <span class="meta">@RequestMapping</span>(method = RequestMethod.GET)</div><div class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, Appointment&gt; <span class="title">get</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> appointmentBook.getAppointmentsForToday();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@RequestMapping</span>(path = <span class="string">"/&#123;day&#125;"</span>, method = RequestMethod.GET)</div><div class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, Appointment&gt; <span class="title">getForDay</span><span class="params">(@PathVariable @DateTimeFormat(iso=ISO.DATE)</span> Date day, Model model) </span>&#123;</div><div class="line">        <span class="keyword">return</span> appointmentBook.getAppointmentsForDay(day);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@RequestMapping</span>(path = <span class="string">"/new"</span>, method = RequestMethod.GET)</div><div class="line">    <span class="function"><span class="keyword">public</span> AppointmentForm <span class="title">getNewForm</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AppointmentForm();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@RequestMapping</span>(method = RequestMethod.POST)</div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">add</span><span class="params">(@Valid AppointmentForm appointment, BindingResult result)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (result.hasErrors()) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="string">"appointments/new"</span>;</div><div class="line">        &#125;</div><div class="line">        appointmentBook.addAppointment(appointment);</div><div class="line">        <span class="keyword">return</span> <span class="string">"redirect:/appointments"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个代码片断中多次使用了@RequestMapping注解. </p>
+<p>第一次是对类进行注解，它意味着类中所有的处理方法路径都是相对于这个路径而言的，在这个例子中，也就是都是相对于/appointments路径. </p>
+<p>第二个注解出现在get方法上，同时还增加了method参数，这意味着这个方法在原来类注解的基础上，增加了请求方法的限制，这里只能匹配get方法的请求. </p>
+<p>第三个注解出现在getForDay中，它也只能匹配get方法，同时它还使用了URI模板，后续会对URI模板进行深入的探讨. 除此之外，getNewForm方法还对请求路径做了进一步的限制，它只匹配/appointments/new，并且只匹配get方法. </p>
+<p>另外，类层级的@RequestMapping注解并不是必须的，如果类没有被它注解，意味着方法中所有的路径都是绝对路径，而不是相对路径.</p>
+<p>在Spring3.1之前，@RequestMapping默认先由DefaultAnnotationHandlerMapping处理，再由DefaultAnnotationHandlerAdapter进一步缩小匹配的范围. </p>
+<p>在Spring3.1以后，spring提供了新的实现，RequestMappingHandlerMapping和RequestMappingHandlerAdapter，处理器的选择由RequestMappingHandlerMapping直接完成.</p>
+<p>Spring4.3以后，对@RequestMapping提供了几个变体版本，针对不同的请求方法，提供了相应的mapping注解，比如@GetMapping, @PostMapping, @PutMapping等等，有需要可以查阅相关的文档，这里不做进一步详述.</p>
+<h2 id="URI模板"><a href="#URI模板" class="headerlink" title="URI模板"></a>URI模板</h2><p>在使用RequestMapping注解的过程中，可以使用URI模板很方便地获取部分URL地址. </p>
+<p>URI模板中的变量可以通过@PathVariable注解来获取，如下所示, 当请求/owners/fred地址时，ownerId的值就会被设置成fred. </p>
+<p>当@PathVariable注解被用于Map类型的变量时，所有的URI模板变量会自动被填充到map变量中: </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@GetMapping</span>(<span class="string">"/owners/&#123;ownerId&#125;"</span>)</div><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">findOwner</span><span class="params">(@PathVariable String ownerId, Model model)</span> </span>&#123;</div><div class="line">    Owner owner = ownerService.findOwner(ownerId);</div><div class="line">    model.addAttribute(<span class="string">"owner"</span>, owner);</div><div class="line">    <span class="keyword">return</span> <span class="string">"displayOwner"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>除了变量，还可以在URI模板中使用正则表达式. 具体的语法为<strong>{varName: regex}</strong>，其中第一部分为定义的变量，第二部分为正则表达式</p>
+<p>如下所示，当请求/spring-web/spring-web-3.0.5.jar时，symbolicName会被设置成spring-web, version被映射成3.0.5，而extension被映射成.jar:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/spring-web/&#123;symbolicName:[a-z-]+&#125;-&#123;version:\\d\\.\\d\\.\\d&#125;&#123;extension:\\.[a-z]+&#125;"</span>)</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handle</span><span class="params">(@PathVariable String version, @PathVariable String extension)</span> </span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当某个请求地址匹配多个URI模板时，匹配的规则按以下进行:</p>
+<ul>
+<li><p>拥有较少URI变量和通配符的URI模板被优先匹配，比如/hotels/{hotel}/<em>有1个变量和1个通配符，因此它比/hotels/{hotel}/*</em>优先匹配</p>
+</li>
+<li><p>如果变量和通配符数量相等，路径长的被优先匹配，比如/foo/bar<em>比/foo/</em>优先匹配</p>
+</li>
+<li><p>如果变量和通配符数量相等且长度相等，拥有较长通配符个数的优先匹配， 比如/hotels/{hotel}比/hotels/*优先匹配</p>
+</li>
+</ul>
+<p>除此之外，还有两条例外:</p>
+<ul>
+<li><p>/**拥有最低的匹配次序</p>
+</li>
+<li><p>前置的通配符拥有更低的匹配次序，例如/public/path3/{a}/{b}/{c}比/public/**优先匹配</p>
+</li>
+</ul>
+<h2 id="矩阵变量"><a href="#矩阵变量" class="headerlink" title="矩阵变量"></a>矩阵变量</h2><p>Spring还支持在URI请求中带上相应的变量，这些变量就被称为矩阵变量(matrix variable). 在spring中，矩阵变量可以有以下三种形式：</p>
+<ul>
+<li>/cars;color=red;year=2012</li>
+<li>/cars;color=red,green,blue;year=2012</li>
+<li>/cars;color=red;color=green;color=blue;year=2012</li>
+</ul>
+<p>如果要在请求中访问矩阵变量的值，可以使用@MatrixVariable注解来获取. 这个注解还支持指定相应的变量名和矩阵变量名来进一步精确地获取其中的值.</p>
+<h2 id="RequestMapping注解方法"><a href="#RequestMapping注解方法" class="headerlink" title="@RequestMapping注解方法"></a>@RequestMapping注解方法</h2><p>@RequestMapping注解被用在方法上时，支持许多类型的输入参数，包括以下这些：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+<th>类型转换</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Request和Response对象</td>
+<td>可以选择特定的请求和响应类型，比如HttpServletRequest和HttpServletResponse</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>Session对象</td>
+<td>HttpSession类型，表示会话对象</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>InputStream, OutputStream, Reader, Writer</td>
+<td>表示请求和响应的输入输出流对象</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>HttpMethod</td>
+<td>表示当前请求方法对象</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>注解参数</td>
+<td>包括@PathVariable, @MatrixVariable, @RequestBody, @RequestParam, @RequestAttribute, @RequestHeader注解, 请求中的属性或参数都会被自动转化成注解所标注的参数类型</td>
+<td>其中@RequestBody注解使用的是HttpMessageConverter接口来进行转换，其它的注解则由</td>
+</tr>
+</tbody>
+</table>
+<p>WebDataBinder和Formatter来完成|<br>|HttpEntity|包括请求参数和请求头信息|类型转换由HttpMessageConverter完成|<br>|Model, Map, ModelMap|增强视图的模型内容|N/A|</p>
+<p>支持的返回类型包括：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+<th>类型转换</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ModelAndView</td>
+<td>包括返回的模型和视图对象</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>Model, Map</td>
+<td>返回的模型对象，视图类由默认的RequestToViewNameTranslator来进行解析得到</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>View</td>
+<td>返回的视图对象，模型对象可以由参数中的Model类型的参数来提供</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>String</td>
+<td>返回的逻辑视图，可以由相应的ViewResolver接口解析得到实际的视图</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>void</td>
+<td>这种情况下，响应的内容由程序直接通过Response对象输出，或者由RequestToViewNameTranslator解析得到</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>HttpEntity</td>
+<td>包括响应头和响应消息体的内容</td>
+<td>消息体的内容由HttpMessageConverter完成类型转换</td>
+</tr>
+<tr>
+<td>HttpHeaders</td>
+<td>表示当前响应不包含消息体，只有响应头</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<h2 id="RequestBody和-ResponceBody"><a href="#RequestBody和-ResponceBody" class="headerlink" title="@RequestBody和@ResponceBody"></a>@RequestBody和@ResponceBody</h2><p>@RequestBody和@ResponceBody分别代表了请求和响应的消息体，当参数被RequestBody注解，或者响应的对象被ResonseBody注解时，Spring会自动根据convesionService的配置转化成相应的对象或消息体. </p>
+<p>事实上，在spring中消息体到对象或者由对象到响应消息体之间的转换全部由HttpMessageConverter完成，包括RequestBody、ResponseBody以及HttpEntity中的消息体.</p>
+<p>RequestMappingHandlerAdapter自动注册了以下几个converters,如果需要可以自行定义和配置converter</p>
+<ul>
+<li><p>ByteArrayHttpMessageConverter</p>
+</li>
+<li><p>StringHttpMessageConverter</p>
+</li>
+<li><p>FormHttpMessageConverter</p>
+</li>
+<li><p>SourceHttpMessageConverter</p>
+</li>
+</ul>
+<h2 id="RestController"><a href="#RestController" class="headerlink" title="@RestController"></a>@RestController</h2><p>当需要在spring中实现RESTful类型的接口时，可以使用@RestController. 它是@Controller和@ResponseBody两个注解的组合，可以很方便地实现RESTful风格的接口</p>
+<h2 id="方法参数与类型转换"><a href="#方法参数与类型转换" class="headerlink" title="方法参数与类型转换"></a>方法参数与类型转换</h2><p>请求中的参数都是字符串类型的，当它们转换成其它类型时，就需要使用类型转换，这些参数包括请求参数，请求头，cookie信息以及path variable变量. 在Spring中，提供了WebDataBinder来实现相应的类型转换. 通过注册Formatter接口的实现来自定义类型转换的过程. 类型转换的过程可以通过两种方式进行：</p>
+<ul>
+<li><p>使用@InitBinder注解</p>
+</li>
+<li><p>使用WebBindingInitializer</p>
+</li>
+</ul>
+<h3 id="InitBinder注解"><a href="#InitBinder注解" class="headerlink" title="@InitBinder注解"></a>@InitBinder注解</h3><p>使用@InitBinder注解可以将方法定义为类型转换的实现，它定义了将请求参数转换成相应类型的具体方法，通过registerCustomEditor或者addCustomFormatter来实现注册.</p>
+<p>它接受的参数同@RequestMapping基本相同，而且不能有返回值. </p>
+<p>这种方式只在声明@InitBinder的controller类中有用. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Controller</div><div class="line">public class MyFormController &#123;</div><div class="line"></div><div class="line">    @InitBinder</div><div class="line">    protected void initBinder(WebDataBinder binder) &#123;</div><div class="line">        SimpleDateFormat dateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);</div><div class="line">        dateFormat.setLenient(false);</div><div class="line">        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));</div><div class="line"></div><div class="line">        //spring4.2后支持的方式</div><div class="line">        binder.addCustomFormatter(new DateFormatter(&quot;yyyy-MM-dd&quot;));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="WebBindingInitializer"><a href="#WebBindingInitializer" class="headerlink" title="WebBindingInitializer"></a>WebBindingInitializer</h3><p>通过WebBindingInitializer可以将类型转换的配置放到RequestMappingAdapter， 通过修改默认的配置自定义类型转换的过程. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;bean class=&quot;org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter&quot;&gt;</div><div class="line">    &lt;property name=&quot;cacheSeconds&quot; value=&quot;0&quot;/&gt;</div><div class="line">    &lt;property name=&quot;webBindingInitializer&quot;&gt;</div><div class="line">        &lt;bean class=&quot;org.springframework.samples.petclinic.web.ClinicBindingInitializer&quot;/&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<h2 id="异步请求处理"><a href="#异步请求处理" class="headerlink" title="异步请求处理"></a>异步请求处理</h2><p>从Servlet3.0规范开始就定义了异步请求处理的方法. Spring框架也从3.2开始支持3.0规范. 在Spring中，可以用两种方式来实现对请求的异步处理：</p>
+<ul>
+<li><p>Callable<t>: 请求到达服务器后，服务器直接返回callable对象，并且servlet的处理线程退出，从而可以接着处理后续进来的请求。后续的处理由threadPoolTaskExecutor中的线程接管，当工作线程处理完成后，结果通过callable回调给servlet容器的线程，再由这个线程返回到客户端. </t></p>
+</li>
+<li><p>DeferredResult<t>： 整个处理的过程与Callable<t>基本一致，唯一不同的是，Callable的结果由容器管理的工作线程完成后交还给servlet容器响应. 但deferredResult的响应结果则由其它的任意线程进行设置，通过它的setResult方法，任何方法都可以将处理的结果设置到deferredResult中</t></t></p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">@RequestMapping(&quot;query&quot;)</div><div class="line">@ResponseBody</div><div class="line">public Callable&lt;Person&gt; asyn() &#123;</div><div class="line">    return () -&gt; &#123;</div><div class="line">    	//延迟两秒响应</div><div class="line">        Thread.sleep(2000);</div><div class="line"></div><div class="line">        return buildPerson();</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@RequestMapping(&quot;queryDefered&quot;)</div><div class="line">@ResponseBody</div><div class="line">public DeferredResult&lt;Person&gt; asynDeferredResult() &#123;</div><div class="line">    DeferredResult&lt;Person&gt; deferredResult = new DeferredResult&lt;&gt;(5000L, buildPerson(&quot;Essviv&quot;));</div><div class="line"></div><div class="line">    new Thread(new Runnable() &#123;</div><div class="line">        @Override</div><div class="line">        public void run() &#123;</div><div class="line">            try &#123;</div><div class="line">                Thread.sleep(2000);</div><div class="line">            &#125; catch (InterruptedException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            deferredResult.setResult(buildPerson());</div><div class="line">        &#125;</div><div class="line">    &#125;).start();</div><div class="line"></div><div class="line">    return deferredResult;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="异步处理流程"><a href="#异步处理流程" class="headerlink" title="异步处理流程"></a>异步处理流程</h3><p>异步请求处理的整个过程包括：</p>
+<ul>
+<li><p>控制器返回callable或者deferredResult</p>
+</li>
+<li><p>SpringMVC开始在工作线程中处理请求，对于Callable，工作线程由容器管理；对于deferredResult，工作线程由任意线程实现</p>
+</li>
+<li><p>DispatcherServer及所有的过滤器线程，但是response仍然打开着，等待进一步响应</p>
+</li>
+<li><p>Callable返回相应的响应并把响应重新分发给dispatchServlet</p>
+</li>
+<li><p>DispatcherServlet被重新唤起，并将callable的内容输出到response中</p>
+</li>
+</ul>
+<p>在异步处理的时候，如果出现异常，异常处理的方式与同步处理表现一致. 在DeferredResult中，也可以通过setErrorResult来设置异常信息</p>
+<h3 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h3><p>那么，在spring中如何配置异步处理请求呢? 简单来讲，分为两步：</p>
+<ul>
+<li><p>设置servlet的版本为3.0</p>
+</li>
+<li><p>在servlet及相应的filter配置中加上<async-support>true</async-support></p>
+</li>
+<li><p>在controller中返回callable或者deferredResult</p>
+</li>
+</ul>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>Controller的官方文档： <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#mvc-controller" target="_blank" rel="external">官方文档</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringMVC/" rel="tag"># SpringMVC</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/15/xstream-converter/" rel="next" title="XStream学习(3)">
+                <i class="fa fa-chevron-left"></i> XStream学习(3)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/21/spring/spring-introduction/" rel="prev" title="SpringMVC学习(1)">
+                SpringMVC学习(1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/06/21/spring/spring-mvc-controller/"
+           data-title="SpringMVC学习(2)" data-url="http://yoursite.com/2016/06/21/spring/spring-mvc-controller/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">173</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Controller"><span class="nav-text">Controller</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Controller和-RequestMapping"><span class="nav-text">@Controller和@RequestMapping</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URI模板"><span class="nav-text">URI模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵变量"><span class="nav-text">矩阵变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RequestMapping注解方法"><span class="nav-text">@RequestMapping注解方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RequestBody和-ResponceBody"><span class="nav-text">@RequestBody和@ResponceBody</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RestController"><span class="nav-text">@RestController</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法参数与类型转换"><span class="nav-text">方法参数与类型转换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#InitBinder注解"><span class="nav-text">@InitBinder注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebBindingInitializer"><span class="nav-text">WebBindingInitializer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步请求处理"><span class="nav-text">异步请求处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#异步处理流程"><span class="nav-text">异步处理流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置方法"><span class="nav-text">配置方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

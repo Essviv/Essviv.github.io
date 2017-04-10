@@ -1,0 +1,823 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="spring Ioc," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="配置细节
+由于配置文件中提供的参数类型都是string类型的，而实际的参数类型有可能是任何类型，因此两者之间必然存在相应的转化，这是通过ConversionService来完成的.
+
+p命名空间可以很方便地通过属性来指定属性值
+
+c命名空间可以用来很方便地通过属性指定构造函数的参数值
+
+depends-on可以用来显式地指定依赖关系，在使用bean之前，它所依赖的所有bean都必须完成初始化操作.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring学习之IoC">
+<meta property="og:url" content="http://yoursite.com/2016/07/12/spring/spring-ioc-2/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="配置细节
+由于配置文件中提供的参数类型都是string类型的，而实际的参数类型有可能是任何类型，因此两者之间必然存在相应的转化，这是通过ConversionService来完成的.
+
+p命名空间可以很方便地通过属性来指定属性值
+
+c命名空间可以用来很方便地通过属性指定构造函数的参数值
+
+depends-on可以用来显式地指定依赖关系，在使用bean之前，它所依赖的所有bean都必须完成初始化操作.">
+<meta property="og:image" content="https://raw.githubusercontent.com/Essviv/images/master/singleton.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Essviv/images/master/prototype.png">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring学习之IoC">
+<meta name="twitter:description" content="配置细节
+由于配置文件中提供的参数类型都是string类型的，而实际的参数类型有可能是任何类型，因此两者之间必然存在相应的转化，这是通过ConversionService来完成的.
+
+p命名空间可以很方便地通过属性来指定属性值
+
+c命名空间可以用来很方便地通过属性指定构造函数的参数值
+
+depends-on可以用来显式地指定依赖关系，在使用bean之前，它所依赖的所有bean都必须完成初始化操作.">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Essviv/images/master/singleton.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/12/spring/spring-ioc-2/"/>
+
+
+
+
+
+  <title> Spring学习之IoC | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/12/spring/spring-ioc-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Spring学习之IoC
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-12T21:45:00+08:00">
+                2016-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/07/12/spring/spring-ioc-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/12/spring/spring-ioc-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="配置细节"><a href="#配置细节" class="headerlink" title="配置细节"></a>配置细节</h1><ul>
+<li><p>由于配置文件中提供的参数类型都是string类型的，而实际的参数类型有可能是任何类型，因此两者之间必然存在相应的转化，这是通过ConversionService来完成的.</p>
+</li>
+<li><p>p命名空间可以很方便地通过属性来指定属性值</p>
+</li>
+<li><p>c命名空间可以用来很方便地通过属性指定构造函数的参数值</p>
+</li>
+<li><p>depends-on可以用来显式地指定依赖关系，在使用bean之前，它所依赖的所有bean都必须完成初始化操作. 如果需要表达对多个bean的依赖关系，可以通过逗号，分号以及空格分隔.</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;beanOne&quot; class=&quot;ExampleBean&quot; depends-on=&quot;manager,accountDao&quot; /&gt;</div><div class="line"></div><div class="line">&lt;bean id=&quot;manager&quot; class=&quot;ManagerBean&quot; /&gt;</div><div class="line">&lt;bean id=&quot;accountDao&quot; class=&quot;x.y.jdbc.JdbcAccountDao&quot; /&gt;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>默认情况下，容器在初始化时，会默认初始化所有的singleton对象，这样如果这些对象的配置有问题，在容器初始化的时候就会被及时发现，而不是等到容器运行了很长时间后才被发现。如果希望容器在需要使用单例对象时才生成相应的单例对象，可以设置它的lazy-initialized属性，这样，容器就只会在这个对象第一次被请求的时候才去生成这个对象.</p>
+</li>
+<li><p>前面提到过，在spring框架中，每个bean对象的生命周期是不一样的，这个生命周期通过scope属性来表示，可以是singleton, prototype以及其它一些选择. 之前也提到过这个问题，如果在singleton对象中需要引用另一个prototype的对象，这个对象的注入时机是在singleton对象初始化的时候完成，也就是说，这个注入只会完成一次. 如果希望单例对象在每次请求时都获取新的prototype对象，spring提供了两种方式：</p>
+<ul>
+<li><p>实现ApplicationContextAware接口： 通过这个接口，单例对象可以获取到ApplicationContext对象，即容器对象，这样当它需要prototype对象时，只需要通过容器获取一次即可. 但这个方法让业务层代码感知到容器的存在，有一定的侵入性. </p>
+</li>
+<li><p>需要通过<strong>方法注入</strong>的方式来完成: 通过指定lookup-method属性，可以将某个在容器中托管的对象映射给方法，也就是说，方法的返回对象被指定的容器对象替换. Spring框架是通过CGLib动态代理的方式来实现相应的机制的. 具体的示例代码如下所示：</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public abstract class CommandManager &#123;</div><div class="line">    public Object process(Object commandState) &#123;</div><div class="line">        // grab a new instance of the appropriate Command interface</div><div class="line">        Command command = createCommand();</div><div class="line">        // set the state on the (hopefully brand new) Command instance</div><div class="line">        command.setState(commandState);</div><div class="line">        return command.execute();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // okay... but where is the implementation of this method?</div><div class="line">    protected abstract Command createCommand();</div><div class="line">&#125;</div><div class="line"></div><div class="line">&lt;!-- a stateful bean deployed as a prototype (non-singleton) --&gt;</div><div class="line">&lt;bean id=&quot;command&quot; class=&quot;fiona.apple.AsyncCommand&quot; scope=&quot;prototype&quot;&gt;</div><div class="line">    &lt;!-- inject dependencies here as required --&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line"></div><div class="line">&lt;!-- commandProcessor uses statefulCommandHelper --&gt;</div><div class="line">&lt;bean id=&quot;commandManager&quot; class=&quot;fiona.apple.CommandManager&quot;&gt;</div><div class="line">    &lt;lookup-method name=&quot;createCommand&quot; bean=&quot;command&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<h1 id="Bean的范围"><a href="#Bean的范围" class="headerlink" title="Bean的范围"></a>Bean的范围</h1><p>对象的Scope属性定义了该对象的生命周期，关于这个之前已经说过很多，本节再对scope属性进行详细的描述. 总得来讲，对象的scope属性有以下几种：</p>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Singleton</td>
+<td>单例对象，容器中只存在一个对象，这是spring对象默认的scope值</td>
+</tr>
+<tr>
+<td>prototype</td>
+<td>原型对象，每次请求容器时，容器都将生成新的对象实例</td>
+</tr>
+<tr>
+<td>request</td>
+<td>单次请求范围有效，也就是说在每次请求时，容器都会生成新的对象实例，这个范围只在web应用中有效</td>
+</tr>
+<tr>
+<td>Session</td>
+<td>会话范围有效，也就是说在开始新的会话时，容器会生成新的对象实例，并在会话期间保持不变，同样，这个范围也只在web应用中有效</td>
+</tr>
+<tr>
+<td>application</td>
+<td>在servletContext范围有效，注意这里是servletContext范围唯一，而单例对象是在容器范围内唯一，这个范围也只在web应用中有效</td>
+</tr>
+<tr>
+<td>globalSession</td>
+<td>略</td>
+</tr>
+<tr>
+<td>webSocket</td>
+<td>略</td>
+</tr>
+</tbody>
+</table>
+<h2 id="singleton"><a href="#singleton" class="headerlink" title="singleton"></a>singleton</h2><p>单例对象在<strong>容器范围保持唯一</strong>，它的示意图如下，也就是说，当容器请求单例对象时，总是返回同一个对象. 同时它也是spring中默认的scope值. </p>
+<p><img src="https://raw.githubusercontent.com/Essviv/images/master/singleton.png" alt="Spring Singleton"></p>
+<h2 id="prototype"><a href="#prototype" class="headerlink" title="prototype"></a>prototype</h2><p>原型对象，从它的命名上就可以看出，它是作为对象的原型来使用，相当于是创建对象的模板. 当向容器请求原型对象时，容器总是返回一个新的原型对象，示意图如下.</p>
+<p>和其它scope类型不同的是，spring容器并没有完整地管理prototype对象的生命周期，当容器创建好原型对象后，它就将原型对象完全交付给客户端，而不管它后续的所有生命周期。这也就意味着，虽然spring容器会对所有对象执行初始化操作(postConstruct或者initialize)，但它并不一定会执行相应的回收操作（preDestroy或者destructor)，原型对象的析构操作必须由客户端自行完成. 如果需要由容器来完成相应的回收操作，那么必须通过实现BeanPostProcessor接口来完成.</p>
+<p><img src="https://raw.githubusercontent.com/Essviv/images/master/prototype.png" alt="Spring Prototype"></p>
+<h1 id="自定义生命周期"><a href="#自定义生命周期" class="headerlink" title="自定义生命周期"></a>自定义生命周期</h1><p>Spring框架中提供了许多扩展点，供用户在需要的时候扩展实现自定义的行为，其中一个就是生命周期函数. 生命周期函数的扩展可以通过以下方式来进行：</p>
+<ul>
+<li><p>实现InitializingBean和DisposobleBean接口：spring团队不建议使用这种方式来扩展，因为它将业务代码和框架代码进行不必要的耦合</p>
+</li>
+<li><p>使用@PostConstruct与@PreDestroy注解：这是推荐的作法，在容器构造完对象后，会调用postConstruct注解的方法进行初始化操作；同样地，在容器析构对象之前，会调用preDestroy注解的方法执行相应的操作. 这种方式对应于XML配置时的init-method属性和destroy-method属性.</p>
+</li>
+</ul>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>官方文档：<a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#beans-factory-scopes" target="_blank" rel="external">官方文档</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring-Ioc/" rel="tag"># spring Ioc</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/05/spring/spring-ioc-1/" rel="next" title="Spring学习之IoC">
+                <i class="fa fa-chevron-left"></i> Spring学习之IoC
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/26/Web/Cookie的属性/" rel="prev" title="Cookie的属性">
+                Cookie的属性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/12/spring/spring-ioc-2/"
+           data-title="Spring学习之IoC" data-url="http://yoursite.com/2016/07/12/spring/spring-ioc-2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">173</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#配置细节"><span class="nav-text">配置细节</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bean的范围"><span class="nav-text">Bean的范围</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#singleton"><span class="nav-text">singleton</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#prototype"><span class="nav-text">prototype</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义生命周期"><span class="nav-text">自定义生命周期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

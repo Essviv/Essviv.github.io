@@ -1,0 +1,774 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SpringMVC config," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="配置SpringMVC在之前的阐述中提到，springMVC框架中提供了很多特殊的对象来实现整个MVC流程的处理（详见概述）. 这一节详细阐述如何分别通过代码和配置的方式在springMVC中自定义这些对象的行为.
+启用SpringMVC框架启用SpringMVC框架的方法很简单，如下所示，只需要一行注解代码或者一行配置即可完成. 启用了springMVC框架后，spring自动完成了以下这些事情">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringMVC学习(6)">
+<meta property="og:url" content="http://yoursite.com/2016/07/02/spring/spring-mvc-config/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="配置SpringMVC在之前的阐述中提到，springMVC框架中提供了很多特殊的对象来实现整个MVC流程的处理（详见概述）. 这一节详细阐述如何分别通过代码和配置的方式在springMVC中自定义这些对象的行为.
+启用SpringMVC框架启用SpringMVC框架的方法很简单，如下所示，只需要一行注解代码或者一行配置即可完成. 启用了springMVC框架后，spring自动完成了以下这些事情">
+<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringMVC学习(6)">
+<meta name="twitter:description" content="配置SpringMVC在之前的阐述中提到，springMVC框架中提供了很多特殊的对象来实现整个MVC流程的处理（详见概述）. 这一节详细阐述如何分别通过代码和配置的方式在springMVC中自定义这些对象的行为.
+启用SpringMVC框架启用SpringMVC框架的方法很简单，如下所示，只需要一行注解代码或者一行配置即可完成. 启用了springMVC框架后，spring自动完成了以下这些事情">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/02/spring/spring-mvc-config/"/>
+
+
+
+
+
+  <title> SpringMVC学习(6) | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/02/spring/spring-mvc-config/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC学习(6)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-02T19:37:00+08:00">
+                2016-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/07/02/spring/spring-mvc-config/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/02/spring/spring-mvc-config/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="配置SpringMVC"><a href="#配置SpringMVC" class="headerlink" title="配置SpringMVC"></a>配置SpringMVC</h1><p>在之前的阐述中提到，springMVC框架中提供了很多特殊的对象来实现整个MVC流程的处理（详见<a href="http://essviv.github.io/2016/06/21/spring-introduction/" target="_blank" rel="external">概述</a>）. 这一节详细阐述如何分别通过代码和配置的方式在springMVC中自定义这些对象的行为.</p>
+<h2 id="启用SpringMVC框架"><a href="#启用SpringMVC框架" class="headerlink" title="启用SpringMVC框架"></a>启用SpringMVC框架</h2><p>启用SpringMVC框架的方法很简单，如下所示，只需要一行注解代码或者一行配置即可完成. 启用了springMVC框架后，spring自动完成了以下这些事情：</p>
+<ul>
+<li><p>注册RequestMappingHandlerMapping对象</p>
+</li>
+<li><p>注册RequestMappingHandlerAdapter对象</p>
+</li>
+<li><p>注册ExceptionHandlerExceptionResolver对象</p>
+</li>
+<li><p>设置了HttpMessageConverters，具体的实现包括：</p>
+<ul>
+<li><p>ByteArrayHttpMessageConverter</p>
+</li>
+<li><p>StringHttpMessageConverter</p>
+</li>
+<li><p>ResourceHttpMessageConverter</p>
+</li>
+<li><p>SourceHttpMessageConverter</p>
+</li>
+<li><p>FormHttpMessageConverter</p>
+</li>
+<li><p>MappingJackson2HttpMessageConverter: 如果在类路径中找到ackson 2，则自动注册这个类</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//代码方式</div><div class="line">@Configuration</div><div class="line">@EnableWebMVC</div><div class="line">public class WebConfig&#123;&#125;</div><div class="line"></div><div class="line">//配置方式, dispatcherServlet.xml</div><div class="line">&lt;mvc:annotation-driven /&gt;</div></pre></td></tr></table></figure>
+<h2 id="类型转换和格式化操作"><a href="#类型转换和格式化操作" class="headerlink" title="类型转换和格式化操作"></a>类型转换和格式化操作</h2><p>如果需要自定义类型转换和格式化，可以通过重写相应的方法或者配置conversionService来完成</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">//代码方式</div><div class="line">@Configuration</div><div class="line">@EnableWebMVC</div><div class="line">public class WebConfig extends WebMvcConfigurerAdapter&#123;</div><div class="line">	@Override</div><div class="line">    public void addFormatters(FormatterRegistry registry) &#123;</div><div class="line">        // Add formatters and/or converters</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//配置方式</div><div class="line">&lt;mvc:annotation-driven conversion-service=&quot;conversionService&quot;/&gt;</div><div class="line"></div><div class="line">&lt;bean id=&quot;conversionService&quot;</div><div class="line">        class=&quot;org.springframework.format.support.FormattingConversionServiceFactoryBean&quot;&gt;</div><div class="line">    &lt;property name=&quot;converters&quot;&gt;</div><div class="line">        &lt;set&gt;</div><div class="line">            &lt;bean class=&quot;org.example.MyConverter&quot;/&gt;</div><div class="line">        &lt;/set&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property name=&quot;formatters&quot;&gt;</div><div class="line">        &lt;set&gt;</div><div class="line">            &lt;bean class=&quot;org.example.MyFormatter&quot;/&gt;</div><div class="line">            &lt;bean class=&quot;org.example.MyAnnotationFormatterFactory&quot;/&gt;</div><div class="line">        &lt;/set&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">    &lt;property name=&quot;formatterRegistrars&quot;&gt;</div><div class="line">        &lt;set&gt;</div><div class="line">            &lt;bean class=&quot;org.example.MyFormatterRegistrar&quot;/&gt;</div><div class="line">        &lt;/set&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>可以通过重写addInterceptors方法或者配置<mvc:interceptors>元素来对所有请求或者部分请求设置拦截器：</mvc:interceptors></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">//代码方式</div><div class="line">@Override</div><div class="line">public void addInterceptors(InterceptorRegistry registry) &#123;</div><div class="line">    registry.addInterceptor(new LocaleInterceptor());</div><div class="line">    registry.addInterceptor(new ThemeInterceptor()).addPathPatterns(&quot;/**&quot;).excludePathPatterns(&quot;/admin/**&quot;);</div><div class="line">    registry.addInterceptor(new SecurityInterceptor()).addPathPatterns(&quot;/secure/*&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">//配置方式</div><div class="line">&lt;mvc:interceptors&gt;</div><div class="line">    &lt;bean class=&quot;org.springframework.web.servlet.i18n.LocaleChangeInterceptor&quot;/&gt;</div><div class="line">    &lt;mvc:interceptor&gt;</div><div class="line">        &lt;mvc:mapping path=&quot;/**&quot;/&gt;</div><div class="line">        &lt;mvc:exclude-mapping path=&quot;/admin/**&quot;/&gt;</div><div class="line">        &lt;bean class=&quot;org.springframework.web.servlet.theme.ThemeChangeInterceptor&quot;/&gt;</div><div class="line">    &lt;/mvc:interceptor&gt;</div><div class="line"></div><div class="line">    &lt;mvc:interceptor&gt;</div><div class="line">        &lt;mvc:mapping path=&quot;/secure/*&quot;/&gt;</div><div class="line">        &lt;bean class=&quot;org.example.SecurityInterceptor&quot;/&gt;</div><div class="line">    &lt;/mvc:interceptor&gt;</div><div class="line">&lt;/mvc:interceptors&gt;</div></pre></td></tr></table></figure>
+<h2 id="内容协商管理器"><a href="#内容协商管理器" class="headerlink" title="内容协商管理器"></a>内容协商管理器</h2><p>在介绍SpringMVC的RESTful支持(<a href="http://essviv.github.io/2016/06/28/spring-mvc-handler-mapping/" target="_blank" rel="external">视图解析</a>)时曾提过，spring框架可以支持按照请求后缀名或者消息头返回相应格式的内容，实现的主要方法就是配置ContentNegotiatingViewResolver. 而将请求的后缀或消息头转化成相应的媒体类型就是由ContentNegotiateManager来完成，配置这个管理器的方法同样也有通过代码和配置文件两种方式：</p>
+<p>springMVC中, 可以根据需要给RequestMappingHandlerMapping、RequestMappingHandlerAdapter以及ExceptionHandlerExceptionResolver提供相同的内容协商器，也可以根据需要提供各自的协商器，具体根据需要进行确定. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//代码方式</div><div class="line">@Override</div><div class="line">public void configureContentNegotiation(ContentNegotiationConfigurer configurer) &#123;</div><div class="line">    configurer.mediaType(&quot;json&quot;, MediaType.APPLICATION_JSON);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//配置方式</div><div class="line">&lt;mvc:annotation-driven content-negotiation-manager=&quot;contentNegotiationManager&quot;/&gt;</div><div class="line">&lt;bean id=&quot;contentNegotiationManager&quot; class=&quot;org.springframework.web.accept.ContentNegotiationManagerFactoryBean&quot;&gt;</div><div class="line">    &lt;property name=&quot;mediaTypes&quot;&gt;</div><div class="line">        &lt;value&gt;</div><div class="line">            json=application/json</div><div class="line">            xml=application/xml</div><div class="line">        &lt;/value&gt;</div><div class="line">    &lt;/property&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<p>在没有使用SpringMVC环境的场景时：</p>
+<ul>
+<li><p>如果需要使用RequestMappingHandlerMapping, 必须生成一个ContentNegotiationManager实例并把它配置到处理器映射对象中，以完成请求的映射</p>
+</li>
+<li><p>如果需要使用RequestMappingHandlerAdapter或者ExceptionHandlerExceptionResolver， 也必须生成一个ContentNegotiationManager的实例来完成内容类型的协商</p>
+</li>
+</ul>
+<h2 id="视图控制器"><a href="#视图控制器" class="headerlink" title="视图控制器"></a>视图控制器</h2><p>视图控制器的作用很简单，它不提供相应的业务处理逻辑，只是将请求映射成相应的视图，它的配置如下: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//代码方式</div><div class="line">@Override</div><div class="line">public void addViewControllers(ViewControllerRegistry registry) &#123;</div><div class="line">    registry.addViewController(&quot;/&quot;).setViewName(&quot;home&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//配置方式</div><div class="line">&lt;mvc:view-controller path=&quot;/&quot; view-name=&quot;home&quot;/&gt;</div></pre></td></tr></table></figure>
+<h2 id="资源配置"><a href="#资源配置" class="headerlink" title="资源配置"></a>资源配置</h2><p>资源配置主要是针对静态资源的处理，具体是由ResourceHttpRequestHandler类进行处理，它可以根据请求头里的信息决定返回304还是200. 配置信息主要是配置哪些路径的请求交由这个类进行处理，以及资源的位置. 具体如下: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//代码方式</div><div class="line">@Override</div><div class="line">public void addResourceHandlers(ResourceHandlerRegistry registry) &#123;</div><div class="line">    registry.addResourceHandler(&quot;/resources/**&quot;).addResourceLocations(&quot;/public-resources/&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//配置方式</div><div class="line">&lt;mvc:resources mapping=&quot;/resources/**&quot; location=&quot;/public-resources/&quot;/&gt;</div></pre></td></tr></table></figure>
+<h2 id="消息转化器"><a href="#消息转化器" class="headerlink" title="消息转化器"></a>消息转化器</h2><p>消息转化器的作用是将请求消息体和响应消息体的内容与对应的类型之间进行转换，配置样例如下: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">//代码方式</div><div class="line">@Override</div><div class="line">public void configureMessageConverters(List&lt;HttpMessageConverter&lt;?&gt;&gt; converters) &#123;</div><div class="line">    Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder()</div><div class="line">            .indentOutput(true)</div><div class="line">            .dateFormat(new SimpleDateFormat(&quot;yyyy-MM-dd&quot;))</div><div class="line">            .modulesToInstall(new ParameterNamesModule());</div><div class="line">    converters.add(new MappingJackson2HttpMessageConverter(builder.build()));</div><div class="line">    converters.add(new MappingJackson2XmlHttpMessageConverter(builder.xml().build()));</div><div class="line">&#125;</div><div class="line"></div><div class="line">//配置方式</div><div class="line">&lt;mvc:annotation-driven&gt;</div><div class="line">    &lt;mvc:message-converters&gt;</div><div class="line">        &lt;bean class=&quot;org.springframework.http.converter.json.MappingJackson2HttpMessageConverter&quot;&gt;</div><div class="line">            &lt;property name=&quot;objectMapper&quot; ref=&quot;objectMapper&quot;/&gt;</div><div class="line">        &lt;/bean&gt;</div><div class="line">        &lt;bean class=&quot;org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter&quot;&gt;</div><div class="line">            &lt;property name=&quot;objectMapper&quot; ref=&quot;xmlMapper&quot;/&gt;</div><div class="line">        &lt;/bean&gt;</div><div class="line">    &lt;/mvc:message-converters&gt;</div><div class="line">&lt;/mvc:annotation-driven&gt;</div></pre></td></tr></table></figure>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>官方文档：<a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#mvc-config-static-resources" target="_blank" rel="external">官方文档</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringMVC-config/" rel="tag"># SpringMVC config</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/02/spring/spring-mvc-code-based-servlet-container-config/" rel="next" title="Spring学习(5)">
+                <i class="fa fa-chevron-left"></i> Spring学习(5)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/02/spring/spring-differerce-between-application-context-and-servlet-context/" rel="prev" title="ServletContext与ApplicationContext的区别">
+                ServletContext与ApplicationContext的区别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/07/02/spring/spring-mvc-config/"
+           data-title="SpringMVC学习(6)" data-url="http://yoursite.com/2016/07/02/spring/spring-mvc-config/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">173</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">52</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#配置SpringMVC"><span class="nav-text">配置SpringMVC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启用SpringMVC框架"><span class="nav-text">启用SpringMVC框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型转换和格式化操作"><span class="nav-text">类型转换和格式化操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拦截器"><span class="nav-text">拦截器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内容协商管理器"><span class="nav-text">内容协商管理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视图控制器"><span class="nav-text">视图控制器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源配置"><span class="nav-text">资源配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息转化器"><span class="nav-text">消息转化器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>

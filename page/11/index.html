@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/13/2016学习计划/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/13/消息队列/rabbitMQ/消息发布的确认/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +278,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/09/13/2016学习计划/" itemprop="url">
-                  2016学习计划
+                <a class="post-title-link" href="/2016/09/13/消息队列/rabbitMQ/消息发布的确认/" itemprop="url">
+                  消息发布的确认
                 </a>
               
             
@@ -314,8 +314,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/09/13/2016学习计划/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/13/2016学习计划/" itemprop="commentCount"></span>
+                <a href="/2016/09/13/消息队列/rabbitMQ/消息发布的确认/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/13/消息队列/rabbitMQ/消息发布的确认/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,16 +343,12 @@
       
         
           
-          2016年学习计划
-2月份-3月份： 学习缓存技术，包括redis, memcached和ehcached
-
-4月份： 学习JAVA中的多线程技术，可以通过官方文档和教程相结合的方式来学习，在学习的过程中，注意理解其原理，结合git上一些实际的项目源码进行分析
-
-5月份： 学习NIO技术，并学习ne
+          消息发布的确认在RMQ中，消息发布的确认有两种方式，一种是AMQP标准的方式，一种是RMQ扩展的方式
+1. 事务机制通过事务的机制来保证每次消息的发布是成功的，如示例代码所示, 但这个方法最大的不足是它必须等待broker处理完后才能继续，导致这种方式的效率非常低，大概比没有启用事务要低250%左右
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/09/13/2016学习计划/#more" rel="contents">
+            <a class="btn" href="/2016/09/13/消息队列/rabbitMQ/消息发布的确认/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -806,7 +802,7 @@ secure： 当secure=true时，表示该cookie只能通过安全通道（即https
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/12/spring-ioc-2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/12/spring/spring-ioc-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -828,7 +824,7 @@ secure： 当secure=true时，表示该cookie只能通过安全通道（即https
             
               
                 
-                <a class="post-title-link" href="/2016/07/12/spring-ioc-2/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/12/spring/spring-ioc-2/" itemprop="url">
                   Spring学习之IoC
                 </a>
               
@@ -864,8 +860,8 @@ secure： 当secure=true时，表示该cookie只能通过安全通道（即https
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/07/12/spring-ioc-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/12/spring-ioc-2/" itemprop="commentCount"></span>
+                <a href="/2016/07/12/spring/spring-ioc-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/12/spring/spring-ioc-2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -904,7 +900,7 @@ depend
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/07/12/spring-ioc-2/#more" rel="contents">
+            <a class="btn" href="/2016/07/12/spring/spring-ioc-2/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -947,7 +943,7 @@ depend
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/05/spring-ioc-1/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/05/spring/spring-ioc-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -969,7 +965,7 @@ depend
             
               
                 
-                <a class="post-title-link" href="/2016/07/05/spring-ioc-1/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/05/spring/spring-ioc-1/" itemprop="url">
                   Spring学习之IoC
                 </a>
               
@@ -1005,8 +1001,8 @@ depend
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/07/05/spring-ioc-1/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/spring-ioc-1/" itemprop="commentCount"></span>
+                <a href="/2016/07/05/spring/spring-ioc-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/05/spring/spring-ioc-1/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1039,7 +1035,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/07/05/spring-ioc-1/#more" rel="contents">
+            <a class="btn" href="/2016/07/05/spring/spring-ioc-1/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1082,7 +1078,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/02/spring-differerce-between-application-context-and-servlet-context/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/02/spring/spring-differerce-between-application-context-and-servlet-context/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1104,7 +1100,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
             
               
                 
-                <a class="post-title-link" href="/2016/07/02/spring-differerce-between-application-context-and-servlet-context/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/02/spring/spring-differerce-between-application-context-and-servlet-context/" itemprop="url">
                   ServletContext与ApplicationContext的区别
                 </a>
               
@@ -1140,8 +1136,8 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/07/02/spring-differerce-between-application-context-and-servlet-context/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/02/spring-differerce-between-application-context-and-servlet-context/" itemprop="commentCount"></span>
+                <a href="/2016/07/02/spring/spring-differerce-between-application-context-and-servlet-context/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/02/spring/spring-differerce-between-application-context-and-servlet-context/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1173,7 +1169,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/07/02/spring-differerce-between-application-context-and-servlet-context/#more" rel="contents">
+            <a class="btn" href="/2016/07/02/spring/spring-differerce-between-application-context-and-servlet-context/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1216,7 +1212,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/02/spring-mvc-config/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/02/spring/spring-mvc-config/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1238,7 +1234,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
             
               
                 
-                <a class="post-title-link" href="/2016/07/02/spring-mvc-config/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/02/spring/spring-mvc-config/" itemprop="url">
                   SpringMVC学习(6)
                 </a>
               
@@ -1274,8 +1270,8 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/07/02/spring-mvc-config/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/02/spring-mvc-config/" itemprop="commentCount"></span>
+                <a href="/2016/07/02/spring/spring-mvc-config/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/02/spring/spring-mvc-config/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1308,7 +1304,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/07/02/spring-mvc-config/#more" rel="contents">
+            <a class="btn" href="/2016/07/02/spring/spring-mvc-config/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1351,7 +1347,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/02/spring-mvc-code-based-servlet-container-config/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/02/spring/spring-mvc-code-based-servlet-container-config/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1373,7 +1369,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
             
               
                 
-                <a class="post-title-link" href="/2016/07/02/spring-mvc-code-based-servlet-container-config/" itemprop="url">
+                <a class="post-title-link" href="/2016/07/02/spring/spring-mvc-code-based-servlet-container-config/" itemprop="url">
                   Spring学习(5)
                 </a>
               
@@ -1409,8 +1405,8 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/07/02/spring-mvc-code-based-servlet-container-config/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/02/spring-mvc-code-based-servlet-container-config/" itemprop="commentCount"></span>
+                <a href="/2016/07/02/spring/spring-mvc-code-based-servlet-container-config/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/07/02/spring/spring-mvc-code-based-servlet-container-config/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1443,7 +1439,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/07/02/spring-mvc-code-based-servlet-container-config/#more" rel="contents">
+            <a class="btn" href="/2016/07/02/spring/spring-mvc-code-based-servlet-container-config/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1486,7 +1482,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/29/spring-mvc-fileUpload-exceptionHandle/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/29/spring/spring-mvc-fileUpload-exceptionHandle/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1508,7 +1504,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
             
               
                 
-                <a class="post-title-link" href="/2016/06/29/spring-mvc-fileUpload-exceptionHandle/" itemprop="url">
+                <a class="post-title-link" href="/2016/06/29/spring/spring-mvc-fileUpload-exceptionHandle/" itemprop="url">
                   SpringMVC学习(4)
                 </a>
               
@@ -1544,8 +1540,8 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/06/29/spring-mvc-fileUpload-exceptionHandle/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/29/spring-mvc-fileUpload-exceptionHandle/" itemprop="commentCount"></span>
+                <a href="/2016/06/29/spring/spring-mvc-fileUpload-exceptionHandle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/29/spring/spring-mvc-fileUpload-exceptionHandle/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1577,7 +1573,7 @@ IoCIoC也可以称为是DI，也就是依赖注入的意思，它的主要作用
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/06/29/spring-mvc-fileUpload-exceptionHandle/#more" rel="contents">
+            <a class="btn" href="/2016/06/29/spring/spring-mvc-fileUpload-exceptionHandle/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
