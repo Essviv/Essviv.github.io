@@ -1,0 +1,818 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="spring,IoC,DI," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="2. 使用容器在本文的第一部分中，我们对容器的初始化操作refresh()方法做了全面的解读，了解了容器构造的整个过程，包括读取bean对象的定义，配置BeanFactoyPostProcessor&amp;amp;BeanPostProcessor接口，以及其它的属性. 在第一部分的解读过程中，还遗留了一个方法，就是getBean()方法. 
+getBean()方法的使用场景有以下几个，从字面上看，这个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring IoC源码分析(2)">
+<meta property="og:url" content="http://yoursite.com/2017/04/11/spring/spring-ioc-source-code(2)/index.html">
+<meta property="og:site_name" content="Essviv">
+<meta property="og:description" content="2. 使用容器在本文的第一部分中，我们对容器的初始化操作refresh()方法做了全面的解读，了解了容器构造的整个过程，包括读取bean对象的定义，配置BeanFactoyPostProcessor&amp;amp;BeanPostProcessor接口，以及其它的属性. 在第一部分的解读过程中，还遗留了一个方法，就是getBean()方法. 
+getBean()方法的使用场景有以下几个，从字面上看，这个">
+<meta property="og:updated_time" content="2017-04-12T04:13:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="spring IoC源码分析(2)">
+<meta name="twitter:description" content="2. 使用容器在本文的第一部分中，我们对容器的初始化操作refresh()方法做了全面的解读，了解了容器构造的整个过程，包括读取bean对象的定义，配置BeanFactoyPostProcessor&amp;amp;BeanPostProcessor接口，以及其它的属性. 在第一部分的解读过程中，还遗留了一个方法，就是getBean()方法. 
+getBean()方法的使用场景有以下几个，从字面上看，这个">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/11/spring/spring-ioc-source-code(2)/"/>
+
+
+
+
+
+  <title> spring IoC源码分析(2) | Essviv </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-76335662-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Essviv</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Dare to be different</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/11/spring/spring-ioc-source-code(2)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                spring IoC源码分析(2)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-11T19:42:00+08:00">
+                2017-04-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/11/spring/spring-ioc-source-code(2)/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/11/spring/spring-ioc-source-code(2)/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="2-使用容器"><a href="#2-使用容器" class="headerlink" title="2. 使用容器"></a>2. 使用容器</h2><p>在本文的第一部分中，我们对容器的初始化操作refresh()方法做了全面的解读，了解了容器构造的整个过程，包括读取bean对象的定义，配置BeanFactoyPostProcessor&amp;BeanPostProcessor接口，以及其它的属性. 在第一部分的解读过程中，还遗留了一个方法，就是getBean()方法. </p>
+<p>getBean()方法的使用场景有以下几个，从字面上看，这个方法就是从容器中获取相应的实例对象，那它具体的实现过程又是怎么样的呢? </p>
+<ul>
+<li>容器初始化结束后，会调用preInstantiateSingleton()方法来实例化lazyInit属性为false的”单例”对象</li>
+<li>应用程序调用getBean()方法获取对象</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        ApplicationContext applicationContext = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"applicationContext.xml"</span>);</div><div class="line">        TestController testController = applicationContext.getBean(TestController.class);</div><div class="line"></div><div class="line">        testController.test();</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>查看ClassPathXmlApplicationContext类的getBean()方法，可以看到它调用的是AbstractApplicationContext类的相应实现，而AbstractApplicationContext方法中是将这个方法的实现委托给内部的BeanFactory对象来实现，从本文第一部分的解读中我们知道，ClassPathXmlApplicationContext内部的BeanFactory对象是在refresh()方法中调用obtainFreshBeanFactory()方法时生成的，默认是DefaultListableBeanFactory的实例，因此我们直接查看DefaultListableBeanFactory类的相应实现即可.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(Class&lt;T&gt; requiredType)</span> <span class="keyword">throws</span> BeansException </span>&#123;</div><div class="line">  assertBeanFactoryActive();</div><div class="line">  <span class="keyword">return</span> getBeanFactory().getBean(requiredType);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从DefaultListableBeanFactory类的实现源码可以看到，获取bean实例对象可以分成以下几个步骤：</p>
+<ol>
+<li>获取容器中指定类型的bean名称</li>
+<li>如果获取的bean名称超过1个，则对名称进行过滤</li>
+<li>判断过滤后的bean名称个数，并根据相应的个数获取实例对象</li>
+</ol>
+<p>接下来我们来详细地看下这些步骤的执行过程. </p>
+<h2 id="2-1-获取指定类型的bean名称"><a href="#2-1-获取指定类型的bean名称" class="headerlink" title="2.1 获取指定类型的bean名称"></a>2.1 获取指定类型的bean名称</h2><h2 id="2-2-过滤bean名称"><a href="#2-2-过滤bean名称" class="headerlink" title="2.2 过滤bean名称"></a>2.2 过滤bean名称</h2><p>在getBean()方法的第一个步骤中，首先根据对象的类型获取到了相应的bean名称数组，如果数组的长度超过1，那么需要对这些对象名称进行过滤. 过滤的主要思路就是去掉那些autowireCandidate属性设置为false的bean定义. </p>
+<p>这里有个比较容易疑惑的地方，就是在过滤的过程中，也保留了containBeanDefinition()返回false的bean名称. 查看这个方法的javaDoc可以知道，这个方法仅判断当前的BeanFactory容器中是否含有这个名称的对象定义，不会考虑它的父容器中是否有这个bean. 但过滤完后，这些bean名称都是通过getBean()方法来进一步获取具体的对象定义，而getBean()方法在当前beanFactory如果找不到这个定义，会尝试从它的父容器中寻找，因此这里在过滤的时候，需要保留那些在当前容器中并不存在的bean名称.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (beanNames.length &gt; <span class="number">1</span>) &#123;</div><div class="line">  ArrayList&lt;String&gt; autowireCandidates = <span class="keyword">new</span> ArrayList&lt;String&gt;();</div><div class="line">  <span class="keyword">for</span> (String beanName : beanNames) &#123;</div><div class="line">    <span class="keyword">if</span> (!containsBeanDefinition(beanName) || getBeanDefinition(beanName).isAutowireCandidate()) &#123;</div><div class="line">      autowireCandidates.add(beanName);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (autowireCandidates.size() &gt; <span class="number">0</span>) &#123;</div><div class="line">    beanNames = autowireCandidates.toArray(<span class="keyword">new</span> String[autowireCandidates.size()]);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2-3-根据名称获取bean对象实例"><a href="#2-3-根据名称获取bean对象实例" class="headerlink" title="2.3 根据名称获取bean对象实例"></a>2.3 根据名称获取bean对象实例</h2><p>在完成了第二步的过滤后，接着就会用名称从容器中查找相应的bean实例. 这里分几种情况考虑：</p>
+<ul>
+<li>如果只有一个名称满足条件，那么直接尝试获取这个名称指定的实例就可以了</li>
+<li>如果满足条件的有多个名称 ，那么需要依次按primary, prirority进行过滤，直到找到唯一的实例对象为止</li>
+<li>如果没有任何名称满足条件，则尝试使用父容器获取相应的实例对象</li>
+<li>否则直接抛出异常</li>
+</ul>
+<h3 id="2-3-1-多个名称符合条件的情况"><a href="#2-3-1-多个名称符合条件的情况" class="headerlink" title="2.3.1 多个名称符合条件的情况"></a>2.3.1 多个名称符合条件的情况</h3><p>对于第一种情况，只有一个名称满足条件，这里暂时略过，后面统一对getBean()这个方法进行详述. 而第三种情况，其实是在父容器中调用同样的方法，也直接跳过. 这里主要解读下第二种情况，从源码中可以看出，在多个名称符合条件的情况下，Spring框架首先会依次获取这些名称的对象，然后通过determinePrimaryCandidate()方法判断其中是否有<strong>唯一</strong>的primary属性为true的实例对象，如果有，直接返回这个对象； 如果没有找到，那么会继续调用determiHighestPriorityCandidate()方法判断是否有<strong>唯一</strong>的Priority注解的对象，如果有，直接返回这个对象，如果还是没有找到那么说明存在多个对象符合条件，那么就抛出异常.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (beanNames.length == <span class="number">1</span>) &#123;</div><div class="line">	<span class="keyword">return</span> getBean(beanNames[<span class="number">0</span>], requiredType, args);</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (beanNames.length &gt; <span class="number">1</span>) &#123;</div><div class="line">	Map&lt;String, Object&gt; candidates = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();</div><div class="line">	<span class="keyword">for</span> (String beanName : beanNames) &#123;</div><div class="line">		candidates.put(beanName, getBean(beanName, requiredType, args));</div><div class="line">	&#125;</div><div class="line">	String primaryCandidate = determinePrimaryCandidate(candidates, requiredType);</div><div class="line">	<span class="keyword">if</span> (primaryCandidate != <span class="keyword">null</span>) &#123;</div><div class="line">		<span class="keyword">return</span> getBean(primaryCandidate, requiredType, args);</div><div class="line">	&#125;</div><div class="line">	String priorityCandidate = determineHighestPriorityCandidate(candidates, requiredType);</div><div class="line">	<span class="keyword">if</span> (priorityCandidate != <span class="keyword">null</span>) &#123;</div><div class="line">		<span class="keyword">return</span> getBean(priorityCandidate, requiredType, args);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> NoUniqueBeanDefinitionException(requiredType, candidates.keySet());</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (getParentBeanFactory() != <span class="keyword">null</span>) &#123;</div><div class="line">	<span class="keyword">return</span> getParentBeanFactory().getBean(requiredType, args);</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span> &#123;</div><div class="line">	<span class="keyword">throw</span> <span class="keyword">new</span> NoSuchBeanDefinitionException(requiredType);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先来看看determinePrimaryCandidate()方法的实现，这里依次判断每个候选对象的primary属性，如果有超过一个对象设置primary属性为true, 那么直接抛出异常；如果只有一个对象设置了这个属性，则直接返回这个对象，根据上面的解读，如果只有唯一一个对象设置了这个属性值，那么这个对象将会被直接返回，否则返回null.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">	<span class="function"><span class="keyword">protected</span> String <span class="title">determinePrimaryCandidate</span><span class="params">(Map&lt;String, Object&gt; candidateBeans, Class&lt;?&gt; requiredType)</span> </span>&#123;</div><div class="line">		String primaryBeanName = <span class="keyword">null</span>;</div><div class="line">		<span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : candidateBeans.entrySet()) &#123;</div><div class="line">			String candidateBeanName = entry.getKey();</div><div class="line">			Object beanInstance = entry.getValue();</div><div class="line">			<span class="keyword">if</span> (isPrimary(candidateBeanName, beanInstance)) &#123;</div><div class="line">				<span class="keyword">if</span> (primaryBeanName != <span class="keyword">null</span>) &#123;</div><div class="line">					<span class="keyword">boolean</span> candidateLocal = containsBeanDefinition(candidateBeanName);</div><div class="line">					<span class="keyword">boolean</span> primaryLocal = containsBeanDefinition(primaryBeanName);</div><div class="line">					<span class="keyword">if</span> (candidateLocal &amp;&amp; primaryLocal) &#123;</div><div class="line">						<span class="keyword">throw</span> <span class="keyword">new</span> NoUniqueBeanDefinitionException(requiredType, candidateBeans.size(),</div><div class="line">								<span class="string">"more than one 'primary' bean found among candidates: "</span> + candidateBeans.keySet());</div><div class="line">					&#125;</div><div class="line">					<span class="keyword">else</span> <span class="keyword">if</span> (candidateLocal) &#123;</div><div class="line">						primaryBeanName = candidateBeanName;</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">else</span> &#123;</div><div class="line">					primaryBeanName = candidateBeanName;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> primaryBeanName;</div><div class="line">	&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isPrimary</span><span class="params">(String beanName, Object beanInstance)</span> </span>&#123;</div><div class="line">  <span class="keyword">if</span> (containsBeanDefinition(beanName)) &#123;</div><div class="line">    <span class="keyword">return</span> getMergedLocalBeanDefinition(beanName).isPrimary();</div><div class="line">  &#125;</div><div class="line">  BeanFactory parentFactory = getParentBeanFactory();</div><div class="line">  <span class="keyword">return</span> (parentFactory <span class="keyword">instanceof</span> DefaultListableBeanFactory &amp;&amp;</div><div class="line">          ((DefaultListableBeanFactory) parentFactory).isPrimary(beanName, beanInstance));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>另外再来看看determineHighestPriorirtyCandidate()方法. 应该来讲，这里的实现思路和上面determineByPrimaryCandidate()方法的思路完全一样，只不过判断是priority，在此基础上还增加了priority属性的比较，其它的都一样. 这里就不再赘述. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> String <span class="title">determineHighestPriorityCandidate</span><span class="params">(Map&lt;String, Object&gt; candidateBeans, Class&lt;?&gt; requiredType)</span> </span>&#123;</div><div class="line">	String highestPriorityBeanName = <span class="keyword">null</span>;</div><div class="line">	Integer highestPriority = <span class="keyword">null</span>;</div><div class="line">	<span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : candidateBeans.entrySet()) &#123;</div><div class="line">		String candidateBeanName = entry.getKey();</div><div class="line">		Object beanInstance = entry.getValue();</div><div class="line">		Integer candidatePriority = getPriority(beanInstance);</div><div class="line">		<span class="keyword">if</span> (candidatePriority != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (highestPriorityBeanName != <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="keyword">if</span> (candidatePriority.equals(highestPriority)) &#123;</div><div class="line">					<span class="keyword">throw</span> <span class="keyword">new</span> NoUniqueBeanDefinitionException(requiredType, candidateBeans.size(),</div><div class="line">							<span class="string">"Multiple beans found with the same priority ('"</span> + highestPriority + <span class="string">"') "</span> +</div><div class="line">									<span class="string">"among candidates: "</span> + candidateBeans.keySet());</div><div class="line">				&#125;</div><div class="line">				<span class="keyword">else</span> <span class="keyword">if</span> (candidatePriority &lt; highestPriority) &#123;</div><div class="line">					highestPriorityBeanName = candidateBeanName;</div><div class="line">					highestPriority = candidatePriority;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">else</span> &#123;</div><div class="line">				highestPriorityBeanName = candidateBeanName;</div><div class="line">				highestPriority = candidatePriority;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> highestPriorityBeanName;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-3-2-只有一个名称符合条件的情况"><a href="#2-3-2-只有一个名称符合条件的情况" class="headerlink" title="2.3.2 只有一个名称符合条件的情况"></a>2.3.2 只有一个名称符合条件的情况</h3><p>到这里，我们就把所有特殊的情况都解读过了，现在只剩下最基本的情况，就是根据bean名称来获取相应的实现，这也是在getBean()方法中实现的. 在AbstractBeanFactory类中可以看到，这个方法最终调用了doGetBean()方法，它的实现过程大体可以分成三个步骤：</p>
+<ul>
+<li>尝试从已经创建或正在创建的singleton对象中获取，如果有则直接调用getObjectForBeanInstance()返回</li>
+<li>如果当前的容器中不包含有这个bean的定义且父容器不为空的情况下，尝试从父容器中获取该bean实例对象</li>
+<li>尝试在当前容器中创建这个bean实例对象，这步又可以进一步细分成以下两个步骤<ul>
+<li>保证当前bean对象的依赖对象已经创建完成</li>
+<li>根据当前bean对象的作用域创建相应的实例对象</li>
+</ul>
+</li>
+<li>创建完对象后，如果类型不符合，那么尝试使用类型转换服务转换成目标类型. </li>
+</ul>
+<p>接下来分别对这些步骤进行解读.</p>
+<h4 id="2-3-2-1-尝试从缓存中获取singleton"><a href="#2-3-2-1-尝试从缓存中获取singleton" class="headerlink" title="2.3.2.1 尝试从缓存中获取singleton"></a>2.3.2.1 尝试从缓存中获取singleton</h4><p>在这一步中，BeanFactory会尝试从singletonObjects属性中读取这个beanName指定的实例对象，如果找到了说明这个对象之前已经被创建过了，直接返回这个对象即可；如果没有找到这个对象，但发现它正在被创建，那么会尝试从earlySingletonObjects属性中查找，如果还是没有找到，则尝试从singletonFactories中查找相应的对象工厂，如果有这个对象的对象工厂，则尝试创建这个对象. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Eagerly check singleton cache for manually registered singletons.</span></div><div class="line">Object sharedInstance = getSingleton(beanName);</div><div class="line"><span class="keyword">if</span> (sharedInstance != <span class="keyword">null</span> &amp;&amp; args == <span class="keyword">null</span>) &#123;</div><div class="line">  bean = getObjectForBeanInstance(sharedInstance, name, beanName, <span class="keyword">null</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//getSingleton方法</span></div><div class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">getSingleton</span><span class="params">(String beanName, <span class="keyword">boolean</span> allowEarlyReference)</span> </span>&#123;</div><div class="line">  Object singletonObject = <span class="keyword">this</span>.singletonObjects.get(beanName);</div><div class="line">  <span class="keyword">if</span> (singletonObject == <span class="keyword">null</span> &amp;&amp; isSingletonCurrentlyInCreation(beanName)) &#123;</div><div class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>.singletonObjects) &#123;</div><div class="line">      singletonObject = <span class="keyword">this</span>.earlySingletonObjects.get(beanName);</div><div class="line">      <span class="keyword">if</span> (singletonObject == <span class="keyword">null</span> &amp;&amp; allowEarlyReference) &#123;</div><div class="line">        ObjectFactory&lt;?&gt; singletonFactory = <span class="keyword">this</span>.singletonFactories.get(beanName);</div><div class="line">        <span class="keyword">if</span> (singletonFactory != <span class="keyword">null</span>) &#123;</div><div class="line">          singletonObject = singletonFactory.getObject();</div><div class="line">          <span class="keyword">this</span>.earlySingletonObjects.put(beanName, singletonObject);</div><div class="line">          <span class="keyword">this</span>.singletonFactories.remove(beanName);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> (singletonObject != NULL_OBJECT ? singletonObject : <span class="keyword">null</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在获取到sharedInstance对象后，代码中会调用getObjectForBeanInstance()方法，这个方法的作用是对获取的对象进行解析，如果它是普通对象或者请求的是工厂对象本身(bean名称以’&amp;’开头)则直接返回； 否则就使用工厂方法创建相应的对象. 这里的逻辑相对简单，就不做过多的阐述. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> Object <span class="title">getObjectForBeanInstance</span><span class="params">(</span></span></div><div class="line">		Object beanInstance, String name, String beanName, RootBeanDefinition mbd) &#123;</div><div class="line"></div><div class="line">	<span class="comment">// Don't let calling code try to dereference the factory if the bean isn't a factory.</span></div><div class="line">	<span class="keyword">if</span> (BeanFactoryUtils.isFactoryDereference(name) &amp;&amp; !(beanInstance <span class="keyword">instanceof</span> FactoryBean)) &#123;</div><div class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> BeanIsNotAFactoryException(transformedBeanName(name), beanInstance.getClass());</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="comment">// Now we have the bean instance, which may be a normal bean or a FactoryBean.</span></div><div class="line">	<span class="comment">// If it's a FactoryBean, we use it to create a bean instance, unless the</span></div><div class="line">	<span class="comment">// caller actually wants a reference to the factory.</span></div><div class="line">	<span class="keyword">if</span> (!(beanInstance <span class="keyword">instanceof</span> FactoryBean) || BeanFactoryUtils.isFactoryDereference(name)) &#123;</div><div class="line">		<span class="keyword">return</span> beanInstance;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	Object object = <span class="keyword">null</span>;</div><div class="line">	<span class="keyword">if</span> (mbd == <span class="keyword">null</span>) &#123;</div><div class="line">		object = getCachedObjectForFactoryBean(beanName);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (object == <span class="keyword">null</span>) &#123;</div><div class="line">		<span class="comment">// Return bean instance from factory.</span></div><div class="line">		FactoryBean&lt;?&gt; factory = (FactoryBean&lt;?&gt;) beanInstance;</div><div class="line">		<span class="comment">// Caches object obtained from FactoryBean if it is a singleton.</span></div><div class="line">		<span class="keyword">if</span> (mbd == <span class="keyword">null</span> &amp;&amp; containsBeanDefinition(beanName)) &#123;</div><div class="line">			mbd = getMergedLocalBeanDefinition(beanName);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">boolean</span> synthetic = (mbd != <span class="keyword">null</span> &amp;&amp; mbd.isSynthetic());</div><div class="line">		object = getObjectFromFactoryBean(factory, beanName, !synthetic);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> object;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-3-2-2-从父容器中获取相应的bean实例对象"><a href="#2-3-2-2-从父容器中获取相应的bean实例对象" class="headerlink" title="2.3.2.2 从父容器中获取相应的bean实例对象"></a>2.3.2.2 从父容器中获取相应的bean实例对象</h4><p>如果当前容器对象不包含有这个beanName, 且父容器不为空的情况下，会尝试从父容器中获取这个bean实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Check if bean definition exists in this factory.</span></div><div class="line">BeanFactory parentBeanFactory = getParentBeanFactory();</div><div class="line"><span class="keyword">if</span> (parentBeanFactory != <span class="keyword">null</span> &amp;&amp; !containsBeanDefinition(beanName)) &#123;</div><div class="line">  <span class="comment">// Not found -&gt; check parent.</span></div><div class="line">  String nameToLookup = originalBeanName(name);</div><div class="line">  <span class="keyword">if</span> (args != <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="comment">// Delegation to parent with explicit args.</span></div><div class="line">    <span class="keyword">return</span> (T) parentBeanFactory.getBean(nameToLookup, args);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// No args -&gt; delegate to standard getBean method.</span></div><div class="line">    <span class="keyword">return</span> parentBeanFactory.getBean(nameToLookup, requiredType);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-3-2-3-尝试从当前容器中加载bean对象"><a href="#2-3-2-3-尝试从当前容器中加载bean对象" class="headerlink" title="2.3.2.3 尝试从当前容器中加载bean对象"></a>2.3.2.3 尝试从当前容器中加载bean对象</h4><p>当父容器为空，或者当前容器中含有指定的bean名称的定义，那么就会在当前容器中尝试加载该对象. 加载的过程可以分成两个步骤，第一个是确保当前对象依赖的所有对象都已经创建完成，第二个是根据对象作用域的不同创建相应的对象. </p>
+<ul>
+<li>确保依赖的对象已经创建完成</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Guarantee initialization of beans that the current bean depends on.</span></div><div class="line">String[] dependsOn = mbd.getDependsOn();</div><div class="line"><span class="keyword">if</span> (dependsOn != <span class="keyword">null</span>) &#123;</div><div class="line">  <span class="keyword">for</span> (String dependsOnBean : dependsOn) &#123;</div><div class="line">    <span class="keyword">if</span> (isDependent(beanName, dependsOnBean)) &#123;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(mbd.getResourceDescription(), beanName,</div><div class="line">                                      <span class="string">"Circular depends-on relationship between '"</span> + beanName + <span class="string">"' and '"</span> + dependsOnBean + <span class="string">"'"</span>);</div><div class="line">    &#125;</div><div class="line">    registerDependentBean(dependsOnBean, beanName);</div><div class="line">    getBean(dependsOnBean);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于每个依赖的对象，都调用isDependent方法来确认是否存在循环依赖关系. isDependent的作用是判断第二个参数指定的对象是否依赖于第一个参数的对象，如果后者依赖于前者，而前者的dependsOn属性中又包含有第二个，说明两者之前有循环依赖关系，这时直接抛出循环依赖异常.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//该方法用于判断第二个参数是否依赖于第一个参数， 第一个参数表示当前对象名称，第二个参数表示依赖于当前对象的名称</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isDependent</span><span class="params">(String beanName, String dependentBeanName, Set&lt;String&gt; alreadySeen)</span> </span>&#123;</div><div class="line">  String canonicalName = canonicalName(beanName);</div><div class="line">  <span class="keyword">if</span> (alreadySeen != <span class="keyword">null</span> &amp;&amp; alreadySeen.contains(beanName)) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//dependentBeanMap属性中存储的是对象间的依赖关系，key为当前对象，value值为依赖于它的对象名称集合.</span></div><div class="line">  Set&lt;String&gt; dependentBeans = <span class="keyword">this</span>.dependentBeanMap.get(canonicalName);</div><div class="line">  <span class="keyword">if</span> (dependentBeans == <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="comment">//如果dependentBeans中包含有这个名称，说明dependentBeanName依赖于当前对象</span></div><div class="line">  <span class="keyword">if</span> (dependentBeans.contains(dependentBeanName)) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="comment">//如果denpendentBeanName不依赖于当前对象，则继续判断它传递依赖于当前对象，深度优先遍历</span></div><div class="line">  <span class="keyword">for</span> (String transitiveDependency : dependentBeans) &#123;</div><div class="line">    <span class="keyword">if</span> (alreadySeen == <span class="keyword">null</span>) &#123;</div><div class="line">      alreadySeen = <span class="keyword">new</span> HashSet&lt;String&gt;();</div><div class="line">    &#125;</div><div class="line">    alreadySeen.add(beanName);</div><div class="line">    <span class="keyword">if</span> (isDependent(transitiveDependency, dependentBeanName, alreadySeen)) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果不存在循环依赖关系，则调用registerDependentBean方法注册对象间的依赖关系. 这个方法会往dependentBeanMap中插入相应的名称，这个属性维护了当前对象以及依赖于这个对象的对象名称集合，另外这个方法还会往dependenciesForBeanMap属性中插入数据，这个属性维护的是当前对象以及当前对象所依赖的对象名称集合. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerDependentBean</span><span class="params">(String beanName, String dependentBeanName)</span> </span>&#123;</div><div class="line">  <span class="comment">// A quick check for an existing entry upfront, avoiding synchronization...</span></div><div class="line">  String canonicalName = canonicalName(beanName);</div><div class="line">  Set&lt;String&gt; dependentBeans = <span class="keyword">this</span>.dependentBeanMap.get(canonicalName);</div><div class="line">  <span class="keyword">if</span> (dependentBeans != <span class="keyword">null</span> &amp;&amp; dependentBeans.contains(dependentBeanName)) &#123;</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// No entry yet -&gt; fully synchronized manipulation of the dependentBeans Set</span></div><div class="line">  <span class="keyword">synchronized</span> (<span class="keyword">this</span>.dependentBeanMap) &#123;</div><div class="line">    dependentBeans = <span class="keyword">this</span>.dependentBeanMap.get(canonicalName);</div><div class="line">    <span class="keyword">if</span> (dependentBeans == <span class="keyword">null</span>) &#123;</div><div class="line">      dependentBeans = <span class="keyword">new</span> LinkedHashSet&lt;String&gt;(<span class="number">8</span>);</div><div class="line">      <span class="keyword">this</span>.dependentBeanMap.put(canonicalName, dependentBeans);</div><div class="line">    &#125;</div><div class="line">    dependentBeans.add(dependentBeanName);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">synchronized</span> (<span class="keyword">this</span>.dependenciesForBeanMap) &#123;</div><div class="line">    Set&lt;String&gt; dependenciesForBean = <span class="keyword">this</span>.dependenciesForBeanMap.get(dependentBeanName);</div><div class="line">    <span class="keyword">if</span> (dependenciesForBean == <span class="keyword">null</span>) &#123;</div><div class="line">      dependenciesForBean = <span class="keyword">new</span> LinkedHashSet&lt;String&gt;(<span class="number">8</span>);</div><div class="line">      <span class="keyword">this</span>.dependenciesForBeanMap.put(dependentBeanName, dependenciesForBean);</div><div class="line">    &#125;</div><div class="line">    dependenciesForBean.add(canonicalName);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>根据对象的作用域创建相应的对象</li>
+</ul>
+<p>在确保依赖的对象都已经创建完成后，就可以开始创建当前对象了. 这里要根据对象的作用域(scope)来采用不同的方式创建. 先来看看singleton对象的创建. 这里调用了getSingleton方法来获取对象，并提供了匿名的ObjectFactory实现. 在getSingleton方法中，其实就是回调了ObjectFactory类的getObject方法, 这是“策略模式”的实践. 在获取到sharedInstance对象后，会调用getObjectForBeanInstance方法，这个方法的作用在前面已经提及过，它是用来判断sharedInstance对象的类型，如果是FactoryBean，则调用相应的方法返回对象，如果它是普通对象或请求的就是工厂对象本身，则直接返回. </p>
+<p>关于createBean()方法的执行过程，后续会有详细的解读. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (mbd.isSingleton()) &#123;</div><div class="line">  sharedInstance = getSingleton(beanName, <span class="keyword">new</span> ObjectFactory&lt;Object&gt;() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">return</span> createBean(beanName, mbd, args);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">catch</span> (BeansException ex) &#123;</div><div class="line">        <span class="comment">// Explicitly remove instance from singleton cache: It might have been put there</span></div><div class="line">        <span class="comment">// eagerly by the creation process, to allow for circular reference resolution.</span></div><div class="line">        <span class="comment">// Also remove any beans that received a temporary reference to the bean.</span></div><div class="line">        destroySingleton(beanName);</div><div class="line">        <span class="keyword">throw</span> ex;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">  bean = getObjectForBeanInstance(sharedInstance, name, beanName, mbd);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再来看看prototype对象的创建. 由于prototype域对象的特性是每次请求对象时都返回新的对象，因此这里的创建过程相对简单，就是调用createBean()方法返回新的实例，再调用getObjectForBeanInstance()方法进行转换即可. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (mbd.isPrototype()) &#123;</div><div class="line">  <span class="comment">// It's a prototype -&gt; create a new instance.</span></div><div class="line">  Object prototypeInstance = <span class="keyword">null</span>;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    beforePrototypeCreation(beanName);</div><div class="line">    prototypeInstance = createBean(beanName, mbd, args);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">finally</span> &#123;</div><div class="line">    afterPrototypeCreation(beanName);</div><div class="line">  &#125;</div><div class="line">  bean = getObjectForBeanInstance(prototypeInstance, name, beanName, mbd);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>除此之外，Spring还支持自定义Scope，对于自定义Scope的对象来讲，它的创建过程与之前的两种情况大同小异，这里就不做过多阐述.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">else</span> &#123;</div><div class="line">  String scopeName = mbd.getScope();</div><div class="line">  <span class="keyword">final</span> Scope scope = <span class="keyword">this</span>.scopes.get(scopeName);</div><div class="line">  <span class="keyword">if</span> (scope == <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"No Scope registered for scope name '"</span> + scopeName + <span class="string">"'"</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    Object scopedInstance = scope.get(beanName, <span class="keyword">new</span> ObjectFactory&lt;Object&gt;() &#123;</div><div class="line">      <span class="meta">@Override</span></div><div class="line">      <span class="function"><span class="keyword">public</span> Object <span class="title">getObject</span><span class="params">()</span> <span class="keyword">throws</span> BeansException </span>&#123;</div><div class="line">        beforePrototypeCreation(beanName);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">          <span class="keyword">return</span> createBean(beanName, mbd, args);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">finally</span> &#123;</div><div class="line">          afterPrototypeCreation(beanName);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line">    bean = getObjectForBeanInstance(scopedInstance, name, beanName, mbd);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">catch</span> (IllegalStateException ex) &#123;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BeanCreationException(beanName,</div><div class="line">                                    <span class="string">"Scope '"</span> + scopeName + <span class="string">"' is not active for the current thread; consider "</span> +</div><div class="line">                                    <span class="string">"defining a scoped proxy for this bean if you intend to refer to it from a singleton"</span>,</div><div class="line">                                    ex);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-3-2-4-类型转换"><a href="#2-3-2-4-类型转换" class="headerlink" title="2.3.2.4 类型转换"></a>2.3.2.4 类型转换</h4><p>在经过上述步骤后，bean对象的实例就基本上创建好了，这时候还需要再进一步判断当前获取的实例对象类型与实际请求的类型是否匹配，如果不匹配的话，还需要进行类型转换操作. 类型转换主要是通过TypeConverter接口来完成的. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Check if required type matches the type of the actual bean instance.</span></div><div class="line"><span class="keyword">if</span> (requiredType != <span class="keyword">null</span> &amp;&amp; bean != <span class="keyword">null</span> &amp;&amp; !requiredType.isAssignableFrom(bean.getClass())) &#123;</div><div class="line">  <span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">return</span> getTypeConverter().convertIfNecessary(bean, requiredType);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">catch</span> (TypeMismatchException ex) &#123;</div><div class="line">    <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</div><div class="line">      logger.debug(<span class="string">"Failed to convert bean '"</span> + name + <span class="string">"' to required type ["</span> +</div><div class="line">                   ClassUtils.getQualifiedName(requiredType) + <span class="string">"]"</span>, ex);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> BeanNotOfRequiredTypeException(name, requiredType, bean.getClass());</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2-4-createBean-方法的实现"><a href="#2-4-createBean-方法的实现" class="headerlink" title="2.4 createBean()方法的实现"></a>2.4 createBean()方法的实现</h2><p>在上面的解读中，我们知道getBean()方法的实现过程，首先尝试从缓存中获取，缓存获取失败后则尝试创建对象，在创建对象时首先检查依赖关系，在满足了依赖关系后就会调用createBean()对象获取实例. 那createBean()方法又是如何实现的呢？createBean()底层调用了doCreateBean()方法, 后者的实现大体上可以分成几个步骤:</p>
+<ul>
+<li>调用createBeanInstance创建对象实例</li>
+<li>调用populateBean()方法填充对象</li>
+<li>调用initilizingBean()方法初始化对象</li>
+</ul>
+<p>接下来就来看看这三个步骤的实现细节. </p>
+<h3 id="2-4-1-createBeanInstance-方法"><a href="#2-4-1-createBeanInstance-方法" class="headerlink" title="2.4.1 createBeanInstance()方法"></a>2.4.1 createBeanInstance()方法</h3><p>调用createBeanInstance()方法创建实例的实现可分为两种，一种是通过工厂对象来创建，一种是直接调用对象的构造方法来创建. </p>
+<h4 id="2-4-1-1-使用工厂对象创建实例"><a href="#2-4-1-1-使用工厂对象创建实例" class="headerlink" title="2.4.1.1 使用工厂对象创建实例"></a>2.4.1.1 使用工厂对象创建实例</h4><p>首先先来看看使用工厂对象来实例化对象的代码, 这个部分主要是调用了instantiateUsingFactoryMethod()方法来实现的，这个方法的实现代码非常复杂，总得来讲，可分为几个步骤：</p>
+<ol>
+<li>确定工厂对象的工厂方法factoryMethod及其参数</li>
+<li>根据第1步中确定的工厂方法和参数实例化对象</li>
+</ol>
+<p>容器首先会尝试从bean定义的消息中获取定义的工厂方法factoryMethodToUse和方法参数argToUse，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (explicitArgs != <span class="keyword">null</span>) &#123;</div><div class="line">  argsToUse = explicitArgs;</div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span> &#123;</div><div class="line">  Object[] argsToResolve = <span class="keyword">null</span>;</div><div class="line">  <span class="keyword">synchronized</span> (mbd.constructorArgumentLock) &#123;</div><div class="line">    factoryMethodToUse = (Method) mbd.resolvedConstructorOrFactoryMethod;</div><div class="line">    <span class="keyword">if</span> (factoryMethodToUse != <span class="keyword">null</span> &amp;&amp; mbd.constructorArgumentsResolved) &#123;</div><div class="line">      <span class="comment">// Found a cached factory method...</span></div><div class="line">      argsToUse = mbd.resolvedConstructorArguments;</div><div class="line">      <span class="keyword">if</span> (argsToUse == <span class="keyword">null</span>) &#123;</div><div class="line">        argsToResolve = mbd.preparedConstructorArguments;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> (argsToResolve != <span class="keyword">null</span>) &#123;</div><div class="line">    argsToUse = resolvePreparedArguments(beanName, mbd, bw, factoryMethodToUse, argsToResolve);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>只要factoryMethodToUse和areToUse参数有一个是缺失的，那么容器就需要遍历所有可能的方法来寻找相应的工厂方法和参数，寻找候选方法的过程是获取工厂对象中声明的所有方法，然后找到其中名称与工厂方法factoryMethod属性一致的方法，</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Method[] rawCandidates = getCandidateMethods(factoryClass, mbd);</div><div class="line">List&lt;Method&gt; candidateSet = <span class="keyword">new</span> ArrayList&lt;Method&gt;();</div><div class="line"><span class="keyword">for</span> (Method candidate : rawCandidates) &#123;</div><div class="line">  <span class="keyword">if</span> (Modifier.isStatic(candidate.getModifiers()) == isStatic &amp;&amp; mbd.isFactoryMethod(candidate)) &#123;</div><div class="line">    candidateSet.add(candidate);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在得到候选方法之后，就需要对这些候选方法进行排序，排序的规则是public方法先于其它类型方法，参数个数多的优先.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Method[] candidates = candidateSet.toArray(<span class="keyword">new</span> Method[candidateSet.size()]);</div><div class="line">AutowireUtils.sortFactoryMethods(candidates);</div><div class="line"></div><div class="line"><span class="comment">//候选方法排序</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sortFactoryMethods</span><span class="params">(Method[] factoryMethods)</span> </span>&#123;</div><div class="line">  Arrays.sort(factoryMethods, <span class="keyword">new</span> Comparator&lt;Method&gt;() &#123;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Method fm1, Method fm2)</span> </span>&#123;</div><div class="line">      <span class="keyword">boolean</span> p1 = Modifier.isPublic(fm1.getModifiers());</div><div class="line">      <span class="keyword">boolean</span> p2 = Modifier.isPublic(fm2.getModifiers());</div><div class="line">      <span class="keyword">if</span> (p1 != p2) &#123;</div><div class="line">        <span class="keyword">return</span> (p1 ? -<span class="number">1</span> : <span class="number">1</span>);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">int</span> c1pl = fm1.getParameterTypes().length;</div><div class="line">      <span class="keyword">int</span> c2pl = fm2.getParameterTypes().length;</div><div class="line">      <span class="keyword">return</span> (c1pl &lt; c2pl ? <span class="number">1</span> : (c1pl &gt; c2pl ? -<span class="number">1</span> : <span class="number">0</span>));</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>排序完后，就需要得到这些方法中匹配度最高的那个方法，匹配度的规则为类型匹配，具体规则可以参阅<a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/util/MethodInvoker.html#getTypeDifferenceWeight-java.lang.Class:A-java.lang.Object:A-" target="_blank" rel="external">这里</a>. 如果存在两个匹配度完全一样的候选方法，那么会抛出异常. </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (Method candidate : candidates) &#123;</div><div class="line">  Class&lt;?&gt;[] paramTypes = candidate.getParameterTypes();</div><div class="line"></div><div class="line">  <span class="comment">//参数个数不能少于指定的参数个数</span></div><div class="line">  <span class="keyword">if</span> (paramTypes.length &gt;= minNrOfArgs) &#123;</div><div class="line">    ArgumentsHolder argsHolder;</div><div class="line"></div><div class="line">    <span class="comment">//没有指定explictArgs的场景，需要通过类型转换及自动注入等机制获取方法的参数</span></div><div class="line">    <span class="keyword">if</span> (resolvedValues != <span class="keyword">null</span>) &#123;</div><div class="line">      String[] paramNames = <span class="keyword">null</span>;</div><div class="line">        ParameterNameDiscoverer pnd = <span class="keyword">this</span>.beanFactory.getParameterNameDiscoverer();</div><div class="line">        <span class="keyword">if</span> (pnd != <span class="keyword">null</span>) &#123;</div><div class="line">          paramNames = pnd.getParameterNames(candidate);</div><div class="line">        &#125;</div><div class="line">        argsHolder = createArgumentArray(</div><div class="line">          beanName, mbd, resolvedValues, bw, paramTypes, paramNames, candidate, autowiring);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123; <span class="comment">//显式给定了参数，则直接比较参数个数，并包装相应的参数</span></div><div class="line">      <span class="comment">// Explicit arguments given -&gt; arguments length must match exactly.</span></div><div class="line">      <span class="keyword">if</span> (paramTypes.length != explicitArgs.length) &#123;</div><div class="line">        <span class="keyword">continue</span>;</div><div class="line">      &#125;</div><div class="line">      argsHolder = <span class="keyword">new</span> ArgumentsHolder(explicitArgs);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//比较权重</span></div><div class="line">    <span class="keyword">int</span> typeDiffWeight = (mbd.isLenientConstructorResolution() ?</div><div class="line">                          argsHolder.getTypeDifferenceWeight(paramTypes) : argsHolder.getAssignabilityWeight(paramTypes));</div><div class="line">    <span class="comment">// Choose this factory method if it represents the closest match.</span></div><div class="line">    <span class="keyword">if</span> (typeDiffWeight &lt; minTypeDiffWeight) &#123;</div><div class="line">      factoryMethodToUse = candidate;</div><div class="line">      argsHolderToUse = argsHolder;</div><div class="line">      argsToUse = argsHolder.arguments;</div><div class="line">      minTypeDiffWeight = typeDiffWeight;</div><div class="line">      ambiguousFactoryMethods = <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// Find out about ambiguity: In case of the same type difference weight</span></div><div class="line">    <span class="comment">// for methods with the same number of parameters, collect such candidates</span></div><div class="line">    <span class="comment">// and eventually raise an ambiguity exception.</span></div><div class="line">    <span class="comment">// However, only perform that check in non-lenient constructor resolution mode,</span></div><div class="line">    <span class="comment">// and explicitly ignore overridden methods (with the same parameter signature).</span></div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (factoryMethodToUse != <span class="keyword">null</span> &amp;&amp; typeDiffWeight == minTypeDiffWeight &amp;&amp;</div><div class="line">             !mbd.isLenientConstructorResolution() &amp;&amp;</div><div class="line">             paramTypes.length == factoryMethodToUse.getParameterTypes().length &amp;&amp;</div><div class="line">             !Arrays.equals(paramTypes, factoryMethodToUse.getParameterTypes())) &#123;</div><div class="line">      <span class="keyword">if</span> (ambiguousFactoryMethods == <span class="keyword">null</span>) &#123;</div><div class="line">        ambiguousFactoryMethods = <span class="keyword">new</span> LinkedHashSet&lt;Method&gt;();</div><div class="line">        ambiguousFactoryMethods.add(factoryMethodToUse);</div><div class="line">      &#125;</div><div class="line">      ambiguousFactoryMethods.add(candidate);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://github.com/Essviv/images/blob/master/wechat.jpg?raw=true" alt="Essviv WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://github.com/Essviv/images/blob/master/alipay.jpg?raw=true" alt="Essviv Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+            <a href="/tags/IoC/" rel="tag"># IoC</a>
+          
+            <a href="/tags/DI/" rel="tag"># DI</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/10/spring/spring-ioc-source-code(1)/" rel="next" title="spring IoC源码分析(1)">
+                <i class="fa fa-chevron-left"></i> spring IoC源码分析(1)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/11/spring/spring-ioc-source-code(2)/"
+           data-title="spring IoC源码分析(2)" data-url="http://yoursite.com/2017/04/11/spring/spring-ioc-source-code(2)/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true"
+               alt="Essviv" />
+          <p class="site-author-name" itemprop="name">Essviv</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">175</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">56</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/essviv" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-使用容器"><span class="nav-text">2. 使用容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-获取指定类型的bean名称"><span class="nav-text">2.1 获取指定类型的bean名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-过滤bean名称"><span class="nav-text">2.2 过滤bean名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-根据名称获取bean对象实例"><span class="nav-text">2.3 根据名称获取bean对象实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-多个名称符合条件的情况"><span class="nav-text">2.3.1 多个名称符合条件的情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-只有一个名称符合条件的情况"><span class="nav-text">2.3.2 只有一个名称符合条件的情况</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-1-尝试从缓存中获取singleton"><span class="nav-text">2.3.2.1 尝试从缓存中获取singleton</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-2-从父容器中获取相应的bean实例对象"><span class="nav-text">2.3.2.2 从父容器中获取相应的bean实例对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-3-尝试从当前容器中加载bean对象"><span class="nav-text">2.3.2.3 尝试从当前容器中加载bean对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-4-类型转换"><span class="nav-text">2.3.2.4 类型转换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-createBean-方法的实现"><span class="nav-text">2.4 createBean()方法的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1-createBeanInstance-方法"><span class="nav-text">2.4.1 createBeanInstance()方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-1-1-使用工厂对象创建实例"><span class="nav-text">2.4.1.1 使用工厂对象创建实例</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Essviv</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"essviv"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+</body>
+</html>
