@@ -1508,7 +1508,7 @@ SOA：分布式程序实践
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/JVM/ClassLoader的双亲委派模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1530,8 +1530,8 @@ SOA：分布式程序实践
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/" itemprop="url">
-                  Netty源码学习系列---服务端的启动
+                <a class="post-title-link" href="/2017/01/25/JVM/ClassLoader的双亲委派模型/" itemprop="url">
+                  ClassLoader的双亲委派模型
                 </a>
               
             
@@ -1566,8 +1566,8 @@ SOA：分布式程序实践
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/JVM/ClassLoader的双亲委派模型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/JVM/ClassLoader的双亲委派模型/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1595,11 +1595,16 @@ SOA：分布式程序实践
       
         
           
-          Netty源码学习系列—服务端的启动netty作为一套NIO框架，它封装了JAVA中的原生的NIO操作逻辑. 在学习netty源码的时候，我们就遵循这样的思路，先用JAVA原生的NIO API实现服务端程序，然后对照这些步骤，一步步地去netty中寻找相应的实现，看看作为框架，它是怎么封装基本的操作
+          ClassLoader的双亲委派模型ClassLoader的层次在java中，ClassLoader的层次可细分为： 
+
+BootStrap ClassLoader： 负责加载JDK中的核心类库
+
+Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
+
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/IO/netty/Netty源码学习系列---服务端的启动/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/JVM/ClassLoader的双亲委派模型/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

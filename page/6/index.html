@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/JAVA基础/equals和hashCode方法的使用约定/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/多线程/juc/AQS框架/阻塞锁与自旋锁/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +278,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/JAVA基础/equals和hashCode方法的使用约定/" itemprop="url">
-                  equals和hashCode方法的使用约定
+                <a class="post-title-link" href="/2017/01/24/多线程/juc/AQS框架/阻塞锁与自旋锁/" itemprop="url">
+                  阻塞锁与自旋锁
                 </a>
               
             
@@ -314,8 +314,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/JAVA基础/equals和hashCode方法的使用约定/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/JAVA基础/equals和hashCode方法的使用约定/" itemprop="commentCount"></span>
+                <a href="/2017/01/24/多线程/juc/AQS框架/阻塞锁与自旋锁/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/多线程/juc/AQS框架/阻塞锁与自旋锁/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,15 +343,12 @@
       
         
           
-          Java的Object类中提供了两个重要的方法，equals和hashCode， 在map和set中这两个方法起到了至关重要的作用，以下是使用和重写这两个方法时的约定
-
-如果两个对象通过equals比较的结果为true, 那么它们的hashCode也必须一样
-
-如果两个对象的hashCode相等，那
+          阻塞锁与自旋锁在学习JAVA并发包的时候发现其底层的实现是通过AQS框架来完成的，而AQS框架中维护了一个CLH队列，CLH队列使用了CLH锁，因此上网搜了下这方面的内容，发现原来在并行编程中有这么多的锁类型，索性做个总结，此为本篇内容的缘由.
+1. 阻塞锁阻塞锁是指当线程尝试获取锁失败时，线程进入
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/JAVA基础/equals和hashCode方法的使用约定/#more" rel="contents">
+            <a class="btn" href="/2017/01/24/多线程/juc/AQS框架/阻塞锁与自旋锁/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -394,7 +391,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/缓存/Memcached/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -416,8 +413,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/" itemprop="url">
-                  RabbitMQ的HA方案
+                <a class="post-title-link" href="/2017/01/24/缓存/Memcached/" itemprop="url">
+                  Memcached
                 </a>
               
             
@@ -452,8 +449,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/" itemprop="commentCount"></span>
+                <a href="/2017/01/24/缓存/Memcached/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/缓存/Memcached/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -481,13 +478,11 @@
       
         
           
-          RabbitMQ的HA方案默认情况下，queue可以认为是只存在于它被声明的那个节点中，但是broker和binding可以认为存在于集群中的所有节点中. 可以通过镜像的方式，将queue复制到其它的节点中，以此来提高可用性
-
-镜像队列之间彼此形成了一主多从的关系，当主镜像队列因为某些原因消失时，一
+          Memcached命令格式123456   &lt;command&gt; &lt;key&gt; &lt;flags&gt; &lt;expireTime&gt; &lt;bytes&gt;   &lt;datablock&gt;e.g. set name 0 0 8           suny
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/消息队列/rabbitMQ/RabbitMQ的HA方案/#more" rel="contents">
+            <a class="btn" href="/2017/01/24/缓存/Memcached/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -950,7 +945,7 @@ AtomicOperation,
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/20/集合/java集合学习之通用接口2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/20/集合/java集合学习之List的实现3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -972,8 +967,8 @@ AtomicOperation,
             
               
                 
-                <a class="post-title-link" href="/2016/12/20/集合/java集合学习之通用接口2/" itemprop="url">
-                  java集合学习之通用接口2
+                <a class="post-title-link" href="/2016/12/20/集合/java集合学习之List的实现3/" itemprop="url">
+                  java集合学习之List的实现3
                 </a>
               
             
@@ -1008,8 +1003,8 @@ AtomicOperation,
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/20/集合/java集合学习之通用接口2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/20/集合/java集合学习之通用接口2/" itemprop="commentCount"></span>
+                <a href="/2016/12/20/集合/java集合学习之List的实现3/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/20/集合/java集合学习之List的实现3/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1037,15 +1032,12 @@ AtomicOperation,
       
         
           
-          java集合学习之通用接口2Collection接口collection接口定义了通用的集合操作，简单说来，可以分为： 
-
-增加操作: add, addAll, 往集合中增加相应类型的元素或者把另一个集合中的元素全部加到当前集合中
-
-删除操作: remove, removeAll, clear, 删
+          java集合学习之List的实现3在Java集合框架中，对于List接口的实现主要有两种， ArrayList和LinkedList. 前者底层是基于数组的实现，后者底层是基于双向链表的实现.
+ArrayList底层是通过Object[]数组来存储数据， 从arrayList的add方法可以看到，当
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/20/集合/java集合学习之通用接口2/#more" rel="contents">
+            <a class="btn" href="/2016/12/20/集合/java集合学习之List的实现3/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1223,7 +1215,7 @@ AtomicOperation,
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/20/集合/java集合学习之List的实现3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/20/集合/java集合学习之通用接口2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1245,8 +1237,8 @@ AtomicOperation,
             
               
                 
-                <a class="post-title-link" href="/2016/12/20/集合/java集合学习之List的实现3/" itemprop="url">
-                  java集合学习之List的实现3
+                <a class="post-title-link" href="/2016/12/20/集合/java集合学习之通用接口2/" itemprop="url">
+                  java集合学习之通用接口2
                 </a>
               
             
@@ -1281,8 +1273,8 @@ AtomicOperation,
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/20/集合/java集合学习之List的实现3/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/20/集合/java集合学习之List的实现3/" itemprop="commentCount"></span>
+                <a href="/2016/12/20/集合/java集合学习之通用接口2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/20/集合/java集合学习之通用接口2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1310,12 +1302,15 @@ AtomicOperation,
       
         
           
-          java集合学习之List的实现3在Java集合框架中，对于List接口的实现主要有两种， ArrayList和LinkedList. 前者底层是基于数组的实现，后者底层是基于双向链表的实现.
-ArrayList底层是通过Object[]数组来存储数据， 从arrayList的add方法可以看到，当
+          java集合学习之通用接口2Collection接口collection接口定义了通用的集合操作，简单说来，可以分为： 
+
+增加操作: add, addAll, 往集合中增加相应类型的元素或者把另一个集合中的元素全部加到当前集合中
+
+删除操作: remove, removeAll, clear, 删
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/20/集合/java集合学习之List的实现3/#more" rel="contents">
+            <a class="btn" href="/2016/12/20/集合/java集合学习之通用接口2/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
