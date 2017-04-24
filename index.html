@@ -794,7 +794,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/03/2017年学习计划/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/JVM/JVM的方法调用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -816,8 +816,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/02/03/2017年学习计划/" itemprop="url">
-                  2017学习计划
+                <a class="post-title-link" href="/2017/01/25/JVM/JVM的方法调用/" itemprop="url">
+                  JVM的方法调用
                 </a>
               
             
@@ -833,8 +833,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-03T10:20:54+08:00">
-                2017-02-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
+                2017-01-25
               </time>
             
 
@@ -852,8 +852,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/02/03/2017年学习计划/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/03/2017年学习计划/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/JVM/JVM的方法调用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/JVM/JVM的方法调用/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -881,20 +881,14 @@
       
         
           
-          2017年学习计划1. 内容篇
-JVM机制: OSGi, 反射，注解， 动态加载， 内存模型， 性能调优
-
-JMS: Kafka, RabbitMQ, ActiveMQ, RocketMQ
-
-缓存: 页面缓存， 浏览器缓存， 代理服务器缓存， 数据库热点数据缓存
-
-SOA：分布式程序实践
-
-数据库：
+          JVM的方法调用关键字： 编译时静态多分派，运行时动态单分派
+”静态多分派“是指在编译阶段，编译器根据方法接收者以及参数的静态类型来决定选用的方法版本
+”动态单分派“是指在运行阶段，只根据方法接收者的实际类型来决定调用的实际方法
+方法调用并不等于于方法执行，方法调用阶段唯一的任务就是确定被调用方法的
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/02/03/2017年学习计划/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/JVM/JVM的方法调用/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -937,7 +931,7 @@ SOA：分布式程序实践
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/Bytebuf学习/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/reactor模型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -959,8 +953,8 @@ SOA：分布式程序实践
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/IO/netty/Bytebuf学习/" itemprop="url">
-                  Bytebuf学习
+                <a class="post-title-link" href="/2017/01/25/IO/netty/reactor模型/" itemprop="url">
+                  reactor模型
                 </a>
               
             
@@ -995,8 +989,8 @@ SOA：分布式程序实践
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/IO/netty/Bytebuf学习/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/Bytebuf学习/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/IO/netty/reactor模型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/reactor模型/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1024,13 +1018,152 @@ SOA：分布式程序实践
       
         
           
-          Bytebuf学习ByteBuf同时支持随机和序列化的方式读取byte数组， 它是nio buffer以及byte数组的抽象视图类. 
-ByteBuf的指针ByteBuf中定义了两个指针， readerIndex和writerIndex， 分别指示当前的读位置与写位置;
-整个ByteBuf被这两个指
+          Reactor模型Reactor模型的中心思想是将所有要处理的IO事件及其处理器注册到一个中心的IO多路复用器上，并将主线程阻塞在多路复用器上；当有相应的IO事件到达时，多路复用器将IO事件分发给相应的处理器进行处理.Reactor模型的模型图如下所示， 其中包括几个核心组件：
+
+Initiatio
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/IO/netty/Bytebuf学习/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/IO/netty/reactor模型/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/JVM/ClassLoader的双亲委派模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/25/JVM/ClassLoader的双亲委派模型/" itemprop="url">
+                  ClassLoader的双亲委派模型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
+                2017-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/01/25/JVM/ClassLoader的双亲委派模型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/JVM/ClassLoader的双亲委派模型/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          ClassLoader的双亲委派模型ClassLoader的层次在java中，ClassLoader的层次可细分为： 
+
+BootStrap ClassLoader： 负责加载JDK中的核心类库
+
+Extension ClassLoader： 负责加载/lib/ext/下的类库，负责JAVA扩展库
+
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/01/25/JVM/ClassLoader的双亲委派模型/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1213,7 +1346,7 @@ http://design-patterns.readthedocs.io/zh_CN/latest/structural_patterns/adapter.h
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/zookeeper学习摘要/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/IO/netty/Bytebuf学习/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1235,8 +1368,8 @@ http://design-patterns.readthedocs.io/zh_CN/latest/structural_patterns/adapter.h
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/zookeeper学习摘要/" itemprop="url">
-                  zookeeper学习摘要
+                <a class="post-title-link" href="/2017/01/25/IO/netty/Bytebuf学习/" itemprop="url">
+                  Bytebuf学习
                 </a>
               
             
@@ -1271,8 +1404,8 @@ http://design-patterns.readthedocs.io/zh_CN/latest/structural_patterns/adapter.h
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/zookeeper学习摘要/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/zookeeper学习摘要/" itemprop="commentCount"></span>
+                <a href="/2017/01/25/IO/netty/Bytebuf学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/IO/netty/Bytebuf学习/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1300,15 +1433,13 @@ http://design-patterns.readthedocs.io/zh_CN/latest/structural_patterns/adapter.h
       
         
           
-          Stat结构
-zxid: zookeeper transaction id, 这个ID表示了全局的顺序, zxid的值越小，那么该操作发生的时间越早.
-czxid: 导致这个节点创建的操作zxid编号
-ctime: 创建这个节点的时间
-mzxid： 最近一次编辑这个节点数据的zxid编号（注意，这里
+          Bytebuf学习ByteBuf同时支持随机和序列化的方式读取byte数组， 它是nio buffer以及byte数组的抽象视图类. 
+ByteBuf的指针ByteBuf中定义了两个指针， readerIndex和writerIndex， 分别指示当前的读位置与写位置;
+整个ByteBuf被这两个指
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/zookeeper学习摘要/#more" rel="contents">
+            <a class="btn" href="/2017/01/25/IO/netty/Bytebuf学习/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1476,148 +1607,6 @@ mzxid： 最近一次编辑这个节点数据的zxid编号（注意，这里
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/JVM/反射/反射-Member接口/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Essviv">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Essviv">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/25/JVM/反射/反射-Member接口/" itemprop="url">
-                  反射-Member接口
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
-                2017-01-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/25/JVM/反射/反射-Member接口/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/JVM/反射/反射-Member接口/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          反射-Member接口Member接口定义了单个成员（可以是属性、构造函数或者方法）的信息，它提供了以下几个方法：
-
-getDeclaringClass: 返回声明这个成员的类信息
-
-getModifier: 返回修饰符信息
-
-getName: 返回成员的名称信息
-
-isSynthetic：标识当前
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/JVM/反射/反射-Member接口/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1667,7 +1656,7 @@ isSynthetic：标识当前
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">148</span>
+                <span class="site-state-item-count">145</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
