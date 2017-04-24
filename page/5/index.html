@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/集合/java集合学习之Queue的实现5/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/06/多线程/等待通知机制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +278,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/集合/java集合学习之Queue的实现5/" itemprop="url">
-                  java集合学习之Queue的实现5
+                <a class="post-title-link" href="/2016/12/06/多线程/等待通知机制/" itemprop="url">
+                  等待通知机制
                 </a>
               
             
@@ -295,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
-                2017-01-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-06T10:20:54+08:00">
+                2016-12-06
               </time>
             
 
@@ -314,8 +314,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/集合/java集合学习之Queue的实现5/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/集合/java集合学习之Queue的实现5/" itemprop="commentCount"></span>
+                <a href="/2016/12/06/多线程/等待通知机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/06/多线程/等待通知机制/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,13 +343,14 @@
       
         
           
-          java集合学习之Queue的实现5Queue接口这个接口的类继承图如下所示，可以看到，这个接口主要有三种实现， AbstractQueue、Deque以及BlockingQueue（在图中未展示）. 
+          等待通知机制notify, notifyAll, wait这三个方法构成了java的等待通知机制的核心，它们主要是用于线程间通信时使用. 使用这三个方法的前提是当前线程必须拥有对象的锁
 
-这个接口只定义了6个方法，可以分成两组，一组在操作无法完成时会抛出异常，一组在操作无法完成时会
+wait: 当前线程进入等待状态，直到其它线程调用了对象的notify或者notifyAll方法
+notify：
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/集合/java集合学习之Queue的实现5/#more" rel="contents">
+            <a class="btn" href="/2016/12/06/多线程/等待通知机制/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -392,7 +393,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/集合/java集合学习之Map和Set的实现4/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/03/多线程/juc/线程池/Executors/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -414,8 +415,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/集合/java集合学习之Map和Set的实现4/" itemprop="url">
-                  java集合学习之Map和Set的实现4
+                <a class="post-title-link" href="/2016/12/03/多线程/juc/线程池/Executors/" itemprop="url">
+                  Executors
                 </a>
               
             
@@ -431,8 +432,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
-                2017-01-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-03T10:20:54+08:00">
+                2016-12-03
               </time>
             
 
@@ -450,8 +451,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/集合/java集合学习之Map和Set的实现4/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/集合/java集合学习之Map和Set的实现4/" itemprop="commentCount"></span>
+                <a href="/2016/12/03/多线程/juc/线程池/Executors/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/03/多线程/juc/线程池/Executors/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -479,13 +480,22 @@
       
         
           
-          java集合学习之Map和Set的实现4Map接口并不继承自Collection接口，它是一系列key-value值的集合，它的类继承图如下，
+          ExecutorsExecutors是并发包中提供的工具类，它可以用来创建以下这些对象:
 
-AbstractMap作为map接口的抽象实现，它实现了map接口中的通用方法，如size, get, putAll等方法. 这个类只定义了一个抽象接口，
+ExecutorService
+
+ScheduledExecutorService
+
+ThreadFactory
+
+Callable
+
+
+1. Executor接口首先先来看看并发包中的Executor接口的
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/集合/java集合学习之Map和Set的实现4/#more" rel="contents">
+            <a class="btn" href="/2016/12/03/多线程/juc/线程池/Executors/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -528,7 +538,7 @@ AbstractMap作为map接口的抽象实现，它实现了map接口中的通用方
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/25/设计模式/设计模式总述/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/IO/netty/netty源码学习系列-----eventLoop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -550,8 +560,8 @@ AbstractMap作为map接口的抽象实现，它实现了map接口中的通用方
             
               
                 
-                <a class="post-title-link" href="/2017/01/25/设计模式/设计模式总述/" itemprop="url">
-                  设计模式总述
+                <a class="post-title-link" href="/2016/12/02/IO/netty/netty源码学习系列-----eventLoop/" itemprop="url">
+                  netty源码学习系列-----eventLoop
                 </a>
               
             
@@ -567,8 +577,8 @@ AbstractMap作为map接口的抽象实现，它实现了map接口中的通用方
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-25T10:20:54+08:00">
-                2017-01-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-02T10:20:54+08:00">
+                2016-12-02
               </time>
             
 
@@ -586,8 +596,8 @@ AbstractMap作为map接口的抽象实现，它实现了map接口中的通用方
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/25/设计模式/设计模式总述/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/25/设计模式/设计模式总述/" itemprop="commentCount"></span>
+                <a href="/2016/12/02/IO/netty/netty源码学习系列-----eventLoop/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/IO/netty/netty源码学习系列-----eventLoop/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -615,162 +625,11 @@ AbstractMap作为map接口的抽象实现，它实现了map接口中的通用方
       
         
           
-          总述参考文献
-https://sourcemaking.com/design_patterns/facade
-
-http://design-patterns.readthedocs.io/zh_CN/latest/structural_patterns/adapter.html
-
-
-
-          
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/25/设计模式/设计模式总述/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/集合/memo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Essviv">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Essviv">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/24/集合/memo/" itemprop="url">
-                  memo
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/24/集合/memo/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/集合/memo/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          memo需要进一步深入学习的点： 
-
-BlockingQueue
-
-CocurrentHashMap
-
-BlockingDeque
-
-
-以上内容可以从这里找到答案 
-
-hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
+          netty源码学习系列—–eventLoopnetty是如何实现对于某个channel的IO事件，交由同一个线程去处理?channel持有一个eventloop，后续所有的操作都会交由这个eventllop操作，具体是在每个操作前，判断一下当前的执行线程是不是eventloop，如果是，直接执行，如
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/集合/memo/#more" rel="contents">
+            <a class="btn" href="/2016/12/02/IO/netty/netty源码学习系列-----eventLoop/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -813,7 +672,7 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/JAVA基础/equals和hashCode方法的使用约定/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/IO/netty/netty源码学习系列----channelHandler/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -835,8 +694,8 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/JAVA基础/equals和hashCode方法的使用约定/" itemprop="url">
-                  equals和hashCode方法的使用约定
+                <a class="post-title-link" href="/2016/12/02/IO/netty/netty源码学习系列----channelHandler/" itemprop="url">
+                  netty源码学习系列----channelHandler
                 </a>
               
             
@@ -852,8 +711,8 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-02T10:20:54+08:00">
+                2016-12-02
               </time>
             
 
@@ -871,8 +730,8 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/JAVA基础/equals和hashCode方法的使用约定/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/JAVA基础/equals和hashCode方法的使用约定/" itemprop="commentCount"></span>
+                <a href="/2016/12/02/IO/netty/netty源码学习系列----channelHandler/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/IO/netty/netty源码学习系列----channelHandler/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -900,15 +759,148 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
       
         
           
-          Java的Object类中提供了两个重要的方法，equals和hashCode， 在map和set中这两个方法起到了至关重要的作用，以下是使用和重写这两个方法时的约定
+          netty源码学习系列—-channelHandlerCodec
+FieldLengthBasedFrameDecoder
 
-如果两个对象通过equals比较的结果为true, 那么它们的hashCode也必须一样
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/12/02/IO/netty/netty源码学习系列----channelHandler/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
 
-如果两个对象的hashCode相等，那
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/01/设计模式/责任链模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/12/01/设计模式/责任链模式/" itemprop="url">
+                  责任链模式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-01T10:20:54+08:00">
+                2016-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/12/01/设计模式/责任链模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/01/设计模式/责任链模式/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          责任链模式责任链模式由两个重要组件组成，请求(指令的产生者)以及处理器(指令的处理者)。 这个模式在很多常用的框架中都可以找到踪迹，比如netty的channelHandler， Spring Security中的Filter等等。 
+简单来讲，请求产生后会在处理器链中按一定的顺序传播，每个处理器的
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/JAVA基础/equals和hashCode方法的使用约定/#more" rel="contents">
+            <a class="btn" href="/2016/12/01/设计模式/责任链模式/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -951,7 +943,7 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/设计模式/迭代器模式/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/29/设计模式/状态模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -973,8 +965,8 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/设计模式/迭代器模式/" itemprop="url">
-                  迭代器模式
+                <a class="post-title-link" href="/2016/11/29/设计模式/状态模式/" itemprop="url">
+                  状态模式
                 </a>
               
             
@@ -990,8 +982,8 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-29T10:20:54+08:00">
+                2016-11-29
               </time>
             
 
@@ -1009,8 +1001,8 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/设计模式/迭代器模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/设计模式/迭代器模式/" itemprop="commentCount"></span>
+                <a href="/2016/11/29/设计模式/状态模式/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/29/设计模式/状态模式/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1038,13 +1030,12 @@ hashCode和equals： http://tutorials.jenkov.com/java-collections/hash
       
         
           
-          迭代器模式迭代器模式中涉及到两个关键的组件， 集合类与迭代器. 迭代器简化了遍历集合类元素的操作，使得外界可以不用了解集合类中的数据组织情况就可以访问其中的所有元素， 它的UML图比较简单，如下所示，
-
-UML图中定义了两个抽象接口，Aggregate和Iterator， 分别对应于上面所说的集合类
+          状态模式在学习nio编程的时候，遇到需要在不同的状态间进行转换，程序也需要根据不同的状态作不同的处理，搜了下相应的设计模式，果然发现有种叫”状态模式“的非常符合自己的需要，简单地做个记录
+按照惯例，还是先上UML图，从图中可以看出， 状态模式有两个重要的组成部分，一个是上下文，也就是维护状态的地方；
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/设计模式/迭代器模式/#more" rel="contents">
+            <a class="btn" href="/2016/11/29/设计模式/状态模式/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1087,7 +1078,7 @@ UML图中定义了两个抽象接口，Aggregate和Iterator， 分别对应于�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/Web/Spring的IoC框架/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/25/测试/spring-test/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1109,8 +1100,8 @@ UML图中定义了两个抽象接口，Aggregate和Iterator， 分别对应于�
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/Web/Spring的IoC框架/" itemprop="url">
-                  Spring的IoC框架
+                <a class="post-title-link" href="/2016/11/25/测试/spring-test/" itemprop="url">
+                  spring-test
                 </a>
               
             
@@ -1126,8 +1117,8 @@ UML图中定义了两个抽象接口，Aggregate和Iterator， 分别对应于�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-25T10:20:54+08:00">
+                2016-11-25
               </time>
             
 
@@ -1145,8 +1136,8 @@ UML图中定义了两个抽象接口，Aggregate和Iterator， 分别对应于�
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/Web/Spring的IoC框架/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/Web/Spring的IoC框架/" itemprop="commentCount"></span>
+                <a href="/2016/11/25/测试/spring-test/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/25/测试/spring-test/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1174,14 +1165,13 @@ UML图中定义了两个抽象接口，Aggregate和Iterator， 分别对应于�
       
         
           
-          容器的含义Spring中的ApplicationContext继承自BeanFactory， 除了提供了BeanFactory的功能外，还额外提供了依赖管理，消息、生命周期监听等等功能，它就是所谓的“容器”
-Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括：
+          spring-test使用spring进行单元测试使用spring对代码进行 单元测试 时， 同其它的pojo进行单元测试是一样的，不过spring对单元测试提供了一些工具类来帮助用户更方便地进行单元测试. 
 
-完
+ReflectionTestUtils:  反射相关的系列工具方法类, 可以用于改变常量
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/Web/Spring的IoC框架/#more" rel="contents">
+            <a class="btn" href="/2016/11/25/测试/spring-test/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1224,7 +1214,7 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/缓存/Memcached/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1246,8 +1236,8 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/缓存/Memcached/" itemprop="url">
-                  Memcached
+                <a class="post-title-link" href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/" itemprop="url">
+                  Runnable, Callable, Future, FutureTask的区别
                 </a>
               
             
@@ -1263,8 +1253,8 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-22T10:20:54+08:00">
+                2016-11-22
               </time>
             
 
@@ -1282,8 +1272,8 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/缓存/Memcached/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/缓存/Memcached/" itemprop="commentCount"></span>
+                <a href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1311,11 +1301,14 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
       
         
           
-          Memcached命令格式123456   &lt;command&gt; &lt;key&gt; &lt;flags&gt; &lt;expireTime&gt; &lt;bytes&gt;   &lt;datablock&gt;e.g. set name 0 0 8           suny
+          Runnable, Callable, Future, FutureTask的区别
+Runnable是thread用来执行时指定的对象，它只包含有一个方法，run方法，这个方法没有返回值，且不会抛出异常信息.
+
+Callable和runnable一样，都是executor用来执行时指定的对象，它也包
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/缓存/Memcached/#more" rel="contents">
+            <a class="btn" href="/2016/11/22/多线程/Runnable, Callable, Future, FutureTask的区别/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1358,7 +1351,7 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/多线程/多线程进阶/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/IO/netty/netty总览图-核心组件/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1380,8 +1373,8 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/多线程/多线程进阶/" itemprop="url">
-                  多线程进阶
+                <a class="post-title-link" href="/2016/11/22/IO/netty/netty总览图-核心组件/" itemprop="url">
+                  netty总览图-核心组件
                 </a>
               
             
@@ -1397,8 +1390,8 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-22T10:20:54+08:00">
+                2016-11-22
               </time>
             
 
@@ -1416,8 +1409,8 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/多线程/多线程进阶/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/多线程/多线程进阶/" itemprop="commentCount"></span>
+                <a href="/2016/11/22/IO/netty/netty总览图-核心组件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/IO/netty/netty总览图-核心组件/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1445,13 +1438,16 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
       
         
           
-          多线程进阶
-锁对象synchronized关键字内部使用的是一种较为简单的重入锁机制，可以通过Lock接口来实现相应的功能。Lock接口的好处在于在尝试获取对象锁时，可以直接返回或者等待一段时间后再返回，更为灵活
-另外，读写锁提供了更为精巧的方式来控制同时读写的问题，它特别适合于解决读写互斥，写写互
+          netty总览图-核心组件netty核心概念关系图
+Bytebuf: 对java nio中ByteBuffer的抽象
+
+每个Channel代表了一种能够用于IO操作的实体，例如socket， 文件等等
+
+每个channel都有一个pipeline, pipeline的作用是处于和这个channel相
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/多线程/多线程进阶/#more" rel="contents">
+            <a class="btn" href="/2016/11/22/IO/netty/netty总览图-核心组件/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1494,7 +1490,7 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/24/工具/snowflake/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/22/IO/java基础/IO中的阻塞、非阻塞、同步和异步的区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1516,8 +1512,8 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
             
               
                 
-                <a class="post-title-link" href="/2017/01/24/工具/snowflake/" itemprop="url">
-                  snowflake
+                <a class="post-title-link" href="/2016/11/22/IO/java基础/IO中的阻塞、非阻塞、同步和异步的区别/" itemprop="url">
+                  IO中的阻塞、非阻塞、同步和异步的区别
                 </a>
               
             
@@ -1533,8 +1529,8 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-24T10:20:54+08:00">
-                2017-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-22T10:20:54+08:00">
+                2016-11-22
               </time>
             
 
@@ -1552,8 +1548,8 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/01/24/工具/snowflake/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/24/工具/snowflake/" itemprop="commentCount"></span>
+                <a href="/2016/11/22/IO/java基础/IO中的阻塞、非阻塞、同步和异步的区别/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/22/IO/java基础/IO中的阻塞、非阻塞、同步和异步的区别/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1581,13 +1577,16 @@ Bean定义Bean在容器的定义由BeanDefinition定义. 具体的内容包括�
       
         
           
-          Snoaflake
-snowflake算法背后的思想是： 时间 + 空间 + 序列号
+          IO中的阻塞、非阻塞、同步和异步的区别IO相关概念
+阻塞：在发起IO操作之后，线程被阻塞，直到相应的IO操作完成才会返回
 
-          
+非阻塞： 在发起IO操作之后，线程不会被阻塞并且立即返回
+
+同步： 在发起IO操作之后，在没有得到结果之前，调用都不会返回（注意，这里不返回不代表就一定阻塞了，应用也可以处于非
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/01/24/工具/snowflake/#more" rel="contents">
+            <a class="btn" href="/2016/11/22/IO/java基础/IO中的阻塞、非阻塞、同步和异步的区别/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1625,7 +1624,7 @@ snowflake算法背后的思想是： 时间 + 空间 + 序列号
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1670,7 +1669,7 @@ snowflake算法背后的思想是： 时间 + 空间 + 序列号
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">176</span>
+                <span class="site-state-item-count">148</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1683,7 +1682,7 @@ snowflake算法背后的思想是： 时间 + 空间 + 序列号
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

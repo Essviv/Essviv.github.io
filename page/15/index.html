@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/17/集合/java-collection-implements/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/SOA/CXF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +278,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/17/集合/java-collection-implements/" itemprop="url">
-                  Java集合学习
+                <a class="post-title-link" href="/2016/01/25/SOA/CXF/" itemprop="url">
+                  CXF
                 </a>
               
             
@@ -295,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-17T11:14:00+08:00">
-                2016-04-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-25T10:20:54+08:00">
+                2016-01-25
               </time>
             
 
@@ -314,8 +314,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/04/17/集合/java-collection-implements/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/17/集合/java-collection-implements/" itemprop="commentCount"></span>
+                <a href="/2016/01/25/SOA/CXF/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/SOA/CXF/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,15 +343,19 @@
       
         
           
-          JAVA集合框架的接口部分定义了各种集合类的功能，具体的实现则在各种具体的实现中完成。按照实现的目的不同，JAVA集合接口的实现可分为以下几种：
+          CXF根据WSDL生成客户端的方式有以下几种：
 
-通用目的的实现： 这些实现都是日常开发中经常用到的实现，具体的实现类包括：
+wsdl2java自动生成代码
 
-特殊目的的实现： 这些实现都是为了一些特殊目的而进行的实现，可能会有某些限
+jax-ws代理： 通过service.create来创建相应的客户端代码.
+
+
+CXF与spring的集成
+在beans中定义server和client，如下, 其中id为spring中标识，implementor
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/17/集合/java-collection-implements/#more" rel="contents">
+            <a class="btn" href="/2016/01/25/SOA/CXF/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -394,7 +398,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/17/集合/java集合学习之实现/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/安全/shiro学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -416,8 +420,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/17/集合/java集合学习之实现/" itemprop="url">
-                  java集合学习之实现
+                <a class="post-title-link" href="/2016/01/25/安全/shiro学习笔记/" itemprop="url">
+                  shiro学习笔记
                 </a>
               
             
@@ -433,8 +437,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-17T10:20:54+08:00">
-                2016-04-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-25T10:20:54+08:00">
+                2016-01-25
               </time>
             
 
@@ -452,8 +456,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/04/17/集合/java集合学习之实现/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/17/集合/java集合学习之实现/" itemprop="commentCount"></span>
+                <a href="/2016/01/25/安全/shiro学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/安全/shiro学习笔记/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -481,15 +485,14 @@
       
         
           
-          JAVA集合框架的接口部分定义了各种集合类的功能，具体的实现则在各种具体的实现中完成。按照实现的目的不同，JAVA集合接口的实现可分为以下几种：
-
-通用目的的实现： 这些实现都是日常开发中经常用到的实现，具体的实现类包括：
-
-特殊目的的实现： 这些实现都是为了一些特殊目的而进行的实现，可能会有某些限
+          Shiro##Terminology参考1  参考2注意realm, principal, credential的理解
+##Architecture
+##SecurityManager
+###GraphAuthenticator, Authorizator, SessionManagement, S
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/17/集合/java集合学习之实现/#more" rel="contents">
+            <a class="btn" href="/2016/01/25/安全/shiro学习笔记/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -532,7 +535,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/16/reference-types-in-java/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/doc/memo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -554,8 +557,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/16/reference-types-in-java/" itemprop="url">
-                  强引用，软引用，弱引用以及虚引用
+                <a class="post-title-link" href="/2016/01/25/doc/memo/" itemprop="url">
+                  memo
                 </a>
               
             
@@ -571,8 +574,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-16T17:55:00+08:00">
-                2016-04-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-25T10:20:54+08:00">
+                2016-01-25
               </time>
             
 
@@ -590,8 +593,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/04/16/reference-types-in-java/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/16/reference-types-in-java/" itemprop="commentCount"></span>
+                <a href="/2016/01/25/doc/memo/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/doc/memo/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -619,14 +622,20 @@
       
         
           
-          
-强引用(Strong Reference)是指平时经常用到的引用类型，如果某个对象存在强引用，那么它将不会被GC回收
+          #Memo
 
-软引用(Soft Reference)是指那些有用但不是必需的对象，它经常被用作缓存，当JVM内存充足时，它不会被GC回收，但如果内存不足时，它会被回收；它可以和引用队列(Ref
-          ...
+按天查询收入（开始时间-结束时间)
+通过手机号查询用户信息
+流量充值
+创建APP接口
+JIRA上的问题
+白条 
+
+
+          
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/16/reference-types-in-java/#more" rel="contents">
+            <a class="btn" href="/2016/01/25/doc/memo/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -669,7 +678,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/14/集合/java-collection-interface/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/doc/id_auto_increment_accross_tables/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -691,8 +700,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/14/集合/java-collection-interface/" itemprop="url">
-                  JAVA集合学习
+                <a class="post-title-link" href="/2016/01/25/doc/id_auto_increment_accross_tables/" itemprop="url">
+                  id_auto_increment_accross_tables
                 </a>
               
             
@@ -708,8 +717,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-14T21:47:00+08:00">
-                2016-04-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-25T10:20:54+08:00">
+                2016-01-25
               </time>
             
 
@@ -727,8 +736,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/04/14/集合/java-collection-interface/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/14/集合/java-collection-interface/" itemprop="commentCount"></span>
+                <a href="/2016/01/25/doc/id_auto_increment_accross_tables/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/doc/id_auto_increment_accross_tables/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -756,14 +765,13 @@
       
         
           
-          java集合框架的内容包括三个部分， 分别为接口，实现，算法. 本章只详述接口部分的内容。
-接口： 接口可从宏观上分为两类， 分别为map和collection， collection又可细分为set, list, queue, deque.在理解接口的时候，可以从以下几个方面来理解：
-
-接口提供了
+          #分表情况下的用户ID自增策略
+总得来讲，在数据库中记录当前已经生成的用户ID数，缓存启动时，读取这个值并将它增加一定的数量（100，1000),然后在缓存中预先生成相应数量的ID值，当应用层请求生成用户ID时，直接从缓存中取出预先生成的值，若缓存里的值被取完，继续更新数据库，生成新的ID值
+##几
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/14/集合/java-collection-interface/#more" rel="contents">
+            <a class="btn" href="/2016/01/25/doc/id_auto_increment_accross_tables/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -806,7 +814,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/12/数据库/数据库事务的隔离级别/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/测试/junit/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -828,8 +836,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/12/数据库/数据库事务的隔离级别/" itemprop="url">
-                  数据库事务的隔离级别
+                <a class="post-title-link" href="/2016/01/25/测试/junit/" itemprop="url">
+                  junit
                 </a>
               
             
@@ -845,8 +853,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-12T10:20:54+08:00">
-                2016-04-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-25T10:20:54+08:00">
+                2016-01-25
               </time>
             
 
@@ -864,8 +872,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/04/12/数据库/数据库事务的隔离级别/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/12/数据库/数据库事务的隔离级别/" itemprop="commentCount"></span>
+                <a href="/2016/01/25/测试/junit/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/测试/junit/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -893,14 +901,18 @@
       
         
           
-          数据库事务的隔离级别隔离级别
-数据库事务的隔离级别分为四个： 未提交读， 提交读，重复读以及序列化，不同隔离级别能解决的问题以及不能解决的问题如下：
+          JUnit
+Test(timeout, expected)： 表示该方法为单元测试方法，timeout表示执行的最长时间，expected表示预期方法会抛出的异常
 
-重复读会对读的范围加锁，也就是在第一次读操作开始的时候，事务会对它所读的范围进行加锁，其它的事务就不能对这个范围内的记录进行修改和删除操作，以此来保
+Before: 每个测试方法执行前被执行一次
+
+After: 每个测试方法执行后被执行一次
+
+BeforeClass: 方法必须为st
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/12/数据库/数据库事务的隔离级别/#more" rel="contents">
+            <a class="btn" href="/2016/01/25/测试/junit/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -943,7 +955,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/10/消息队列/rabbitMQ/RabbitMQ的集群方案/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/doc/memcached/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -965,8 +977,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/10/消息队列/rabbitMQ/RabbitMQ的集群方案/" itemprop="url">
-                  RabbitMQ的集群方案
+                <a class="post-title-link" href="/2016/01/25/doc/memcached/" itemprop="url">
+                  memcached
                 </a>
               
             
@@ -982,8 +994,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-10T10:20:54+08:00">
-                2016-04-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-01-25T10:20:54+08:00">
+                2016-01-25
               </time>
             
 
@@ -1001,8 +1013,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/04/10/消息队列/rabbitMQ/RabbitMQ的集群方案/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/10/消息队列/rabbitMQ/RabbitMQ的集群方案/" itemprop="commentCount"></span>
+                <a href="/2016/01/25/doc/memcached/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/doc/memcached/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1030,12 +1042,16 @@
       
         
           
-          RabbitMQ的集群方案1. RMQ的集群组建RMQ集群可以动态的变化，集群中的每个节点可以先单独创建，然后再加入到集群中；也可以随时从集群中退出
-在RMQ集群中，所有的数据和状态都是共享的，包括用户，虚拟主机，队列，exchange, 绑定以及运行时参数，这些对象在集群中基本上都是有备份的，除了
-          ...
+          #memcached
+##commandsset, add, replace, append, prepend, cas, get, gets, flush_all, delete, incr, decr, touch
+##References官方文档
+命令说明
+turtorialPoint
+
+          
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/10/消息队列/rabbitMQ/RabbitMQ的集群方案/#more" rel="contents">
+            <a class="btn" href="/2016/01/25/doc/memcached/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1078,7 +1094,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/10/缓存/Redis/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/11/25/SOA/SOAP/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1100,8 +1116,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/10/缓存/Redis/" itemprop="url">
-                  Redis
+                <a class="post-title-link" href="/2015/11/25/SOA/SOAP/" itemprop="url">
+                  SOAP
                 </a>
               
             
@@ -1117,8 +1133,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-10T10:20:54+08:00">
-                2016-04-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-25T10:20:54+08:00">
+                2015-11-25
               </time>
             
 
@@ -1136,8 +1152,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/04/10/缓存/Redis/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/10/缓存/Redis/" itemprop="commentCount"></span>
+                <a href="/2015/11/25/SOA/SOAP/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/11/25/SOA/SOAP/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1165,23 +1181,23 @@
       
         
           
-          Redis数据类型
-字符串
-列表
-集合
-散列
-有序集合
+          SOAPSOAP消息包括以下几个部分：
 
-说明: 具体的redis命令可以通过中文网站进行参考, 每个类型的命令均可以按照“CURD”的分组来帮助记忆
-键空间事件通知
-通知可分为两类
+Envelope元素： 标识此XML文档为SOAP消息， 必需
 
-键空间通知：键空间中的键发生变化的时候会发送通知，通知内容为事件的名称
-键事件通知：当某些特定的操
+Heaher元素： 头部信息，可选
+
+Body元素： 包含所有的请求和响应信息， 必需
+
+Fault元素： 包含针对此消息出错时的错误信息，可选
+
+
+例如：
+12345678910111213
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/10/缓存/Redis/#more" rel="contents">
+            <a class="btn" href="/2015/11/25/SOA/SOAP/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1224,7 +1240,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/25/doc/data_access/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1246,8 +1262,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/" itemprop="url">
-                  RabbitMQ的基本概念
+                <a class="post-title-link" href="/2015/10/25/doc/data_access/" itemprop="url">
+                  data_access
                 </a>
               
             
@@ -1263,8 +1279,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-09T10:20:54+08:00">
-                2016-04-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-25T10:20:54+08:00">
+                2015-10-25
               </time>
             
 
@@ -1282,8 +1298,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/" itemprop="commentCount"></span>
+                <a href="/2015/10/25/doc/data_access/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/25/doc/data_access/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1311,292 +1327,16 @@
       
         
           
-          RMQ的基本概念： 基本概念
-生产者将消息投递给broker中的exchange模块，exchange根据“绑定”规则将这条消息投递给queue， 而queue再根据订阅的情况主动地push给消费者，或者由消费者主动向broker进行pull操作。
-queue， exchange以及binding三
+          #Data Access
+##Transaction Management
+###Concept diagram
+###Propagation参考1 参考2
+###Isolation参考1
+Read Uncommitted —&gt;  Dirty Read —&gt; Read Committed
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Essviv">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Essviv">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/" itemprop="url">
-                  RabbitMQ基础教程
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-08T10:20:54+08:00">
-                2016-04-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          RabbitMQ基础教程
-生产者-消费者
-
-生产者的流程：ConnectionFactory —&gt; Connection —&gt; Channel —&gt; ExchangeDeclare  –&gt; QueueDeclare —&gt; BasicPublish
-
-消费者的流程: Co
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/07/消息队列/rabbitMQ/AMQP学习/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Essviv">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Essviv">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/07/消息队列/rabbitMQ/AMQP学习/" itemprop="url">
-                  AMQP学习
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-07T10:20:54+08:00">
-                2016-04-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/04/07/消息队列/rabbitMQ/AMQP学习/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/07/消息队列/rabbitMQ/AMQP学习/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          AMQP学习Topic Exchange的匹配
-*: 匹配一个单词
-#: 匹配零或多个单词
-
-1e.g. *.stocks.# 能够匹配usd.stocks以及eur.stocks.db，但不能匹配stocks.nasdaq
-header exchange的匹配
-这种类型的exchange在匹配时会
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/04/07/消息队列/rabbitMQ/AMQP学习/#more" rel="contents">
+            <a class="btn" href="/2015/10/25/doc/data_access/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1634,7 +1374,7 @@ header exchange的匹配
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/14/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span><a class="page-number" href="/page/16/">16</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/16/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/14/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><span class="page-number current">15</span>
   </nav>
 
 
@@ -1679,7 +1419,7 @@ header exchange的匹配
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">176</span>
+                <span class="site-state-item-count">148</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1692,7 +1432,7 @@ header exchange的匹配
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

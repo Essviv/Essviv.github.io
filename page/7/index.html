@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/16/多线程/juc/AQS框架/ReentrantReadWriteLock源码分析/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-属性信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +278,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/12/16/多线程/juc/AQS框架/ReentrantReadWriteLock源码分析/" itemprop="url">
-                  ReentrantReadWriteLock源码分析
+                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-属性信息/" itemprop="url">
+                  反射-属性信息
                 </a>
               
             
@@ -295,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-16T10:20:54+08:00">
-                2016-12-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-30T10:20:54+08:00">
+                2016-10-30
               </time>
             
 
@@ -314,8 +314,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/16/多线程/juc/AQS框架/ReentrantReadWriteLock源码分析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/16/多线程/juc/AQS框架/ReentrantReadWriteLock源码分析/" itemprop="commentCount"></span>
+                <a href="/2016/10/30/JVM/反射/反射-属性信息/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-属性信息/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,11 +343,18 @@
       
         
           
-          ReentrantReadWriteLock源码分析在之前的源码分析 中，ReentrantLock展示了排它锁的实现，而CountDownLatch和Semaphore则展示了共享锁的实现，接下来，我们要一起看看ReentrantReadWriteLock(RRWL)的源码，它同时实现了独占锁和共
+          反射-属性信息Field代表了属性信息，可以是类属性，也可以是实例属性
+属性中定义了以下方法：
+
+getType: 获取属性的类型信息
+
+实现了Member接口： Member接口中定义了getName, getDeclaringClass, getModifier和isSynthetic方法
+
+g
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/16/多线程/juc/AQS框架/ReentrantReadWriteLock源码分析/#more" rel="contents">
+            <a class="btn" href="/2016/10/30/JVM/反射/反射-属性信息/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -390,7 +397,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/15/多线程/juc/AQS框架/CountDownLatch, Semaphore, CyclicBarrier源码解析/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-方法信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -412,8 +419,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/12/15/多线程/juc/AQS框架/CountDownLatch, Semaphore, CyclicBarrier源码解析/" itemprop="url">
-                  CountDownLatch, Semaphore, CyclicBarrier源码解析
+                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-方法信息/" itemprop="url">
+                  反射-方法信息
                 </a>
               
             
@@ -429,8 +436,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-15T10:20:54+08:00">
-                2016-12-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-30T10:20:54+08:00">
+                2016-10-30
               </time>
             
 
@@ -448,8 +455,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/15/多线程/juc/AQS框架/CountDownLatch, Semaphore, CyclicBarrier源码解析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/15/多线程/juc/AQS框架/CountDownLatch, Semaphore, CyclicBarrier源码解析/" itemprop="commentCount"></span>
+                <a href="/2016/10/30/JVM/反射/反射-方法信息/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-方法信息/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -477,11 +484,159 @@
       
         
           
-          CountDownLatch, Semaphore, CyclicBarrier源码解析java并发包下提供了AQS框架，使得锁的实现变得非常容易. 之前我们分析了ReentrantLock的源码（这里），我们知道这个是可重入的、公平性可选的独占锁. 简单回忆一下，在线程尝试获取锁对象时，RL底层会
+          反射-方法信息方法与构造函数一样，都是继承自Executable类，关于Executable类提供的方法信息可以参见构造函数
+方法特有的方法信息： 
+
+invoke: 传入相应的参数，并在实例上调用该方法
+
+getReturnType: 返回返回参数的类型信息
+
+
+
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/10/30/JVM/反射/反射-方法信息/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-构造函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-构造函数/" itemprop="url">
+                  反射-构造函数
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-30T10:20:54+08:00">
+                2016-10-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/10/30/JVM/反射/反射-构造函数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-构造函数/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          反射-构造函数构造函数与方法信息都有个共同的基类，Executable类，这个类中定义了以下几个构造函数和方法共有的方法：
+
+getParameterTypes: 按构造函数（或方法）参数的声明顺序，返回相应的参数类型信息
+
+getParameterCount: 返回构造函数（或方法）参数的个数
+
+
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/15/多线程/juc/AQS框架/CountDownLatch, Semaphore, CyclicBarrier源码解析/#more" rel="contents">
+            <a class="btn" href="/2016/10/30/JVM/反射/反射-构造函数/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -524,7 +679,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/14/多线程/juc/AQS框架/AQS框架源码解析/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-类信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -546,8 +701,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/12/14/多线程/juc/AQS框架/AQS框架源码解析/" itemprop="url">
-                  AQS框架源码解析
+                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-类信息/" itemprop="url">
+                  反射-类信息
                 </a>
               
             
@@ -563,8 +718,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-14T10:20:54+08:00">
-                2016-12-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-30T10:20:54+08:00">
+                2016-10-30
               </time>
             
 
@@ -582,8 +737,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/14/多线程/juc/AQS框架/AQS框架源码解析/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/14/多线程/juc/AQS框架/AQS框架源码解析/" itemprop="commentCount"></span>
+                <a href="/2016/10/30/JVM/反射/反射-类信息/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-类信息/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -611,12 +766,13 @@
       
         
           
-          AQS框架源码解析AQS类的全称是AbstractQueuedSynchronizer， 它的核心是通过维护一个名为state的整型变量和CLH队列（这里）， 子类通过修改状态变量的值来实现获取锁和释放锁的操作.
-AQS可以说是整个JUC并发包中的核心类，它是典型的模板模式应用（这里）， 同时，它也
+          反射-类信息反射可以在运行时获取类、方法以及属性的信息
+通过反射，可以在运行时获取类各方面的信息，包括类名信息、包信息、修饰符、超类信息、接口信息、方法信息、属性信息、构造函数以及注解等信息.
+类名信息getName, getSimpleName(不包含包名信息), getCanonicalName
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/14/多线程/juc/AQS框架/AQS框架源码解析/#more" rel="contents">
+            <a class="btn" href="/2016/10/30/JVM/反射/反射-类信息/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -659,7 +815,7 @@ AQS可以说是整个JUC并发包中的核心类，它是典型的模板模式�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/14/多线程/juc/并发集合/CopyOnWriteList和CopyOnWriteSet/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/25/JVM/JAVA中的引用类型/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -681,8 +837,8 @@ AQS可以说是整个JUC并发包中的核心类，它是典型的模板模式�
             
               
                 
-                <a class="post-title-link" href="/2016/12/14/多线程/juc/并发集合/CopyOnWriteList和CopyOnWriteSet/" itemprop="url">
-                  CopyOnWriteList和CopyOnWriteSet
+                <a class="post-title-link" href="/2016/10/25/JVM/JAVA中的引用类型/" itemprop="url">
+                  JAVA中的引用类型
                 </a>
               
             
@@ -698,8 +854,8 @@ AQS可以说是整个JUC并发包中的核心类，它是典型的模板模式�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-14T10:20:54+08:00">
-                2016-12-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-25T10:20:54+08:00">
+                2016-10-25
               </time>
             
 
@@ -717,8 +873,8 @@ AQS可以说是整个JUC并发包中的核心类，它是典型的模板模式�
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/14/多线程/juc/并发集合/CopyOnWriteList和CopyOnWriteSet/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/14/多线程/juc/并发集合/CopyOnWriteList和CopyOnWriteSet/" itemprop="commentCount"></span>
+                <a href="/2016/10/25/JVM/JAVA中的引用类型/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/25/JVM/JAVA中的引用类型/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -746,12 +902,14 @@ AQS可以说是整个JUC并发包中的核心类，它是典型的模板模式�
       
         
           
-          CopyOnWriteList和CopyOnWriteSetCOWSet的底层是通过COWList实现的， 在写操作的时候，有选择性的选择addIfAbsent版本的操作.
-COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执行前都必须先获取到相应的RL锁，然后再进行操作
+          JAVA中的引用类型
+强引用(Strong Reference)是指平时经常用到的引用类型，如果某个对象存在强引用，那么它将不会被GC回收
+
+软引用(Soft Reference)是指那些有用但不是必需的对象，它经常被用作缓存，当JVM内存充足时，它不会被GC回收，但如果内存不足时，它会被回收；它可
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/14/多线程/juc/并发集合/CopyOnWriteList和CopyOnWriteSet/#more" rel="contents">
+            <a class="btn" href="/2016/10/25/JVM/JAVA中的引用类型/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -794,7 +952,7 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/12/多线程/juc/AQS框架/CountDownLatch, CyclicBarrier和Semaphore的使用/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/14/安全/常见的Web安全问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -816,8 +974,8 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
             
               
                 
-                <a class="post-title-link" href="/2016/12/12/多线程/juc/AQS框架/CountDownLatch, CyclicBarrier和Semaphore的使用/" itemprop="url">
-                  CountDownLatch, CyclicBarrier和Semaphore的使用
+                <a class="post-title-link" href="/2016/10/14/安全/常见的Web安全问题/" itemprop="url">
+                  常见的Web安全问题
                 </a>
               
             
@@ -833,8 +991,8 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-12T10:20:54+08:00">
-                2016-12-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-14T10:20:54+08:00">
+                2016-10-14
               </time>
             
 
@@ -852,8 +1010,8 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/12/多线程/juc/AQS框架/CountDownLatch, CyclicBarrier和Semaphore的使用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/12/多线程/juc/AQS框架/CountDownLatch, CyclicBarrier和Semaphore的使用/" itemprop="commentCount"></span>
+                <a href="/2016/10/14/安全/常见的Web安全问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/14/安全/常见的Web安全问题/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -881,11 +1039,14 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
       
         
           
-          CountDownLatch, CyclicBarrier和Semaphore的使用1. CountDownLatch实现类似于“计数器”一样的功能, 一般用于某个线程等待其它一些线程完成特定工作后开启后续工作时使用. 它最重要的方法是设置计数，计数减1， 等待计数结束， 分别对应于CountDow
+          常见的WEB安全问题1. XSS跨站脚本攻击， 解决方式就是对所有的用户进行转义编码，永远不要相信用户的输入
+2. CSRF跨站请求伪造，原理图如下. 解决方式是给每个请求增加攻击者无法猜测的随机量，在接收到请求时，先校验这个随机量的有效性.
+
+3. 固定session攻击会话固定攻击. 攻击者先登
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/12/多线程/juc/AQS框架/CountDownLatch, CyclicBarrier和Semaphore的使用/#more" rel="contents">
+            <a class="btn" href="/2016/10/14/安全/常见的Web安全问题/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -928,7 +1089,7 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/08/设计模式/模板模式/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/11/工具/Flyway/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -950,8 +1111,8 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
             
               
                 
-                <a class="post-title-link" href="/2016/12/08/设计模式/模板模式/" itemprop="url">
-                  模板模式
+                <a class="post-title-link" href="/2016/10/11/工具/Flyway/" itemprop="url">
+                  Flyway
                 </a>
               
             
@@ -967,8 +1128,8 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-08T10:20:54+08:00">
-                2016-12-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-11T10:20:54+08:00">
+                2016-10-11
               </time>
             
 
@@ -986,8 +1147,8 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/08/设计模式/模板模式/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/08/设计模式/模板模式/" itemprop="commentCount"></span>
+                <a href="/2016/10/11/工具/Flyway/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/11/工具/Flyway/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1015,148 +1176,19 @@ COWList的底层实现是通过ReentrantLock来实现的，所有的写操作执
       
         
           
-          模板模式
-          
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/12/08/设计模式/模板模式/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
+          FlywayFlyway的命令包括：
 
-    <div>
-      
-    </div>
+migrate: 将DB升级到最新的版本
 
-    <div>
-      
-    </div>
+clean: 清空数据库中所有的数据，注意这条命令只能在集成环境或测试环境中执行，严禁在生产环境中执行
 
+info: 显示当前所有升级脚本的执行情况，显示pending、fail或者是success
 
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/06/多线程/等待通知机制/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Essviv">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Essviv">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/06/多线程/等待通知机制/" itemprop="url">
-                  等待通知机制
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-06T10:20:54+08:00">
-                2016-12-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/12/06/多线程/等待通知机制/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/06/多线程/等待通知机制/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          等待通知机制notify, notifyAll, wait这三个方法构成了java的等待通知机制的核心，它们主要是用于线程间通信时使用. 使用这三个方法的前提是当前线程必须拥有对象的锁
-
-wait: 当前线程进入等待状态，直到其它线程调用了对象的notify或者notifyAll方法
-notify：
+validat
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/06/多线程/等待通知机制/#more" rel="contents">
+            <a class="btn" href="/2016/10/11/工具/Flyway/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1199,7 +1231,7 @@ notify：
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/03/多线程/juc/线程池/Executors/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/10/集合/HashMap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1221,8 +1253,8 @@ notify：
             
               
                 
-                <a class="post-title-link" href="/2016/12/03/多线程/juc/线程池/Executors/" itemprop="url">
-                  Executors
+                <a class="post-title-link" href="/2016/10/10/集合/HashMap/" itemprop="url">
+                  HashMap
                 </a>
               
             
@@ -1238,8 +1270,8 @@ notify：
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-03T10:20:54+08:00">
-                2016-12-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-10T10:20:54+08:00">
+                2016-10-10
               </time>
             
 
@@ -1257,8 +1289,8 @@ notify：
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/03/多线程/juc/线程池/Executors/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/03/多线程/juc/线程池/Executors/" itemprop="commentCount"></span>
+                <a href="/2016/10/10/集合/HashMap/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/10/集合/HashMap/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1286,22 +1318,17 @@ notify：
       
         
           
-          ExecutorsExecutors是并发包中提供的工具类，它可以用来创建以下这些对象:
+          HashMap哈希表使用的是 数组加链表的方式存储元素，具体如下：
 
-ExecutorService
+通过hash(key)与数组长度运算，hash(key)&amp;(length-1), 获取新元素在数组中的位置
 
-ScheduledExecutorService
+如果数组中该位置上没有元素，那么新元素直接被放置在这个位置
 
-ThreadFactory
-
-Callable
-
-
-1. Executor接口首先先来看看并发包中的Executor接口的
+如果数组中该位置上已经有元素，那么新元素被放在以这
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/03/多线程/juc/线程池/Executors/#more" rel="contents">
+            <a class="btn" href="/2016/10/10/集合/HashMap/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1344,7 +1371,7 @@ Callable
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/IO/netty/netty源码学习系列----channelHandler/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/工具/maven学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1366,8 +1393,8 @@ Callable
             
               
                 
-                <a class="post-title-link" href="/2016/12/02/IO/netty/netty源码学习系列----channelHandler/" itemprop="url">
-                  netty源码学习系列----channelHandler
+                <a class="post-title-link" href="/2016/10/04/工具/maven学习笔记/" itemprop="url">
+                  maven学习笔记
                 </a>
               
             
@@ -1383,8 +1410,8 @@ Callable
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-02T10:20:54+08:00">
-                2016-12-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-04T10:20:54+08:00">
+                2016-10-04
               </time>
             
 
@@ -1402,8 +1429,8 @@ Callable
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/12/02/IO/netty/netty源码学习系列----channelHandler/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/IO/netty/netty源码学习系列----channelHandler/" itemprop="commentCount"></span>
+                <a href="/2016/10/04/工具/maven学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/工具/maven学习笔记/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1431,147 +1458,154 @@ Callable
       
         
           
-          netty源码学习系列—-channelHandlerCodec
-FieldLengthBasedFrameDecoder
-
-          
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/12/02/IO/netty/netty源码学习系列----channelHandler/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/02/IO/netty/netty源码学习系列-----eventLoop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Essviv">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Essviv">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/02/IO/netty/netty源码学习系列-----eventLoop/" itemprop="url">
-                  netty源码学习系列-----eventLoop
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-02T10:20:54+08:00">
-                2016-12-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/12/02/IO/netty/netty源码学习系列-----eventLoop/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/IO/netty/netty源码学习系列-----eventLoop/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          netty源码学习系列—–eventLoopnetty是如何实现对于某个channel的IO事件，交由同一个线程去处理?channel持有一个eventloop，后续所有的操作都会交由这个eventllop操作，具体是在每个操作前，判断一下当前的执行线程是不是eventloop，如果是，直接执行，如
+          Maven学习笔记构件的坐标groupId, artifactId, version
+管理依赖通过构件的坐标来唯一指定123456&lt;dependency&gt;         &lt;groupId&gt;&lt;/groupId&gt;         &lt;artifactId&gt;
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/12/02/IO/netty/netty源码学习系列-----eventLoop/#more" rel="contents">
+            <a class="btn" href="/2016/10/04/工具/maven学习笔记/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/SOA/WSDL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Essviv">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://github.com/Essviv/images/blob/master/avatar.jpg?raw=true">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Essviv">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/10/04/SOA/WSDL/" itemprop="url">
+                  WSDL
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-04T10:20:54+08:00">
+                2016-10-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/10/04/SOA/WSDL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/SOA/WSDL/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          WSDLWSDL中包含以下几类元素
+
+抽象元素：
+
+types: WS定义的类型，通过这种方式，WS可以最大限度的实现平台的中立性
+
+message: WS的消息， 可以理解成传统函数中的输入输出参数
+
+portType: WS执行的操作, 可以理解成传统函数库的一个模块或一个类， 也可以认为是接口
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2016/10/04/SOA/WSDL/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1609,7 +1643,7 @@ FieldLengthBasedFrameDecoder
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1654,7 +1688,7 @@ FieldLengthBasedFrameDecoder
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">176</span>
+                <span class="site-state-item-count">148</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1667,7 +1701,7 @@ FieldLengthBasedFrameDecoder
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>

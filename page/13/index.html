@@ -256,7 +256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/25/培训/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +278,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/05/25/培训/" itemprop="url">
-                  培训
+                <a class="post-title-link" href="/2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/" itemprop="url">
+                  RabbitMQ的基本概念
                 </a>
               
             
@@ -295,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-25T10:20:54+08:00">
-                2016-05-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-09T10:20:54+08:00">
+                2016-04-09
               </time>
             
 
@@ -314,8 +314,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/25/培训/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/25/培训/" itemprop="commentCount"></span>
+                <a href="/2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,23 +343,13 @@
       
         
           
-          培训数据库开发单一的数据源或集群的代理异构数据源： hibernate, spring-data(for redis, hbase)
-提供统一的API
-动态生成操作
-优化性能
-异步并行加载框架
-热点缓存
-恶意访问的拦截、值班表扫描的拦截
-按需加载
-
-
-
-淘宝技术魔方技术架构
-数据源层（DB， 日志）
+          RMQ的基本概念： 基本概念
+生产者将消息投递给broker中的exchange模块，exchange根据“绑定”规则将这条消息投递给queue， 而queue再根据订阅的情况主动地push给消费者，或者由消费者主动向broker进行pull操作。
+queue， exchange以及binding三
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/25/培训/#more" rel="contents">
+            <a class="btn" href="/2016/04/09/消息队列/rabbitMQ/RabbitMQ的基本概念/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -402,7 +392,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/23/SOA/JAXB/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -424,8 +414,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/05/23/SOA/JAXB/" itemprop="url">
-                  JAXB
+                <a class="post-title-link" href="/2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/" itemprop="url">
+                  RabbitMQ基础教程
                 </a>
               
             
@@ -441,8 +431,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-23T10:20:54+08:00">
-                2016-05-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-08T10:20:54+08:00">
+                2016-04-08
               </time>
             
 
@@ -460,8 +450,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/23/SOA/JAXB/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/23/SOA/JAXB/" itemprop="commentCount"></span>
+                <a href="/2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -489,21 +479,16 @@
       
         
           
-          JAXB架构
-标签
-@XmlRootElement: 根元素
+          RabbitMQ基础教程
+生产者-消费者
 
-@XmlElement: 用于setter方法
+生产者的流程：ConnectionFactory —&gt; Connection —&gt; Channel —&gt; ExchangeDeclare  –&gt; QueueDeclare —&gt; BasicPublish
 
-@XmlAttribute: 表示将这个字段作为元素的属性
-
-@XmlType: propOrder属性的名称
-
-@XmlJavaTypeAdapter: 用于复杂的java类型，或者当
+消费者的流程: Co
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/23/SOA/JAXB/#more" rel="contents">
+            <a class="btn" href="/2016/04/08/消息队列/rabbitMQ/RabbitMQ基础教程/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -546,7 +531,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/17/消息队列/rabbitMQ/RabbitMQ的安装/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/07/消息队列/rabbitMQ/AMQP学习/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -568,8 +553,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/05/17/消息队列/rabbitMQ/RabbitMQ的安装/" itemprop="url">
-                  RabbitMQ的安装
+                <a class="post-title-link" href="/2016/04/07/消息队列/rabbitMQ/AMQP学习/" itemprop="url">
+                  AMQP学习
                 </a>
               
             
@@ -585,8 +570,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-17T10:20:54+08:00">
-                2016-05-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-07T10:20:54+08:00">
+                2016-04-07
               </time>
             
 
@@ -604,8 +589,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/17/消息队列/rabbitMQ/RabbitMQ的安装/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/17/消息队列/rabbitMQ/RabbitMQ的安装/" itemprop="commentCount"></span>
+                <a href="/2016/04/07/消息队列/rabbitMQ/AMQP学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/07/消息队列/rabbitMQ/AMQP学习/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -633,18 +618,17 @@
       
         
           
-          RabbitMQ的安装
-安装RMQ后，需要启用后台管理插件
+          AMQP学习Topic Exchange的匹配
+*: 匹配一个单词
+#: 匹配零或多个单词
 
-rabbitmq-plugins list: 查看插件列表
-
-rabbitmq-plugins enable plugins-name: 启用某个插件    
-
-rabbitmq-plugins disable plugins-name:
+1e.g. *.stocks.# 能够匹配usd.stocks以及eur.stocks.db，但不能匹配stocks.nasdaq
+header exchange的匹配
+这种类型的exchange在匹配时会
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/17/消息队列/rabbitMQ/RabbitMQ的安装/#more" rel="contents">
+            <a class="btn" href="/2016/04/07/消息队列/rabbitMQ/AMQP学习/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -687,7 +671,7 @@ rabbitmq-plugins disable plugins-name:
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/13/前端/JS基础语法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/04/消息队列/activeMQ/activeMQ/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -709,8 +693,8 @@ rabbitmq-plugins disable plugins-name:
             
               
                 
-                <a class="post-title-link" href="/2016/05/13/前端/JS基础语法/" itemprop="url">
-                  JS基础语法
+                <a class="post-title-link" href="/2016/04/04/消息队列/activeMQ/activeMQ/" itemprop="url">
+                  activeMQ
                 </a>
               
             
@@ -726,8 +710,8 @@ rabbitmq-plugins disable plugins-name:
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-13T10:20:54+08:00">
-                2016-05-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-04T10:20:54+08:00">
+                2016-04-04
               </time>
             
 
@@ -745,8 +729,8 @@ rabbitmq-plugins disable plugins-name:
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/13/前端/JS基础语法/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/13/前端/JS基础语法/" itemprop="commentCount"></span>
+                <a href="/2016/04/04/消息队列/activeMQ/activeMQ/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/04/消息队列/activeMQ/activeMQ/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -774,26 +758,16 @@ rabbitmq-plugins disable plugins-name:
       
         
           
-          JS基础语法
-区分大小写
+          AcitveMQ
+多路复用: 每个连接可以创建多个会话，只要保证每个会话之间是线程独立的即可，多个会话共享一个连接， 这样可以节省连接的数量
 
-数据类型
+广播: AMQ自带的根据topic进行广播的机制可以相应的功能
 
-
-
-Number: 不区分整形和浮点数，统一用Number来表示
-
-字符串： 可以用双引号(“”)或者单引号(‘’)来表示字符串
-
-
-
-可以通过’\’进行转义操作
-
-操作： toLowerCase, toUpperCase, 字符操作， indexOf(查找第
+监听消息: 消息监听器能够实现异步的消费，同步的消费者通过receive方法来等待消息的到
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/13/前端/JS基础语法/#more" rel="contents">
+            <a class="btn" href="/2016/04/04/消息队列/activeMQ/activeMQ/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -836,7 +810,7 @@ Number: 不区分整形和浮点数，统一用Number来表示
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/07/IO/java-io-model/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/01/first-post/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -858,8 +832,8 @@ Number: 不区分整形和浮点数，统一用Number来表示
             
               
                 
-                <a class="post-title-link" href="/2016/05/07/IO/java-io-model/" itemprop="url">
-                  JAVA-IO学习
+                <a class="post-title-link" href="/2016/04/01/first-post/" itemprop="url">
+                  First Post
                 </a>
               
             
@@ -875,8 +849,8 @@ Number: 不区分整形和浮点数，统一用Number来表示
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-07T15:44:00+08:00">
-                2016-05-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-01T16:00:00+08:00">
+                2016-04-01
               </time>
             
 
@@ -894,8 +868,8 @@ Number: 不区分整形和浮点数，统一用Number来表示
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/07/IO/java-io-model/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/07/IO/java-io-model/" itemprop="commentCount"></span>
+                <a href="/2016/04/01/first-post/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/01/first-post/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -923,16 +897,14 @@ Number: 不区分整形和浮点数，统一用Number来表示
       
         
           
-          IO相关概念
-阻塞：在发起IO操作之后，线程被阻塞，直到相应的IO操作完成才会返回
+          
+”Congratulations!“
 
-非阻塞： 在发起IO操作之后，线程不会被阻塞并且立即返回
 
-同步： 在发起IO操作之后，在没有得到结果之前，调用都不会返回（注意，这里不返回不代表就一定阻塞了，应用也可以处于非阻塞状态），调用一旦返回了，IO操作的
-          ...
+          
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/07/IO/java-io-model/#more" rel="contents">
+            <a class="btn" href="/2016/04/01/first-post/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -975,7 +947,7 @@ Number: 不区分整形和浮点数，统一用Number来表示
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/07/IO/java-nio-2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/24/多线程/Java_Concurrency_In_Practise笔记(3) - Composing objects/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -997,8 +969,8 @@ Number: 不区分整形和浮点数，统一用Number来表示
             
               
                 
-                <a class="post-title-link" href="/2016/05/07/IO/java-nio-2/" itemprop="url">
-                  JAVA-IO学习
+                <a class="post-title-link" href="/2016/03/24/多线程/Java_Concurrency_In_Practise笔记(3) - Composing objects/" itemprop="url">
+                  Java_Concurrency_In_Practise笔记(3) - Composing objects
                 </a>
               
             
@@ -1014,8 +986,8 @@ Number: 不区分整形和浮点数，统一用Number来表示
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-07T13:40:00+08:00">
-                2016-05-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-24T10:20:54+08:00">
+                2016-03-24
               </time>
             
 
@@ -1033,8 +1005,8 @@ Number: 不区分整形和浮点数，统一用Number来表示
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/07/IO/java-nio-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/07/IO/java-nio-2/" itemprop="commentCount"></span>
+                <a href="/2016/03/24/多线程/Java_Concurrency_In_Practise笔记(3) - Composing objects/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/24/多线程/Java_Concurrency_In_Practise笔记(3) - Composing objects/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1062,17 +1034,19 @@ Number: 不区分整形和浮点数，统一用Number来表示
       
         
           
-          buffer1.属性: capacity, position, limit, mark
+          Java_Concurrency_In_Practise笔记(3) - Composing objects
+设计线程安全的类
 
-capacity: 缓冲区的容量大小
+明确类的状态
+明确类状态之间的限制
+明确访问类状态时
 
-position: 当前缓冲区的游标位置，也就是下一个读或写的位置
 
-limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，在写模式，这个值一般和capacity
+每个类的所有成员变量组成了这个类的状态，这个类的所有状态组成了相应的状态空间，在状态空间中，如果存在某些无效的状态
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/07/IO/java-nio-2/#more" rel="contents">
+            <a class="btn" href="/2016/03/24/多线程/Java_Concurrency_In_Practise笔记(3) - Composing objects/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1115,7 +1089,7 @@ limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/23/多线程/Java_Concurrency_In_Practise笔记(2)-Sharing Objects/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1137,8 +1111,8 @@ limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，�
             
               
                 
-                <a class="post-title-link" href="/2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/" itemprop="url">
-                  JAVA-IO学习之NIO.2(一)
+                <a class="post-title-link" href="/2016/03/23/多线程/Java_Concurrency_In_Practise笔记(2)-Sharing Objects/" itemprop="url">
+                  Java_Concurrency_In_Practise笔记(2)-Sharing Objects
                 </a>
               
             
@@ -1154,8 +1128,8 @@ limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-07T10:20:54+08:00">
-                2016-05-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-23T10:20:54+08:00">
+                2016-03-23
               </time>
             
 
@@ -1173,8 +1147,8 @@ limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，�
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/" itemprop="commentCount"></span>
+                <a href="/2016/03/23/多线程/Java_Concurrency_In_Practise笔记(2)-Sharing Objects/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/23/多线程/Java_Concurrency_In_Practise笔记(2)-Sharing Objects/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1202,18 +1176,12 @@ limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，�
       
         
           
-          JAVA-IO学习之NIO.2(一）buffer属性
-capacity: 缓冲区的容量大小
-
-position: 当前缓冲区的游标位置，也就是下一个读或写的位置
-
-limit: 缓冲区读写的上限位置，代表了可读写的最多数据量，在写模式，这个值一般和capacity一样
-
-mark: 缓冲区的标记位置
+          Java_Concurrency_In_Practise笔记(2)-Sharing Objects
+锁机制有两方面的作用， 一个是通过定义临界区，提供原子化操作；另一个则是提供了可见性保证。在单线程中，如果对某个变量进行赋值，随后马上进行读取，并且在上次写操作之后没有再进行写操作，那么可以预见的是，
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/07/IO/java基础/JAVA-IO学习之NIO.2(一)/#more" rel="contents">
+            <a class="btn" href="/2016/03/23/多线程/Java_Concurrency_In_Practise笔记(2)-Sharing Objects/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1256,7 +1224,7 @@ mark: 缓冲区的标记位置
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/04/quota/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1278,8 +1246,8 @@ mark: 缓冲区的标记位置
             
               
                 
-                <a class="post-title-link" href="/2016/05/04/quota/" itemprop="url">
-                  自勉
+                <a class="post-title-link" href="/2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/" itemprop="url">
+                  Java_Concurrency_In_Practise笔记(1)-Thread safety
                 </a>
               
             
@@ -1295,8 +1263,8 @@ mark: 缓冲区的标记位置
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-04T18:00:00+08:00">
-                2016-05-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-22T10:20:54+08:00">
+                2016-03-22
               </time>
             
 
@@ -1314,8 +1282,8 @@ mark: 缓冲区的标记位置
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/04/quota/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/04/quota/" itemprop="commentCount"></span>
+                <a href="/2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1343,12 +1311,13 @@ mark: 缓冲区的标记位置
       
         
           
-          
-When nothing seems to help, I go look at a stonecutter hammering away at his rock perhaps a hundred times without as much as a crack showing in it. Y
+          Java_Concurrency_In_Practise笔记(1)-Thread safety使用多线程编程时会遇到的问题
+数据一致性问题: nothing bad ever happen
+Liveness Failure: something good eventually happens, de
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/04/quota/#more" rel="contents">
+            <a class="btn" href="/2016/03/22/多线程/Java_Concurrency_In_Practise笔记(1)-Thread safety/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1391,7 +1360,7 @@ When nothing seems to help, I go look at a stonecutter hammering away at his roc
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/01/IO/java基础/JAVA-IO学习之NIO/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/03/22/安全/Spring security的原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1413,8 +1382,8 @@ When nothing seems to help, I go look at a stonecutter hammering away at his roc
             
               
                 
-                <a class="post-title-link" href="/2016/05/01/IO/java基础/JAVA-IO学习之NIO/" itemprop="url">
-                  JAVA-IO学习之NIO
+                <a class="post-title-link" href="/2016/03/22/安全/Spring security的原理/" itemprop="url">
+                  Spring security的原理
                 </a>
               
             
@@ -1430,8 +1399,8 @@ When nothing seems to help, I go look at a stonecutter hammering away at his roc
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-01T10:20:54+08:00">
-                2016-05-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-22T10:20:54+08:00">
+                2016-03-22
               </time>
             
 
@@ -1449,8 +1418,8 @@ When nothing seems to help, I go look at a stonecutter hammering away at his roc
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/01/IO/java基础/JAVA-IO学习之NIO/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/01/IO/java基础/JAVA-IO学习之NIO/" itemprop="commentCount"></span>
+                <a href="/2016/03/22/安全/Spring security的原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/22/安全/Spring security的原理/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1478,15 +1447,12 @@ When nothing seems to help, I go look at a stonecutter hammering away at his roc
       
         
           
-          JAVA-IO学习之NIONIOJAVA的NIO部分相对来讲比较简单，它把过去那些旧的IO实现进行了新的封装，将与文件相关的操作封装到以下几个类中： 
-
-Paths: 用于获取Path对象的工具类，可以通过指定文件名，URI等方式来获取Path对象
-
-Path: 文件的语法表示，也就是说，这个对象只
+          Spring security的原理在使用SS的时候，需要在web.xml里定义DelegatingFilterProxy，这个对象的作用是将托管在spring容器的对象当成filter来使用，它是个代理，所有对这个代理的调用最终都会调用它所代理的对象;
+在SS中，delegatingFilterP
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/01/IO/java基础/JAVA-IO学习之NIO/#more" rel="contents">
+            <a class="btn" href="/2016/03/22/安全/Spring security的原理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1529,7 +1495,7 @@ Path: 文件的语法表示，也就是说，这个对象只
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/01/IO/java-io-nio/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/02/04/IO/java基础/IO & NIO & NIO2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1551,8 +1517,8 @@ Path: 文件的语法表示，也就是说，这个对象只
             
               
                 
-                <a class="post-title-link" href="/2016/05/01/IO/java-io-nio/" itemprop="url">
-                  JAVA-IO学习
+                <a class="post-title-link" href="/2016/02/04/IO/java基础/IO & NIO & NIO2/" itemprop="url">
+                  IO & NIO & NIO2
                 </a>
               
             
@@ -1568,8 +1534,8 @@ Path: 文件的语法表示，也就是说，这个对象只
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-01T09:48:00+08:00">
-                2016-05-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-04T10:20:54+08:00">
+                2016-02-04
               </time>
             
 
@@ -1587,8 +1553,8 @@ Path: 文件的语法表示，也就是说，这个对象只
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/05/01/IO/java-io-nio/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/01/IO/java-io-nio/" itemprop="commentCount"></span>
+                <a href="/2016/02/04/IO/java基础/IO & NIO & NIO2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/04/IO/java基础/IO & NIO & NIO2/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1616,15 +1582,16 @@ Path: 文件的语法表示，也就是说，这个对象只
       
         
           
-          NIOJAVA的NIO部分相对来讲比较简单，它把过去那些旧的IO实现进行了新的封装，将与文件相关的操作封装到以下几个类中： 
-
-Paths: 用于获取Path对象的工具类，可以通过指定文件名，URI等方式来获取Path对象
-
-Path: 文件的语法表示，也就是说，这个对象只是个纯JAVA意义上的路径
+          IO &amp; NIO &amp; NIO2IO
+Inputstream/OutputStream: 流对象，用于字节读写
+Reader/Writer: 用于字符读写
+DataInput/DataOutput: 用于二进制读写
+ObjectInput/ObjectOutput: 用于对象读写
+Sc
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/05/01/IO/java-io-nio/#more" rel="contents">
+            <a class="btn" href="/2016/02/04/IO/java基础/IO & NIO & NIO2/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1662,7 +1629,7 @@ Path: 文件的语法表示，也就是说，这个对象只是个纯JAVA意义�
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1707,7 +1674,7 @@ Path: 文件的语法表示，也就是说，这个对象只是个纯JAVA意义�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">176</span>
+                <span class="site-state-item-count">148</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1720,7 +1687,7 @@ Path: 文件的语法表示，也就是说，这个对象只是个纯JAVA意义�
             
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">标签</span>
               
             </div>
