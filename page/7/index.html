@@ -533,7 +533,7 @@ g
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-方法信息/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/30/JVM/反射/反射-构造函数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -555,8 +555,8 @@ g
             
               
                 
-                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-方法信息/" itemprop="url">
-                  反射-方法信息
+                <a class="post-title-link" href="/2016/10/30/JVM/反射/反射-构造函数/" itemprop="url">
+                  反射-构造函数
                 </a>
               
             
@@ -591,8 +591,8 @@ g
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/30/JVM/反射/反射-方法信息/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-方法信息/" itemprop="commentCount"></span>
+                <a href="/2016/10/30/JVM/反射/反射-构造函数/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/JVM/反射/反射-构造函数/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -620,19 +620,17 @@ g
       
         
           
-          反射-方法信息方法与构造函数一样，都是继承自Executable类，关于Executable类提供的方法信息可以参见构造函数
-方法特有的方法信息： 
+          反射-构造函数构造函数与方法信息都有个共同的基类，Executable类，这个类中定义了以下几个构造函数和方法共有的方法：
 
-invoke: 传入相应的参数，并在实例上调用该方法
+getParameterTypes: 按构造函数（或方法）参数的声明顺序，返回相应的参数类型信息
 
-getReturnType: 返回返回参数的类型信息
-
+getParameterCount: 返回构造函数（或方法）参数的个数
 
 
-          
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/30/JVM/反射/反射-方法信息/#more" rel="contents">
+            <a class="btn" href="/2016/10/30/JVM/反射/反射-构造函数/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1231,7 +1229,7 @@ validat
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/SOA/WSDL/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/工具/maven学习笔记/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1253,8 +1251,8 @@ validat
             
               
                 
-                <a class="post-title-link" href="/2016/10/04/SOA/WSDL/" itemprop="url">
-                  WSDL
+                <a class="post-title-link" href="/2016/10/04/工具/maven学习笔记/" itemprop="url">
+                  maven学习笔记
                 </a>
               
             
@@ -1289,8 +1287,8 @@ validat
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/04/SOA/WSDL/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/SOA/WSDL/" itemprop="commentCount"></span>
+                <a href="/2016/10/04/工具/maven学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/工具/maven学习笔记/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1318,19 +1316,12 @@ validat
       
         
           
-          WSDLWSDL中包含以下几类元素
-
-抽象元素：
-
-types: WS定义的类型，通过这种方式，WS可以最大限度的实现平台的中立性
-
-message: WS的消息， 可以理解成传统函数中的输入输出参数
-
-portType: WS执行的操作, 可以理解成传统函数库的一个模块或一个类， 也可以认为是接口
+          Maven学习笔记构件的坐标groupId, artifactId, version
+管理依赖通过构件的坐标来唯一指定123456&lt;dependency&gt;         &lt;groupId&gt;&lt;/groupId&gt;         &lt;artifactId&gt;
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/04/SOA/WSDL/#more" rel="contents">
+            <a class="btn" href="/2016/10/04/工具/maven学习笔记/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1509,7 +1500,7 @@ maven的生命周期分为三套：clean， default以及site， 分别对应于
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/工具/maven学习笔记/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/04/SOA/WSDL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -1531,8 +1522,8 @@ maven的生命周期分为三套：clean， default以及site， 分别对应于
             
               
                 
-                <a class="post-title-link" href="/2016/10/04/工具/maven学习笔记/" itemprop="url">
-                  maven学习笔记
+                <a class="post-title-link" href="/2016/10/04/SOA/WSDL/" itemprop="url">
+                  WSDL
                 </a>
               
             
@@ -1567,8 +1558,8 @@ maven的生命周期分为三套：clean， default以及site， 分别对应于
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/10/04/工具/maven学习笔记/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/工具/maven学习笔记/" itemprop="commentCount"></span>
+                <a href="/2016/10/04/SOA/WSDL/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/04/SOA/WSDL/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -1596,12 +1587,19 @@ maven的生命周期分为三套：clean， default以及site， 分别对应于
       
         
           
-          Maven学习笔记构件的坐标groupId, artifactId, version
-管理依赖通过构件的坐标来唯一指定123456&lt;dependency&gt;         &lt;groupId&gt;&lt;/groupId&gt;         &lt;artifactId&gt;
+          WSDLWSDL中包含以下几类元素
+
+抽象元素：
+
+types: WS定义的类型，通过这种方式，WS可以最大限度的实现平台的中立性
+
+message: WS的消息， 可以理解成传统函数中的输入输出参数
+
+portType: WS执行的操作, 可以理解成传统函数库的一个模块或一个类， 也可以认为是接口
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/10/04/工具/maven学习笔记/#more" rel="contents">
+            <a class="btn" href="/2016/10/04/SOA/WSDL/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
