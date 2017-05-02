@@ -217,16 +217,6 @@
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
-            
-            关于
-          </a>
-        </li>
-      
 
       
     </ul>
@@ -256,7 +246,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/测试/junit/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/SOA/CXF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -278,8 +268,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/01/25/测试/junit/" itemprop="url">
-                  junit
+                <a class="post-title-link" href="/2016/01/25/SOA/CXF/" itemprop="url">
+                  CXF
                 </a>
               
             
@@ -314,8 +304,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/01/25/测试/junit/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/测试/junit/" itemprop="commentCount"></span>
+                <a href="/2016/01/25/SOA/CXF/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/SOA/CXF/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -343,18 +333,19 @@
       
         
           
-          JUnit
-Test(timeout, expected)： 表示该方法为单元测试方法，timeout表示执行的最长时间，expected表示预期方法会抛出的异常
+          CXF根据WSDL生成客户端的方式有以下几种：
 
-Before: 每个测试方法执行前被执行一次
+wsdl2java自动生成代码
 
-After: 每个测试方法执行后被执行一次
+jax-ws代理： 通过service.create来创建相应的客户端代码.
 
-BeforeClass: 方法必须为st
+
+CXF与spring的集成
+在beans中定义server和client，如下, 其中id为spring中标识，implementor
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/01/25/测试/junit/#more" rel="contents">
+            <a class="btn" href="/2016/01/25/SOA/CXF/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -397,7 +388,7 @@ BeforeClass: 方法必须为st
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/测试/easyMock/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/doc/memcached/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -419,8 +410,8 @@ BeforeClass: 方法必须为st
             
               
                 
-                <a class="post-title-link" href="/2016/01/25/测试/easyMock/" itemprop="url">
-                  easyMock
+                <a class="post-title-link" href="/2016/01/25/doc/memcached/" itemprop="url">
+                  memcached
                 </a>
               
             
@@ -455,8 +446,8 @@ BeforeClass: 方法必须为st
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/01/25/测试/easyMock/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/测试/easyMock/" itemprop="commentCount"></span>
+                <a href="/2016/01/25/doc/memcached/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/doc/memcached/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -484,19 +475,16 @@ BeforeClass: 方法必须为st
       
         
           
-          EasyMock参考文献
-EasyMock测试入门文章
+          #memcached
+##commandsset, add, replace, append, prepend, cas, get, gets, flush_all, delete, incr, decr, touch
+##References官方文档
+命令说明
+turtorialPoint
 
-
-EasyMock讲解文章
-
-http://www.ibm.com/developerworks/java/library/j-easymock/index.html
-
-https://effectivejavatesting.wordpre
-          ...
+          
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/01/25/测试/easyMock/#more" rel="contents">
+            <a class="btn" href="/2016/01/25/doc/memcached/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -539,7 +527,7 @@ https://effectivejavatesting.wordpre
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/doc/useful_website/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/01/25/工具/mybatis migration/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -561,8 +549,8 @@ https://effectivejavatesting.wordpre
             
               
                 
-                <a class="post-title-link" href="/2016/01/25/doc/useful_website/" itemprop="url">
-                  useful_website
+                <a class="post-title-link" href="/2016/01/25/工具/mybatis migration/" itemprop="url">
+                  mybatis migration
                 </a>
               
             
@@ -597,8 +585,8 @@ https://effectivejavatesting.wordpre
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/01/25/doc/useful_website/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/doc/useful_website/" itemprop="commentCount"></span>
+                <a href="/2016/01/25/工具/mybatis migration/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/01/25/工具/mybatis migration/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -626,16 +614,17 @@ https://effectivejavatesting.wordpre
       
         
           
-          #Some useful websites
+          mybatis migrationmybatis migration(MM)的目的也是对数据库升级进行管理， 它的命令主要包括：
 
-www.owasp.org: open web application security project.
+init: 初始化项目目录，运行完这条命令后，MM会在指定的目录下生成项目所需要的目录结构，包括
 
+drivers: 用于存放数据库驱动
 
-
-          
+environments: 
+          ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/01/25/doc/useful_website/#more" rel="contents">
+            <a class="btn" href="/2016/01/25/工具/mybatis migration/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
