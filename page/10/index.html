@@ -246,7 +246,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/14/xstream-annotation/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/14/xstream-alias/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Essviv">
@@ -268,8 +268,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/06/14/xstream-annotation/" itemprop="url">
-                  XStream学习(2)
+                <a class="post-title-link" href="/2016/06/14/xstream-alias/" itemprop="url">
+                  XStream学习(1)
                 </a>
               
             
@@ -304,8 +304,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2016/06/14/xstream-annotation/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/14/xstream-annotation/" itemprop="commentCount"></span>
+                <a href="/2016/06/14/xstream-alias/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/14/xstream-alias/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -333,13 +333,22 @@
       
         
           
-          注解在上一章中，我们学习了如何使用XStream的别名机制来更好的控制输出，但是有时候这种控制略显烦琐，因此XStream也提供了相应的注解支持.
-本章主要展示了如何使用XStream提供的注解机制来更简单有效地控制相应的输出. 首先我们先定义消息模式，并输出最基本的XML格式：
-123456789
+          XStream概览XStream是用来将对象与XML进行互相转换的第三方库. 它的主要特点包括：
+
+简单易用. 
+无需映射. 
+性能. 
+简洁的XML. 
+…
+错误信息的输出.
+支持与JSON格式的转换.
+
+别名假设我们定义了以下的XML格式, 需要通过XStream进行读写：
+1234567891
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2016/06/14/xstream-annotation/#more" rel="contents">
+            <a class="btn" href="/2016/06/14/xstream-alias/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

@@ -100,7 +100,7 @@
 
 重复读会对读的范围加锁，也就是在第一次读操作开始的时候，事务会对它所读的范围进行加锁，其它的事务就不能对这个范围内的记录进行修改和删除操作，以此来保证它的重复读；但它不能保证选择范围外的记录不被修改或增加，因此无法避免幻读的情况(select)">
 <meta property="og:image" content="https://github.com/Essviv/images/blob/master/transaction.jpg?raw=true">
-<meta property="og:updated_time" content="2017-03-08T08:38:11.000Z">
+<meta property="og:updated_time" content="2017-05-07T03:45:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库事务的隔离级别">
 <meta name="twitter:description" content="数据库事务的隔离级别隔离级别
@@ -367,6 +367,8 @@
 </li>
 <li><p><a href="http://blog.csdn.net/zhangzeyuaaa/article/details/46400419" target="_blank" rel="external">数据库并发的五个问题及四级封锁协议</a></p>
 </li>
+<li><p><a href="https://docs.microsoft.com/en-us/sql/odbc/reference/develop-app/transaction-isolation-levels" target="_blank" rel="external">微软关于事务隔离级别的说明(推荐)</a></p>
+</li>
 </ol>
 
       
@@ -419,8 +421,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/10/消息队列/rabbitMQ/RabbitMQ的集群方案/" rel="next" title="RabbitMQ的集群方案">
-                <i class="fa fa-chevron-left"></i> RabbitMQ的集群方案
+              <a href="/2016/04/10/缓存/Redis/" rel="next" title="Redis">
+                <i class="fa fa-chevron-left"></i> Redis
               </a>
             
           </div>
